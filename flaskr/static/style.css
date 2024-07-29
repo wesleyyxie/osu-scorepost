@@ -1,0 +1,97 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+@font-face {
+    font-family: exo2;
+    src: url(Exo2-Medium.ttf);
+}
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(23,26,28,255);
+    font-family: exo2;
+}
+
+.notif{
+    opacity: 0;
+    position: absolute;
+    top: 52em;
+    background-color: rgb(242, 98, 159);
+    padding: 0.7em;
+    border-radius: 25px;
+    color: white;
+    border-color: white;
+    border-width: 2px;
+    border-style: solid;
+    font-weight: bold;
+}
+.show{
+    opacity: 1;
+}
+
+@keyframes fadeOut {
+    from {opacity: 1;}
+    to {opacity: 0;}
+}
+.fadeout{
+    animation-name: fadeOut;
+    animation-duration: 2s;
+}
+.form{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+}
+
+.score_input {
+    display: flex;
+    flex-wrap: wrap;
+    width: 450px; /* Adjust based on your needs */
+    justify-content: center;
+    column-gap: 10px;
+}
+
+.submit_button{
+    font-family: exo2;
+}
+
+.submit_button:hover{
+    cursor: pointer;
+}
+
+.submit_button:disabled {
+    background-color: #d3d3d3;
+    color: #a9a9a9;
+    border: 1px solid #a9a9a9;
+    cursor: not-allowed;
+}
+
+.url_input{
+    font-family: exo2;
+}
+
+.generated_title {
+    color: white
+}
+
+.copy_button{
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.fa-clipboard:hover{
+    color: rgb(76, 93, 99);
+}
+
+.score_image {
+    border-radius: 25px;
+}
+.score_image:hover{
+    cursor: pointer;
+}
