@@ -1,16 +1,16 @@
-from flask import Blueprint, render_template, request
-from app import flask_app
+from flask import Blueprint, render_template, request, Flask
 import os
 import sys
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir)
 from src import create_score_title, screenshot_of_score
+app = Flask(__name__)
 
 default_title = 'Player | Artist - Beatmap Title [Version] +MODS (Creator, 7.27*) 100% SS | 727pp'
 default_score_img = '/static/default_score_image.png'
 
-@flask_app.route("/", methods=['POST', 'GET'])
+@app.route("/", methods=['POST', 'GET'])
 def index():
     if request.method == 'POST':
         print(request.form)
