@@ -136,3 +136,5 @@ def create_title(url: str):
     # Create title
     title = f"{score_mode}{username} | {artist} - {title} [{version}]{mods} ({creator}, {stars_converted:.2f}*) {acc}{fc} {status}| {performance_points}"
     return title
+
+#print(create_title("https://osu.ppy.sh/scores/3241837339"))

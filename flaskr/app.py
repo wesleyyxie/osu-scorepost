@@ -7,8 +7,8 @@ sys.path.append(parent_dir)
 from src import main
 
 app = Flask(__name__)
-default_title = '9MlCE | VINXIS - Sidetracked Day [Infinity Inside] +HDDT (DendyHere, 10.50*) 96.69% FC #1 | 1711pp'
-default_score_img = '/static/placeholder_for_default.png'
+default_title = 'Player | Artist - Beatmap Title [Version] +MODS (Creator, 7.27*) 100% SS | 727pp'
+default_score_img = '/static/default_score_image.png'
 
 @app.route("/", methods=['POST', 'GET'])
 def index():
@@ -27,7 +27,7 @@ def index():
             print(title)
         except:
             title = "Please enter a valid score link"
-            score_img = default_score_img
+            score_img = "/static/error_img.png"
     else:
         score_img = default_score_img
         title = default_title
