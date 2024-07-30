@@ -47,7 +47,7 @@ def screenshot_of_score(score_url: str):
 
     # Crop, save, and delete non-cropped screenshot
     cropped = screenshotted.crop((left, top, right, bottom))
-    cropped.save(f"flaskr/static/score.png")
+    cropped.save(f"app/static/score.png")
     os.remove("screenshot.png")
     print("Score screenshot Ready!")
     end_time = time.time()

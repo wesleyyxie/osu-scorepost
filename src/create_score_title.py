@@ -1,4 +1,9 @@
-from .osu_api import *
+import os
+import sys
+current_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(current_dir)
+
+from osu_api import *
 import rosu_pp_py as rosu
 import requests
 
@@ -136,5 +141,3 @@ def create_title(url: str):
     # Create title
     title = f"{score_mode}{username} | {artist} - {title} [{version}]{mods} ({creator}, {stars_converted:.2f}*) {acc}{fc} {status}| {performance_points}"
     return title
-
-#print(create_title("https://osu.ppy.sh/scores/3241837339"))
