@@ -108,8 +108,17 @@ body {
     color: rgb(76, 93, 99);
 }
 
+.image_container{
+    width: 984px;
+    height: 554px;
+    border-radius: 25px;
+}
+
 .score_image {
     border-radius: 25px;
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
 }
 .score_image:hover{
     cursor: pointer;

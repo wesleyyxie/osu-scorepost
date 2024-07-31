@@ -79,7 +79,7 @@ def create_title(url: str):
 
     response = requests.get(f"https://osu.ppy.sh/osu/{score.beatmap.id}")
     map = rosu.Beatmap(bytes = response.content)
-
+    
     if score.mode.value == "fruits":
         map.convert(rosu.GameMode.Catch)
     elif score.mode.value == "taiko":
@@ -141,3 +141,5 @@ def create_title(url: str):
     # Create title
     title = f"{score_mode}{username} | {artist} - {title} [{version}]{mods} ({creator}, {stars_converted:.2f}*) {acc}{fc} {status}| {performance_points}"
     return title
+
+#print(create_title("https://osu.ppy.sh/scores/329583391"))
