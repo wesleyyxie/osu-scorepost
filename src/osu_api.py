@@ -6,7 +6,7 @@ load_dotenv(dotenv_path)
 CLIENT_ID = os.getenv("CLIENT_ID")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 # Get osu! api
-api = Ossapi(CLIENT_ID, CLIENT_SECRET)
+api = Ossapi(CLIENT_ID, CLIENT_SECRET, "http://localhost:3914/")
 
 # Returns the score object
 def get_score(score_link: str):
@@ -53,4 +53,24 @@ def get_ranking_global(score: Score):
     # Returns 0 if score is not in leaderboard
     return 0
 
+def count_geki_katu_osu(score : Score):
+    replay = api.download_score_mode(mode=score.mode, score_id=score.id)
+    return {
+        'count_300k' : replay.count_geki,
+        'count_100k' : replay.count_katu
+    }
+        
+    
+
+
+#score = get_score("https://osu.ppy.sh/scores/3250271015")
+#rint(score)
+#print(api.score_mode("osu", 4661603629))
+#print(api.download_score_mode("osu", 4661603629))
+#print(count_geki_katu_osu(get_score("https://osu.ppy.sh/scores/328536")))
+#print(get_score("https://osu.ppy.sh/scores/328536").replay)
+#print(get_score("https://osu.ppy.sh/scores/3250271015").replay)
+
+#score = get_score("https://osu.ppy.sh/scores/2327036403")
+#print(score.statistics)
 

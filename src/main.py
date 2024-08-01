@@ -1,6 +1,6 @@
 
 from .create_score_title import create_title
-from .screenshot_of_score import screenshot_of_score
+from .screenshot_of_score_selenium import screenshot_of_score
 
 # OSU STANDARD
 def create_scorepost(url):

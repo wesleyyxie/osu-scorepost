@@ -8,11 +8,9 @@ import rosu_pp_py as rosu
 import requests
 
 # Creates title for osu
-def create_title(url: str):
-    
-    # Score object from Ossapi
+def create_title(url):
     score = get_score(url)
-
+    # Score object from Ossapi
     username = score._user.username
     artist = score.beatmapset.artist
     title = score.beatmapset.title
@@ -143,3 +141,4 @@ def create_title(url: str):
     return title
 
 #print(create_title("https://osu.ppy.sh/scores/329583391"))
+#print(create_title("https://osu.ppy.sh/scores/328536"))

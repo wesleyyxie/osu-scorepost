@@ -1,0 +1,4 @@
+from .statistics_fruits import generate_statistics_fruits
+from .statistics_mania import generate_statistics_mania
+from .statistics_osu import generate_statistics_osu
+from .statistics_taiko import generate_statistics_taiko
