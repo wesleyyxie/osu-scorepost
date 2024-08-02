@@ -9,7 +9,6 @@ CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 API_KEY = os.getenv("API_KEY")
 # Get osu! api
 api = Ossapi(CLIENT_ID, CLIENT_SECRET)
-cg = Circleguard(API_KEY)
 
 # Returns the score object
 def get_score(score_link: str):
