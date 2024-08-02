@@ -1,12 +1,15 @@
 from ossapi import Ossapi, Score
+from circleguard import Circleguard, ReplayMap
 import os
 from dotenv import find_dotenv, load_dotenv
 dotenv_path = find_dotenv()
 load_dotenv(dotenv_path)
 CLIENT_ID = os.getenv("CLIENT_ID")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET")
+API_KEY = os.getenv("API_KEY")
 # Get osu! api
-api = Ossapi(CLIENT_ID, CLIENT_SECRET, "http://localhost:3914/")
+api = Ossapi(CLIENT_ID, CLIENT_SECRET)
+cg = Circleguard(API_KEY)
 
 # Returns the score object
 def get_score(score_link: str):
@@ -54,14 +57,12 @@ def get_ranking_global(score: Score):
     return 0
 
 def count_geki_katu_osu(score : Score):
-    replay = api.download_score_mode(mode=score.mode, score_id=score.id)
+    replay = ReplayMap(score.beatmap.id, score.user_id)
+    cg.load(replay)
     return {
-        'count_300k' : replay.count_geki,
-        'count_100k' : replay.count_katu
+        "count_300k" : f"{replay.count_geki}",
+        "count_100k" : f"{replay.count_katu}"
     }
-        
-    
-
 
 #score = get_score("https://osu.ppy.sh/scores/3250271015")
 #rint(score)
@@ -70,7 +71,4 @@ def count_geki_katu_osu(score : Score):
 #print(count_geki_katu_osu(get_score("https://osu.ppy.sh/scores/328536")))
 #print(get_score("https://osu.ppy.sh/scores/328536").replay)
 #print(get_score("https://osu.ppy.sh/scores/3250271015").replay)
-
-#score = get_score("https://osu.ppy.sh/scores/2327036403")
-#print(score.statistics)
 

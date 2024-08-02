@@ -197,7 +197,7 @@ def generate_ss(url):
 
 #generate_ss("https://osu.ppy.sh/scores/328536")
 #generate_ss("https://osu.ppy.sh/scores/329583391")
-#generate_ss("https://osu.ppy.sh/scores/3250271015")
+generate_ss("https://osu.ppy.sh/scores/3250271015")
 #generate_ss("https://osu.ppy.sh/scores/2344387027")
-generate_ss("https://osu.ppy.sh/scores/2903729026")
+#generate_ss("https://osu.ppy.sh/scores/2903729026")
 #generate_ss("https://osu.ppy.sh/scores/2327036403")

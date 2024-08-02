@@ -24,7 +24,7 @@ def generate_statistics_osu(im: Image.Image, score: Score):
     im.paste(blue_hit, (22, 575), blue_hit)
     im.paste(miss, (450, 575), miss)
 
-    if score.replay:
+    if score.id == score.best_id:
         im.paste(green_hit, (450, 455), green_hit)
         count_300k_100k = count_geki_katu_osu(score)
         count_100k = f"{count_300k_100k["count_100k"]}"

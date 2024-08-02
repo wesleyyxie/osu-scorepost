@@ -54,4 +54,4 @@ def screenshot_of_score(score_url: str):
     print(end_time - start_time)
 
 
-#screenshot_of_score("https://osu.ppy.sh/scores/1674443338")
+screenshot_of_score("https://osu.ppy.sh/scores/1674443338")

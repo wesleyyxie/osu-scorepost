@@ -11,7 +11,7 @@ import time
 app = Flask(__name__)
 
 default_title = 'Player | Artist - Beatmap Title [Version] +MODS (Creator, 7.27*) 100% SS | 727pp'
-default_score_img = '/static/default_score_image.png'
+default_score_img = '/static/default_score.png'
 
 @app.route("/", methods=['POST', 'GET'])
 def index():
@@ -28,7 +28,7 @@ def index():
             time.sleep(1)
             score_img = "/static/scorepost_generator_images/score.png"
         else:
-            score_img = "/static/error_img.png"
+            score_img = default_score_img
        
     else:
         score_img = default_score_img
