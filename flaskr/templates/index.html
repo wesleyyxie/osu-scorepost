@@ -25,7 +25,7 @@
       function loading() {
         setTimeout(function(){
           loading_element = document.getElementById('loading')
-          loading_element.style.visibility = "visible"
+          loading_element.innerText = "Loading..."
           document.getElementById('submit_button').disabled = true;
         }, 100)
 
@@ -58,7 +58,7 @@
       <div class="image_container">
         <img class="score_image" src="{{ image_src }}">
       </div>
-      <p style="visibility: hidden;"id="loading">Loading...</p>
+      <p id="loading">{{ results }}</p>
       <p>If image does not load properly, please try entering the score link again.</p>
     </div>
   </body>

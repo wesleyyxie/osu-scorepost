@@ -27,13 +27,15 @@ def index():
             generate_screenshot.generate_ss(url)
             time.sleep(1)
             score_img = "/static/scorepost_generator_images/score.png"
+            results = "Screenshot successfully generated"
         else:
             score_img = default_score_img
-       
+            results = ""
     else:
         score_img = default_score_img
         title = default_title
-    return render_template('index.html', score_title=title, image_src=score_img)
+        results = ""
+    return render_template('index.html', score_title=title, image_src=score_img, results=results)
 
 if __name__ == "__main__":
     app.run(debug=True)

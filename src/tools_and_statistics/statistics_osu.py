@@ -30,7 +30,7 @@ def generate_statistics_osu(im: Image.Image, score: Score):
         count_100k = f"{count_300k_100k["count_100k"]}"
         count_300k = f"{count_300k_100k["count_300k"]}"
         write_with_img(count_300k, 608, 325, 1.5, im)
-        write_with_img(count_100k, 608, 455, 1.5, im)
+        write_with_img(count_100k, 608, 455, 1.5, im)   
 
     write_with_img(count_300, 180, 325, 1.5, im)
     write_with_img(count_100, 180, 455, 1.5, im)
