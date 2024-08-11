@@ -10,7 +10,7 @@ from src import create_score_title, generate_screenshot
 import time
 app = Flask(__name__)
 
-default_title = 'Player | Artist - Beatmap Title [Version] +MODS (Creator, 7.27*) 100% SS | 727pp'
+default_title = 'Player | Artist - Beatmap Title [Version] (Creator, 0.00*) 0.00% SS | 0pp'
 default_score_img = '/static/default_score.png'
 
 @app.route("/", methods=['POST', 'GET'])
@@ -19,15 +19,22 @@ def index():
         not_valid_link_msg = "Please enter a valid score link"
         print(request.form)
         url = request.form['content']
-        title = create_score_title.create_title(url)
+        try:
+            title = create_score_title.create_title(url)
+        except:
+            title = not_valid_link_msg
         print(title)
         checkbox = request.form.getlist('checkbox')
         print(checkbox)
         if len(checkbox) > 0 and title != not_valid_link_msg:
-            generate_screenshot.generate_ss(url)
-            time.sleep(1)
-            score_img = "/static/scorepost_generator_images/score.png"
-            results = "Screenshot successfully generated"
+            try:
+                generate_screenshot.generate_ss(url)
+                time.sleep(1)
+                score_img = "/static/scorepost_generator_images/score.png"
+                results = "Screenshot successfully generated"
+            except:
+                score_img = default_score_img
+                results = "There was a problem generating your screenshot"
         else:
             score_img = default_score_img
             results = ""
