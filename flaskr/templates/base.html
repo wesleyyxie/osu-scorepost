@@ -4,14 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>HTML 5 Boilerplate</title>
+    <title>osu!scorepost</title>
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='style.css') }}">
     <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static',filename='osu_scorepost_generator_logo.ico') }}" />
     <script src="https://kit.fontawesome.com/a5b2cefb49.js" crossorigin="anonymous" async></script>
-    {% block copy_contacts %}{% endblock %}
     <script async>
-        function copyToClipboard() {
-            scoreTitleText = document.getElementById('generated_title').innerText;
+        function copyToClipboard(elementId) {
+            scoreTitleText = document.getElementById(elementId).innerText;
             navigator.clipboard.writeText(scoreTitleText);
 
             notif = document.getElementById('copy_notification')
@@ -61,5 +60,6 @@
     </div>
     <!-- generator starts here -->
     {% block generator %}{% endblock %}
+    <div id="copy_notification" class="">Copied to clipboard</div>
   </body>
 </html>

@@ -10,6 +10,7 @@ import requests
 # Creates title for osu
 def create_title(url):
     score = get_score(url)
+    print("successfully got score")
     # Score object from Ossapi
     username = score._user.username
     artist = score.beatmapset.artist

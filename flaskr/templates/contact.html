@@ -1,19 +1,10 @@
 {% extends "base.html" %}
-{% block copy_contacts %}
-<script async>
-    function copySocial(elementId){
-        socialName = document.getElementById(elementId).innerText
-        navigator.clipboard.writeText(socialName);
-    }
-
-</script>
-{% endblock %}
 {% block generator %}
 <div class="contacts_container">
     <h1 class="contact_title">Contacts</h1>
     <p class="contact_prompt">If you notice any issues, bugs, or have any questions, please feel free to contact me in any way that works for you.</p>
     <div class="socials_container">
-        <a class="discord social_icon" onclick="copySocial('discordName')">
+        <a class="discord social_icon" onclick="copyToClipboard('discordName')">
             <i class="fa-brands fa-discord" style="color: rgb(114,137,218)"></i>
             <p>Discord</p>
             <span class="tooltiptext" id="discordName">smaako</span>

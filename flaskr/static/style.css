@@ -390,7 +390,7 @@ body {
     .results{
         font-size: 11em;
     }
-    .notif{
+    #copy_notification{
         font-size: 13em;
     }
 
@@ -436,7 +436,7 @@ body {
     .results{
         font-size: 14em;
     }
-    .notif{
+    #copy_notification{
         font-size: 15em;
     }
 }

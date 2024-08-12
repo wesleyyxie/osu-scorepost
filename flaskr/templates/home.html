@@ -16,7 +16,7 @@
 
   <p class="generated_title" id="generated_title">
     {{ score_title }}
-    <button class="copy_button" onclick="copyToClipboard()">
+    <button class="copy_button" onclick="copyToClipboard('generated_title')">
       <span style="color: white;" class="copy_button_style">
         <i class="fa-solid fa-clipboard"></i>
       </span>
@@ -26,6 +26,5 @@
     <img class="score_image" src="{{ image_src }}">
   </a>
   <p class = "results" id="loading">{{ results }}</p>
-  <div id="copy_notification" class="">Copied to clipboard</div>
 </div>
 {% endblock %}
