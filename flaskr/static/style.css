@@ -9,7 +9,7 @@ html{
 body {
     font-size: 1px;
     margin: 0px;
-    background-color: rgba(23,26,28,255);
+    background-color: rgb(22, 26, 29);
     font-family: exo2;
 }
 
@@ -34,10 +34,16 @@ body {
     color: white;
     font-size: 30em;
     margin: 10px;
+    font-weight: bold;
+    text-decoration: none;
 }
 
 .site_title > *{
     vertical-align: middle;
+}
+
+.site_title:hover{
+    cursor: pointer;
 }
 
 .links_container{
@@ -66,6 +72,7 @@ body {
 
 @media screen and (max-width: 880px) {
     .top_navbar{
+        padding-top: 10px;
         display: block;
     }
     .site_logo{
@@ -103,6 +110,8 @@ body {
         font-size: 10rem;
     }
 }
+
+/* generator css */
 .generator_container{
     flex-direction: column;
     display: flex;
@@ -195,7 +204,11 @@ body {
     border-radius: 10000000px;
     border: none;
     font-size: 1px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    box-shadow: 0 4px 8px 0 black, 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.url_input:active{
+    border: none;
 }
 
 .checkbox_container{
@@ -208,6 +221,7 @@ body {
 }
 .checkbox_label:hover{
     cursor: pointer;
+    color: rgb(205, 205, 205);
 }
 .get_screenshot:hover{
     cursor: pointer;
@@ -232,12 +246,13 @@ body {
 
 .image_container{
     aspect-ratio: 1920/1080;
+    margin-top: 20px;
     width: 55vw;
 }
 
 .score_image {
     border-radius: 25px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    box-shadow: 0 0 20px #676767;
     width: 100%;
     object-fit: contain;
     height: auto;
@@ -248,6 +263,84 @@ body {
 
 .results{
     color: white;
+}
+
+/*contacts css*/
+
+.contacts_container{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 60px;
+}
+
+.contact_title{
+    color: white;
+    font-size: 40em;
+    margin-bottom: 0;
+}
+
+.contact_prompt{
+    color: white;
+    font-size: 20em;
+}
+
+.socials_container{
+    font-size: 20em;
+    display: flex;
+    column-gap: 60px;
+    padding-top: 20px;
+}
+.socials_container a{
+    text-align: center;
+    font-size: 25rem;
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.socials_container i{
+    font-size: 40rem;
+}
+.socials_container p{
+    color: white;
+    margin-top: 7px;
+    margin-bottom: 0;
+}
+
+.osu_wrapper{
+    background-color: rgb(242, 98, 159);
+    display: inline-block;
+    border-radius: 100%;
+}
+
+.reddit_wrapper{
+    background-color: white;
+    display: inline-block;
+    border-radius: 100%;
+}
+
+.github_prompt{
+    font-size: 20em;
+    margin-top: 80px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.github{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: white;
+}
+
+.social_icon:hover{
+    background-color: rgb(42, 46, 49);
 }
 
 @media (min-width: 320px) {

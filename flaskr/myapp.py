@@ -13,8 +13,16 @@ app = Flask(__name__)
 default_title = 'Player | Artist - Beatmap Title [Version] (Creator, 0.00*) 0.00% SS | 0pp'
 default_score_img = '/static/default_score.png'
 
+@app.route('/how_it_works')
+def how_it_works():
+    return render_template('how_it_works.html')
+
+@app.route('/contact')
+def contact():
+    return render_template('contact.html')
+
 @app.route("/", methods=['POST', 'GET'])
-def index():
+def home():
     if request.method == 'POST':
         not_valid_link_msg = "Please enter a valid score link"
         print(request.form)
@@ -42,7 +50,7 @@ def index():
         score_img = default_score_img
         title = default_title
         results = ""
-    return render_template('index.html', score_title=title, image_src=score_img, results=results)
+    return render_template('home.html', score_title=title, image_src=score_img, results=results)
 
 if __name__ == "__main__":
     app.run(debug=True)

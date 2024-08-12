@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block generator %}
+<div class="generator_container">
+  <form class="score_input" action="/" method="POST">
+    <div class="input_container">
+      <input class="url_input" type="text" name="content" id="content" placeholder="Score URL e.g. https://osu.ppy.sh/scores/00000">
+      <button class="submit_button" id="submit_button fa-solid fa-arrow-right" onclick="loading()" type="submit">
+        <i class="fa-solid fa-angle-right" data-fa-transform="down-40"></i>
+      </button>
+    </div>
+    <div class="checkbox_container">
+      <input class="get_screenshot" name="checkbox" type="checkbox" id="checkbox" value="get screenshot">
+      <label for="checkbox" class="checkbox_label">Get score screenshot</label>
+    </div>
+  </form>
+
+  <p class="generated_title" id="generated_title">
+    {{ score_title }}
+    <button class="copy_button" onclick="copyToClipboard()">
+      <span style="color: white;" class="copy_button_style">
+        <i class="fa-solid fa-clipboard"></i>
+      </span>
+    </button>
+  </p>
+  <a class="image_container" href=" {{ image_src }}" target="_blank">
+    <img class="score_image" src="{{ image_src }}">
+  </a>
+  <p class = "results" id="loading">{{ results }}</p>
+  <div id="copy_notification" class="notif">Copied to clipboard</div>
+</div>
+{% endblock %}
