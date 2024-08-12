@@ -1,37 +1,50 @@
 {% extends "base.html" %}
+{% block copy_contacts %}
+<script async>
+    function copySocial(elementId){
+        socialName = document.getElementById(elementId).innerText
+        navigator.clipboard.writeText(socialName);
+    }
+
+</script>
+{% endblock %}
 {% block generator %}
 <div class="contacts_container">
     <h1 class="contact_title">Contacts</h1>
     <p class="contact_prompt">If you notice any issues, bugs, or have any questions, please feel free to contact me in any way that works for you.</p>
     <div class="socials_container">
-        <a class="discord social_icon">
+        <a class="discord social_icon" onclick="copySocial('discordName')">
             <i class="fa-brands fa-discord" style="color: rgb(114,137,218)"></i>
             <p>Discord</p>
+            <span class="tooltiptext" id="discordName">smaako</span>
         </a>
         <a class="osu social_icon" href="https://osu.ppy.sh/users/26080649" target="_blank">
             <div class="osu_wrapper">
                 <i class="fa-regular fa-circle-dot" style="color: white;"></i> 
             </div>           
             <p>osu!</p>
+            <span class="tooltiptext">sm4ko</span>
         </a>
         <a class="instagram social_icon" href="https://www.instagram.com/wesleyyxie/" target="_blank">
             <i class="fa-brands fa-instagram" style="background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%); color: transparent; background-clip: text;"></i>
             <p>Instagram</p>
+            <span class="tooltiptext">@wesleyyxie</span>
         </a>
         <a class="reddit social_icon" target="_blank">
             <div class="reddit_wrapper">
                 <i class="fa-brands fa-reddit" style="color: rgb(255,99,20);"></i>
             </div>
             <p>Reddit</p>
+            <span class="tooltiptext">smako</span>
         </a>
     </div>
     <div class="github_prompt">
         <p>This project is also available on Github. Don't feel hesitated to submit any pull requests, feature requests or bug reports.</p>
-        <a class="github social_icon" href="https://github.com/wesleyyxie/osuScorepost" target="_blank">
-            <i class="fa-brands fa-github" style="font-size: 45rem; margin-bottom: 10px;"></i>
-            Github
-        </a>
-        
     </div>
+    <a class="github social_icon" href="https://github.com/wesleyyxie/osuScorepost" target="_blank">
+        <i class="fa-brands fa-github"></i>
+        Github
+        <span class="tooltiptext">wesleyyxie</span>
+    </a>
 </div>
 {% endblock %}

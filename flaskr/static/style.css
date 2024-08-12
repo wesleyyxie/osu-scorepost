@@ -17,23 +17,23 @@ body {
     position: relative;
     overflow: hidden;
     padding-left: 15px;
-    padding-right: 15px;   
+    padding-right: 15px;
+    padding-top: 10px; 
     background-color: rgb(56, 134, 172);
-    display: flex;
+    display: block;
     justify-content: space-between;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .site_logo{
     aspect-ratio: 1;
-    height: 50px;
     margin-right: 5px;
+    height: 30px;
 }
 
 .site_title{
     color: white;
-    font-size: 30em;
-    margin: 10px;
+    font-size: 15em;
     font-weight: bold;
     text-decoration: none;
 }
@@ -47,21 +47,23 @@ body {
 }
 
 .links_container{
+    flex-direction: column;
+    align-items:flex-start;
     display: flex;
-    align-items: center;
     column-gap: 10px;
 }
 
 .links_container a{
-    font-size: 20em;
+    display: inline-block;
+    font-size: 10em;
     text-decoration: none;
     color: white;
-    padding: 12px;
     border-radius: 10px;
+    padding: 5px;
 }
 
 .links_container i{
-    font-size: 20rem;
+    font-size: 10rem;
     padding: 2px;
 }
 
@@ -70,46 +72,11 @@ body {
     background-color: rgb(46, 124, 162);
 }
 
-@media screen and (max-width: 880px) {
-    .top_navbar{
-        padding-top: 10px;
-        display: block;
-    }
-    .site_logo{
-        height: 40px;
-    }
-    .site_title{
-        font-size: 20em;
-    }
-    .links_container a{
-        font-size: 15em;
-    }
-    .links_container i{
-        font-size: 15rem;
-    }
+.reddit_submit:hover{
+    background-color: white;
 }
 
-@media screen and (max-width: 575px) {
-    .links_container{
-        flex-direction: column;
-        align-items:flex-start;
-    }
-    .links_container a{
-        display: inline-block;
-    }
-    .site_logo{
-        height: 30px;
-    }
-    .site_title{
-        font-size: 15em;
-    }
-    .links_container a{
-        font-size: 10em;
-    }
-    .links_container i{
-        font-size: 10rem;
-    }
-}
+
 
 /* generator css */
 .generator_container{
@@ -121,30 +88,48 @@ body {
     top: 80px;
 }
 
-.notif{
-    opacity: 0;
-    background-color: rgb(242, 98, 159);
-    padding: 0.7em;
-    border-radius: 100px;
-    color: white;
-    border-color: white;
-    border-width: 2px;
-    border-style: solid;
-    font-weight: bold;
+#copy_notification{
+    visibility: hidden;
+    min-width: 250px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 30px;
+    font-size: 15rem;
+    font-size: 11em;
 }
 
-.show{
-    opacity: 1;
-}
-
-@keyframes fadeOut {
-    from {opacity: 1;}
-    to {opacity: 0;}
-}
-.fadeout{
-    animation-name: fadeOut;
-    animation-duration: 2s;
-}
+#copy_notification.show{
+    visibility: visible;
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  }
+  
+  /* Animations to fade the snackbar in and out */
+  @-webkit-keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 30px; opacity: 1;}
+  }
+  
+  @keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 30px; opacity: 1;}
+  }
+  
+  @-webkit-keyframes fadeout {
+    from {bottom: 30px; opacity: 1;}
+    to {bottom: 0; opacity: 0;}
+  }
+  
+  @keyframes fadeout {
+    from {bottom: 30px; opacity: 1;}
+    to {bottom: 0; opacity: 0;}
+  }
 .form{
     display: flex;
     justify-content: center;
@@ -158,6 +143,7 @@ body {
 .score_input {
     display: flex;
     flex-wrap: wrap;
+    row-gap: 0px;
     width: 18vw;
     row-gap: 10px;
     justify-content: center;
@@ -177,7 +163,7 @@ body {
     border: none;
     font-weight: bold;
     border-radius: 50%;
-    font-size: 1px;
+    font-size: 10em;
     right: auto;
     position: absolute;
     right: 0.6%;
@@ -203,8 +189,9 @@ body {
     padding: 6px 5px 4px 5px;
     border-radius: 10000000px;
     border: none;
-    font-size: 1px;
     box-shadow: 0 4px 8px 0 black, 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    width: 30vw;
+    font-size: 9em;
 }
 
 .url_input:active{
@@ -218,6 +205,7 @@ body {
 
 .checkbox_label{
     color: white;
+    font-size: 8rem;
 }
 .checkbox_label:hover{
     cursor: pointer;
@@ -229,15 +217,15 @@ body {
 
 .generated_title {
     color: white;
-    margin-top: 30px;
-    margin-bottom: 10px;
+    margin: 30px 10px 10px 10px;
+    font-size: 11em;
 }
 
 .copy_button{
     border: none;
     background-color: transparent;
     cursor: pointer;
-    font-size: 1px;
+    font-size: 10rem;
 }
 
 .fa-clipboard:hover{
@@ -247,7 +235,7 @@ body {
 .image_container{
     aspect-ratio: 1920/1080;
     margin-top: 20px;
-    width: 55vw;
+    width: 80vw;
 }
 
 .score_image {
@@ -263,44 +251,44 @@ body {
 
 .results{
     color: white;
+    font-size: 8em;
 }
-
 /*contacts css*/
 
 .contacts_container{
     display: flex;
     align-items: center;
     flex-direction: column;
-    margin-top: 60px;
+    margin: 60px;
 }
 
 .contact_title{
     color: white;
-    font-size: 40em;
+    font-size: 20em;
     margin-bottom: 0;
 }
 
 .contact_prompt{
     color: white;
-    font-size: 20em;
+    font-size: 12em;
 }
 
 .socials_container{
     font-size: 20em;
     display: flex;
-    column-gap: 60px;
-    padding-top: 20px;
+    column-gap: 10px;
+    margin: 20px;
 }
 .socials_container a{
     text-align: center;
-    font-size: 25rem;
+    font-size: 10rem;
     text-decoration: none;
     padding: 10px;
     border-radius: 10px;
 }
 
 .socials_container i{
-    font-size: 40rem;
+    font-size: 20rem;
 }
 .socials_container p{
     color: white;
@@ -321,8 +309,9 @@ body {
 }
 
 .github_prompt{
-    font-size: 20em;
-    margin-top: 80px;
+    font-size: 12em;
+    margin-top: 10px;
+    margin-bottom: 10px;
     color: white;
     display: flex;
     flex-direction: column;
@@ -337,52 +326,28 @@ body {
     border-radius: 10px;
     text-decoration: none;
     color: white;
+    font-size: 10rem;
+}
+
+.github i{
+    font-size: 20rem;
+    margin-bottom: 7px;
+}
+
+
+.tooltiptext{
+    visibility: hidden;
+    color: white;
 }
 
 .social_icon:hover{
     background-color: rgb(42, 46, 49);
+    box-shadow: 0 0 20px #c2c2c2;
+    cursor: pointer;
 }
 
-@media (min-width: 320px) {
-
-    .score_input{
-        row-gap: 0px;
-    }
-    .submit_button{
-        font-size: 10em;
-    }
-
-    .url_input{
-        width: 30vw;
-        font-size: 9em;
-    }
-
-    .checkbox_label{
-        font-size: 8rem;
-    }
-
-    .generated_title{
-        font-size: 11em;
-    }
-
-    .copy_button{
-        font-size: 10rem;
-    }
-
-    .image_container{
-        width: 80vw;
-    }
-
-    .score_image{
-        border-radius: 10px;
-    }
-
-    .results{
-        font-size: 8em;
-    }
-    .notif{
-        font-size: 11em;
-    }
+.social_icon:hover .tooltiptext{
+    visibility: visible;
 }
 
 @media (min-width: 660px) {
@@ -391,6 +356,10 @@ body {
     }
     .submit_button{
         font-size: 13em;
+    }
+
+    .checkbox_container{
+        padding: 5px;
     }
 
     .url_input{
@@ -434,7 +403,9 @@ body {
     .submit_button{
         font-size: 18em;
     }
-
+    .checkbox_container{
+        padding: 5px;
+    }
     .url_input{
         font-size: 13em;
         width: 40vw;
@@ -522,4 +493,94 @@ body {
     .notif{
         font-size: 17em;
     }
+}
+
+
+@media (min-width: 575px) {
+    .site_logo{
+        height: 40px;
+    }
+    .site_title{
+        font-size: 20em;
+        margin: 10px;
+    }
+    .links_container{
+        flex-direction: row;
+    }
+    .links_container a{
+        font-size: 15em;
+        padding: 12px;
+    }
+    .links_container i{
+        font-size: 15rem;
+    }
+
+    /* contacts */
+    .contacts_container{
+        font-size: 1.5em;
+    }
+    .socials_container{
+        column-gap: 30px;
+    }
+    .socials_container i{
+        font-size: 35rem;
+    }
+    .socials_container a{
+        font-size: 15rem;
+    }
+
+    .github{
+        font-size: 15rem;
+    }
+    .github i{
+        font-size: 35rem;
+    }
+}
+
+
+@media (min-width: 880px) {
+    .top_navbar{
+        display: flex;
+    }
+    .site_logo{
+        height: 50px;
+    }
+    .site_title{
+        font-size: 30em;
+        margin: 10px;
+    }
+    .links_container{
+        align-items: center;
+        flex-direction: row;
+    }
+    .links_container a{
+        font-size: 20em;
+        padding: 12px;
+    }
+    .links_container i{
+        align-items: center;
+        font-size: 20rem;
+    }
+
+    /* contacts */
+    .contacts_container{
+        font-size: 2em;
+    }
+    .socials_container{
+        column-gap: 40px;
+    }
+    .socials_container i{
+        font-size: 45rem;
+    }
+    .socials_container a{
+        font-size: 25rem;
+    }
+    
+    .github{
+        font-size: 25rem;
+    }
+    .github i{
+        font-size: 45rem;
+    }
+    
 }
