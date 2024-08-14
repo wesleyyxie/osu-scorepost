@@ -32,25 +32,20 @@ def set_up_image_dimensions(im: Image.Image):
     im = im.resize((DESIRED_WIDTH, DESIRED_HEIGHT), Image.Resampling.BICUBIC)
     return im
 
-def set_up_skeleton(im: Image.Image):
-    width, height = im.size
-    rectangle = Image.open(os.path.join(util_dir, "black_rectangle.png")).convert('RGBA')
-    ranking_panel = Image.open(os.path.join(skin_dir, "Aristia(Edit)", "ranking-panel@2x.png")).convert('RGBA')
-    back_button = Image.open(os.path.join(skin_dir, "Aristia(Edit)", "menu-back-7@2x.png")).convert('RGBA')
-    ranking_graph = Image.open(os.path.join(skin_dir, "Aristia(Edit)", "ranking-graph@2x.png")).convert('RGBA')
-    replay_button = Image.open(os.path.join(skin_dir, "Aristia(Edit)", "pause-replay.png")).convert('RGBA')
-
-    back_button = back_button.resize((308, 174))
-    ranking_panel = ranking_panel.resize((924, 980))
-    ranking_graph = ranking_graph.resize((397, 205))
-    replay_button = replay_button.resize((546, 91))
-
-    im.paste(rectangle, (0, 0), rectangle)
-    im.paste(back_button, (0, height - 174), back_button)
-    im.paste(ranking_panel, (0, 145), ranking_panel)
-    im.paste(ranking_graph, (435, height - 225), ranking_graph)
-    im.paste(replay_button, (1350, 840), replay_button)
-
+def set_up_skeleton(im: Image.Image, score : Score):
+    match score.mode.value:
+        case "osu":
+            if score.id == score.best_id:
+                skeleton = Image.open(os.path.join(skin_dir, "Aristia(Edit)", "skeletons", "osu_skeleton_replay.png"))
+            else:
+                skeleton = Image.open(os.path.join(skin_dir, "Aristia(Edit)", "skeletons", "osu_skeleton_noreplay.png"))
+        case "taiko":
+            skeleton = Image.open(os.path.join(skin_dir, "Aristia(Edit)", "skeletons", "taiko_skeleton.png"))
+        case "mania":
+            skeleton = Image.open(os.path.join(skin_dir, "Aristia(Edit)", "skeletons", "mania_skeleton.png"))
+        case "fruits":
+            skeleton = Image.open(os.path.join(skin_dir, "Aristia(Edit)", "skeletons", "fruits_skeleton.png"))
+    im = im.paste(skeleton, (0,0), skeleton)
 
 def aller_write_on_img(s: str, xy: tuple, font_size: int, im: Image):
     draw_text = ImageDraw.Draw(im)
@@ -186,7 +181,7 @@ def generate_ss(url):
     im = color_enhancer.enhance(0.50)
     im = brightness_enhance.enhance(0.6)
     im = set_up_image_dimensions(im)
-    set_up_skeleton(im)
+    set_up_skeleton(im, score)
     generate_top_left_text(im, score)
     generate_rank(im, score)
     generate_mods_items(im, score)
@@ -200,4 +195,4 @@ def generate_ss(url):
 #generate_ss("https://osu.ppy.sh/scores/2344387027")
 #generate_ss("https://osu.ppy.sh/scores/2903729026")
 #generate_ss("https://osu.ppy.sh/scores/2327036403")
-generate_ss("https://osu.ppy.sh/scores/3326116414")
+#generate_ss("https://osu.ppy.sh/scores/3326116414")

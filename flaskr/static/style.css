@@ -239,7 +239,7 @@ body {
 }
 
 .score_image {
-    border-radius: 25px;
+    border-radius: 5px;
     box-shadow: 0 0 20px #676767;
     width: 100%;
     object-fit: contain;

@@ -1,6 +1,7 @@
 from ossapi import Score
 import os
 import sys
+from multiprocessing import Process
 statistics_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.join(statistics_dir, "..")
 sys.path.append(parent_dir)
@@ -17,15 +18,7 @@ def generate_statistics_osu(im: Image.Image, score: Score):
     accuracy = f"{score.accuracy * 100 :.2f}%"
     max_combo = f"{score.max_combo}"
 
-    green_hit = Image.open(os.path.join(skin_dir, "Aristia(Edit)", "hit100.png")).convert('RGBA')
-    blue_hit = Image.open(os.path.join(skin_dir, "Aristia(Edit)", "hit50.png")).convert('RGBA')
-    miss = Image.open(os.path.join(skin_dir,"Aristia(Edit)", "hit0.png")).convert('RGBA')
-    im.paste(green_hit, (22, 455), green_hit)
-    im.paste(blue_hit, (22, 575), blue_hit)
-    im.paste(miss, (450, 575), miss)
-
     if score.id == score.best_id:
-        im.paste(green_hit, (450, 455), green_hit)
         count_300k_100k = count_geki_katu_osu(score)
         count_100k = f"{count_300k_100k["count_100k"]}"
         count_300k = f"{count_300k_100k["count_300k"]}"

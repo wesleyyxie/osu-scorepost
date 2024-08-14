@@ -24,6 +24,7 @@ def contact():
 @app.route("/", methods=['POST', 'GET'])
 def home():
     if request.method == 'POST':
+        st = time.time()
         not_valid_link_msg = "Please enter a valid score link"
         print(request.form)
         url = request.form['content']
@@ -37,7 +38,6 @@ def home():
         if len(checkbox) > 0 and title != not_valid_link_msg:
             try:
                 generate_screenshot.generate_ss(url)
-                time.sleep(1)
                 score_img = "/static/scorepost_generator_images/score.png"
                 results = "Screenshot successfully generated"
             except:
@@ -46,6 +46,9 @@ def home():
         else:
             score_img = default_score_img
             results = ""
+        et = time.time()
+        elapsed_time = et - st
+        print('Execution time:', elapsed_time, 'seconds')
     else:
         score_img = default_score_img
         title = default_title

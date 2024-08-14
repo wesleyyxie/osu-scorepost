@@ -63,6 +63,7 @@ def count_geki_katu_osu(score : Score):
         "count_100k" : f"{replay.count_katu}"
     }
 
+#count_geki_katu_osu(get_score("https://osu.ppy.sh/scores/2903729026"))
 #score = get_score("https://osu.ppy.sh/scores/3250271015")
 #rint(score)
 #print(api.score_mode("osu", 4661603629))
