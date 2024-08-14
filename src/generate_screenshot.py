@@ -130,6 +130,7 @@ def generate_rank(im: Image.Image, score: Score):
         "SH" : "Ranking-SH@2x.png",
         "X" : "Ranking-X@2x.png",
         "XH" : "Ranking-XH@2x.png",
+        "F" : "Ranking-D@2x.png"
     }
     skin_folder = os.path.join(skin_dir,"Aristia(Edit)")
     rank_img = Image.open(os.path.join(skin_folder, rank_img_dict[rank]))
@@ -196,3 +197,4 @@ def generate_ss(url):
 #generate_ss("https://osu.ppy.sh/scores/2903729026")
 #generate_ss("https://osu.ppy.sh/scores/2327036403")
 #generate_ss("https://osu.ppy.sh/scores/3326116414")
+generate_ss("https://osu.ppy.sh/users/11367222")
