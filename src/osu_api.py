@@ -11,35 +11,41 @@ API_KEY = os.getenv("API_KEY")
 # Get osu! api
 api = Ossapi(CLIENT_ID, CLIENT_SECRET)
 cg = Circleguard(API_KEY)
+
 # Returns the score object
+def get_score(input: str):
+    # Sets id whether the input is a link or not
+    if "osu.ppy.sh/" in input:
+         # If it is a link, the id would be the number inside of the link
+         is_link = True
+         link_id = int(re.search(r'\d+', input).group())
+    else:
+         # Assume the input is a username
+         is_link = False
+         user = api.user(input)
+         link_id = user.id
 
-
-
-def get_score(link: str):
-    # Specify gamemode of score
-    
-    link_id = int(re.search(r'\d+', link).group())
-    if "/users/" in link:
-          user = api.user(link_id)
-          if "/osu" in link:
+    # Search by score or user
+    if "/users/" in input or is_link == False:
+          if "/osu" in input:
                 recent_scores = api.user_scores(user_id=link_id, legacy_only=False, type="recent", mode="osu", limit=1, include_fails=True)
                 if recent_scores != []:
                      score = recent_scores[0]
                 else:
                      score = None
-          elif "/taiko":
+          elif "/taiko" in input:
                 recent_score = api.user_scores(user_id=link_id, legacy_only=False, type="recent", mode="taiko", limit=1, include_fails=True)
                 if recent_scores != []:
                      score = recent_scores[0]
                 else:
                      score = None
-          elif "/fruits":
+          elif "/fruits" in input:
                 recent_score = api.user_scores(user_id=link_id, legacy_only=False, type="recent", mode="fruits", limit=1, include_fails=True)
                 if recent_scores != []:
                      score = recent_scores[0]
                 else:
                      score = None
-          elif "/mania":
+          elif "/mania" in input:
                 recent_score = api.user_scores(user_id=link_id, legacy_only=False, type="recent", mode="mania", limit=1, include_fails=True)
                 if recent_scores != []:
                      score = recent_scores[0]
@@ -51,16 +57,18 @@ def get_score(link: str):
                     score = recent_scores[0]
                 else:
                      score = None
-    elif "/osu/" in link:
+
+    elif "/osu/" in input:
         score = api.score_mode("osu", link_id)
-    elif "/taiko/" in link:
+    elif "/taiko/" in input:
         score = api.score_mode("taiko", link_id)
-    elif "/mania/" in link:
+    elif "/mania/" in input:
         score = api.score_mode("mania", link_id)
-    elif "/fruits/" in link:
+    elif "/fruits/" in input:
         score = api.score_mode("fruits", link_id)
     else:
         score = api.score(link_id)
+
     if score == None:
         print("ERROR NO SCORE FOUND")
     return score
@@ -96,15 +104,3 @@ def count_geki_katu_osu(score : Score):
 
 def get_beatmap(id : int):
      return api.beatmap(beatmap_id=id)
-
-#count_geki_katu_osu(get_score("https://osu.ppy.sh/scores/2903729026"))
-#score = get_score("https://osu.ppy.sh/scores/3250271015")
-#rint(score)
-#print(api.score_mode("osu", 4661603629))
-#print(api.download_score_mode("osu", 4661603629))
-#print(count_geki_katu_osu(get_score("https://osu.ppy.sh/scores/328536")))
-#print(get_score("https://osu.ppy.sh/scores/328536").replay)
-#print(get_score("https://osu.ppy.sh/scores/3250271015").replay)
-
-#print(api.user_scores(user_id=11367222, legacy_only=True, type="recent", mode="osu", limit=1, include_fails=True))
-#print(get_score("https://osu.ppy.sh/scores/3332906064"))
