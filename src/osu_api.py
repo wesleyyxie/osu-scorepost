@@ -12,8 +12,12 @@ API_KEY = os.getenv("API_KEY")
 api = Ossapi(CLIENT_ID, CLIENT_SECRET)
 cg = Circleguard(API_KEY)
 # Returns the score object
+
+
+
 def get_score(link: str):
     # Specify gamemode of score
+    
     link_id = int(re.search(r'\d+', link).group())
     if "/users/" in link:
           user = api.user(link_id)

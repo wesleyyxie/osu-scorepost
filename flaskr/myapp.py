@@ -36,6 +36,7 @@ def home():
         checkbox = request.form.getlist('checkbox')
         print(checkbox)
         if len(checkbox) > 0 and title != not_valid_link_msg:
+            checked=True
             try:
                 generate_screenshot.generate_ss(url)
                 score_img = "/static/scorepost_generator_images/score.png"
@@ -44,6 +45,7 @@ def home():
                 score_img = default_score_img
                 results = "There was a problem generating your screenshot"
         else:
+            checked=False
             score_img = default_score_img
             results = ""
         et = time.time()
@@ -53,7 +55,9 @@ def home():
         score_img = default_score_img
         title = default_title
         results = ""
-    return render_template('home.html', score_title=title, image_src=score_img, results=results)
+        url=""
+        checked=True
+    return render_template('home.html', score_title=title, image_src=score_img, results=results, input=url, checked=checked)
 
 if __name__ == "__main__":
     app.run(debug=True)

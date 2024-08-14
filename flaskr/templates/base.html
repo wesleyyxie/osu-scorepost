@@ -8,6 +8,7 @@
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='style.css') }}">
     <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static',filename='osu_scorepost_generator_logo.ico') }}" />
     <script src="https://kit.fontawesome.com/a5b2cefb49.js" crossorigin="anonymous" async></script>
+    {% block home_scripts %}{% endblock %}
     <script async>
         function copyToClipboard(elementId) {
             scoreTitleText = document.getElementById(elementId).innerText;
@@ -29,6 +30,9 @@
         if (window.history.replaceState) {
             window.history.replaceState(null, null, window.location.href);
         }
+        var input = document.getElementById('myTextInput');
+        input.focus();
+        input.select();
     </script>
   </head>
   <body>

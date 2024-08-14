@@ -147,4 +147,4 @@ def create_title(url):
 #print(create_title("https://osu.ppy.sh/scores/329583391"))
 #print(create_title("https://osu.ppy.sh/scores/328536"))
 #print(create_title("https://osu.ppy.sh/users/11367222"))
-print(create_title("https://osu.ppy.sh/users/11367222/osu"))
+#print(create_title("https://osu.ppy.sh/users/11367222/osu"))

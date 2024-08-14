@@ -1,15 +1,25 @@
 {% extends "base.html" %}
+{% block home_scripts %}
+<script>
+  window.onload = function () {
+    var input = document.getElementById('content');
+    input.focus();
+    input.select();
+  }
+</script>
+
+{% endblock %}
 {% block generator %}
 <div class="generator_container">
   <form class="score_input" action="/" method="POST">
     <div class="input_container">
-      <input class="url_input" type="text" name="content" id="content" placeholder="Score URL e.g. https://osu.ppy.sh/scores/00000">
-      <button class="submit_button" id="submit_button fa-solid fa-arrow-right" onclick="loading()" type="submit">
+      <input class="url_input" type="text" name="content" id="content" value="{{ input }}" placeholder="Score URL e.g. https://osu.ppy.sh/scores/00000">
+      <button class="submit_button" id="submit_button fa-solid fa-arrow-right" onclick="loading()" type="submit" onsubmit="keepInputs()">
         <i class="fa-solid fa-angle-right" data-fa-transform="down-40"></i>
       </button>
     </div>
     <div class="checkbox_container">
-      <input class="get_screenshot" name="checkbox" type="checkbox" id="checkbox" value="get screenshot">
+      <input class="get_screenshot" name="checkbox" type="checkbox" {% if checked %} checked {% endif %} id="checkbox" value="get screenshot">
       <label for="checkbox" class="checkbox_label">Get score screenshot</label>
     </div>
   </form>
