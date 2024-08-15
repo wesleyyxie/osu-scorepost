@@ -8,8 +8,9 @@ import rosu_pp_py as rosu
 import requests
 
 # Creates title for osu
-def create_title(url):
-    score = get_score(url)
+def create_title(score: Score):
+    if score == -1:
+        return "No recent scores found"
     bm = get_beatmap(score.beatmap.id)
     print("successfully got score")
     # Score object from Ossapi
@@ -93,7 +94,7 @@ def create_title(url):
     performance_points = f"{pp_score}pp"
 
     # Beatmap status
-    if bm.status.value != 1 and bm.status.value != 2:
+    if bm.status.value == 4 or bm.status.value == 3 or bm.status.value == -2:
         performance_points += " if ranked"
         status = bm.status.value
         match status:
@@ -106,7 +107,9 @@ def create_title(url):
     
     # If score is not an FC e.g. less than 20 combo from max beatmap combo
     # or if miss count is > 0
-    if score.max_combo < bm.max_combo - 20 or score.statistics.count_miss > 0:
+    diff = rosu.Difficulty()
+    max_combo = diff.calculate(map).max_combo
+    if score.max_combo < max_combo - 20 or score.statistics.count_miss > 0:
         # pp if FC (mania does not care about FC)
         if score.mode.value != "mania":
             perf_fc = rosu.Performance(
@@ -117,8 +120,7 @@ def create_title(url):
                 n_katu = number_katu,
                 n_geki = number_geki,
             )
-
-            fc = f" {score.max_combo}/{bm.max_combo}x"
+            fc = f" {score.max_combo}/{max_combo}x"
             if_fc_pp = round(perf_fc.calculate(map).pp)
             if score.statistics.count_miss > 0:
                 fc += f" {score.statistics.count_miss}xMiss"
@@ -141,6 +143,7 @@ def create_title(url):
             fc += f" #{rank_global}"
 
     # Create title
+
     title = f"{score_mode}{username} | {artist} - {title} [{version}]{mods} ({creator}, {stars_converted:.2f}*) {acc}{fc} {status}| {performance_points}"
     return title
 
@@ -148,3 +151,4 @@ def create_title(url):
 #print(create_title("https://osu.ppy.sh/scores/328536"))
 #print(create_title("https://osu.ppy.sh/users/11367222"))
 #print(create_title("https://osu.ppy.sh/users/11367222/osu"))
+#print(create_title("https://osu.ppy.sh/scores/3337662645"))

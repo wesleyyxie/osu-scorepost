@@ -6,7 +6,7 @@ parent_dir = os.path.dirname(current_dir)
 path_to_src = os.path.join(parent_dir, "src", "statistics")
 sys.path.append(parent_dir)
 sys.path.append(path_to_src)
-from src import create_score_title, generate_screenshot
+from src import create_score_title, generate_screenshot, osu_api
 import time
 app = Flask(__name__)
 
@@ -25,29 +25,45 @@ def contact():
 def home():
     if request.method == 'POST':
         st = time.time()
-        not_valid_link_msg = "Please enter a valid score link"
-        print(request.form)
+        not_valid_link_msg = "No score found, please enter a valid score link, user link, or username"
         url = request.form['content']
-        try:
-            title = create_score_title.create_title(url)
-        except:
-            title = not_valid_link_msg
-        print(title)
         checkbox = request.form.getlist('checkbox')
-        print(checkbox)
-        if len(checkbox) > 0 and title != not_valid_link_msg:
-            checked=True
+        checked = len(checkbox) > 0
+        try:
+            score = osu_api.get_score(url)
+            print("successfully got score!")
+        except:
+            score = False
+            print("error did not get score!")
+
+        if score != False:
             try:
-                generate_screenshot.generate_ss(url)
-                score_img = "/static/scorepost_generator_images/score.png"
-                results = "Screenshot successfully generated"
+                title = create_score_title.create_title(score)
+                generated_title = True
+                print("successfully created title!")
             except:
+                title = not_valid_link_msg
+                generated_title = False
+                print("ERROR IN CREATING TITLE!")
+            
+            if checked and generated_title:
+                try:    
+                    generate_screenshot.generate_ss(score)
+                    score_img = "/static/scorepost_generator_images/score.png"
+                    results = "Screenshot successfully generated"
+                    print("successfully made ss!")
+                except:
+                    score_img = default_score_img
+                    results = "There was a problem generating your screenshot"
+                    print("ERROR IN MAKING SS!")
+            else:
                 score_img = default_score_img
-                results = "There was a problem generating your screenshot"
+                results = ""
         else:
-            checked=False
             score_img = default_score_img
             results = ""
+            title = not_valid_link_msg
+            
         et = time.time()
         elapsed_time = et - st
         print('Execution time:', elapsed_time, 'seconds')

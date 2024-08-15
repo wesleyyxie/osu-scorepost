@@ -159,10 +159,9 @@ def generate_statistics(im : Image.Image, score: Score):
     elif score_mode == "fruits":
         generate_statistics_fruits(im, score)
 
-def generate_ss(url):
-    score = get_score(url)
-    
+def generate_ss(score : Score):
     beatmapset_id = score.beatmapset.id
+    
     beatmap_img_url = f"https://assets.ppy.sh/beatmaps/{beatmapset_id}/covers/raw.jpg"
     img_data = requests.get(beatmap_img_url).content
     path_to_background = os.path.join(dir_generator, "..", "flaskr", "static", "scorepost_generator_images","background.png")
@@ -198,3 +197,4 @@ def generate_ss(url):
 #generate_ss("https://osu.ppy.sh/scores/2327036403")
 #generate_ss("https://osu.ppy.sh/scores/3326116414")
 #generate_ss("https://osu.ppy.sh/users/11367222")
+#generate_ss(get_score("https://osu.ppy.sh/users/4668236"))

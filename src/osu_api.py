@@ -19,12 +19,12 @@ def get_score(input: str):
          # If it is a link, the id would be the number inside of the link
          is_link = True
          link_id = int(re.search(r'\d+', input).group())
+         input = input.split("osu.ppy.sh")[1]
     else:
          # Assume the input is a username
          is_link = False
          user = api.user(input)
          link_id = user.id
-
     # Search by score or user
     if "/users/" in input or is_link == False:
           if "/osu" in input:
@@ -34,19 +34,20 @@ def get_score(input: str):
                 else:
                      score = None
           elif "/taiko" in input:
-                recent_score = api.user_scores(user_id=link_id, legacy_only=False, type="recent", mode="taiko", limit=1, include_fails=True)
+                print("hi")
+                recent_scores = api.user_scores(user_id=link_id, legacy_only=False, type="recent", mode="taiko", limit=1, include_fails=True)
                 if recent_scores != []:
                      score = recent_scores[0]
                 else:
                      score = None
           elif "/fruits" in input:
-                recent_score = api.user_scores(user_id=link_id, legacy_only=False, type="recent", mode="fruits", limit=1, include_fails=True)
+                recent_scores = api.user_scores(user_id=link_id, legacy_only=False, type="recent", mode="fruits", limit=1, include_fails=True)
                 if recent_scores != []:
                      score = recent_scores[0]
                 else:
                      score = None
           elif "/mania" in input:
-                recent_score = api.user_scores(user_id=link_id, legacy_only=False, type="recent", mode="mania", limit=1, include_fails=True)
+                recent_scores = api.user_scores(user_id=link_id, legacy_only=False, type="recent", mode="mania", limit=1, include_fails=True)
                 if recent_scores != []:
                      score = recent_scores[0]
                 else:
@@ -71,6 +72,7 @@ def get_score(input: str):
 
     if score == None:
         print("ERROR NO SCORE FOUND")
+        return -1
     return score
 
 # Returns difficulty attributes of score
@@ -104,3 +106,9 @@ def count_geki_katu_osu(score : Score):
 
 def get_beatmap(id : int):
      return api.beatmap(beatmap_id=id)
+
+
+#score = get_score("https://osu.ppy.sh/scores/1546684074")
+#score = get_score("https://osu.ppy.sh/scores/2992949973")
+#print(get_beatmap(score.beatmap.id))
+#print(get_score("https://osu.ppy.sh/users/9905079/taiko"))
