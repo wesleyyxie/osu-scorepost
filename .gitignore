@@ -1,2 +1,6 @@
 tests.py
+.venv
 .env
+*.pyc
+*.pyo
+__pycache__/

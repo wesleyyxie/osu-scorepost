@@ -67,7 +67,7 @@ def generate_top_left_text(im: Image.Image, score : ScoreInfo):
     title = score.beatmapset_artist + " - " + score.beatmapset_title+ " [" + score.beatmap_version + "]"
     creator = f"Beatmap by {score.beatmapset_creator}"
     player = f"Played by {score.username} on "
-    datetime = f"{score.created_at.strftime("%d.%m.%Y %H:%M:%S")}."
+    datetime = f'{score.created_at.strftime("%d.%m.%Y %H:%M:%S")}.'
 
     draw_datetime = ImageDraw.Draw(im)
 
