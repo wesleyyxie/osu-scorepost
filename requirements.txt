@@ -1,5 +1,4 @@
 ossapi==4.0.0
-selenium==4.22.0
 rosu-pp-py==1.1.0
 pillow==10.4.0
 Flask==3.0.3
