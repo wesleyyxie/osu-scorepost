@@ -72,6 +72,3 @@ def home():
         url=""
         checked=True
     return render_template("home.html", score_title=title, image_src=score_img, results=results, input=url, checked=checked)
-
-if __name__ == "__main__":
-    app.run(debug=True)
