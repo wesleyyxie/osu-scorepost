@@ -10,7 +10,6 @@ from .util.score import ScoreInfo
 def create_title(score: ScoreInfo):
     if score == -1:
         return "No recent scores found"
-    print("successfully got score")
     # Score object from Ossapi
     username = score.username
     artist = score.beatmapset_artist

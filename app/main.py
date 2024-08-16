@@ -3,10 +3,12 @@ from .scorepost.create_score_title import create_title
 from .scorepost.generate_screenshot import generate_ss
 from .scorepost.util.get_score import get_score_info
 import time
+import os
 app = Flask(__name__)
 
 default_title = 'Player | Artist - Beatmap Title [Version] (Creator, 0.00*) 0.00% SS | 0pp'
 default_score_img = '/static/default_score.png'
+not_valid_link_msg = "No score found, please enter a valid score link, user link, or username"
 
 @app.route('/how_it_works')
 def how_it_works():
@@ -20,7 +22,6 @@ def contact():
 def home():
     if request.method == 'POST':
         st = time.time()
-        not_valid_link_msg = "No score found, please enter a valid score link, user link, or username"
         url = request.form['content']
         checkbox = request.form.getlist('checkbox')
         checked = len(checkbox) > 0
@@ -46,6 +47,7 @@ def home():
             if checked and generated_title:
                 try:    
                     screenshot_file_name = generate_ss(score)
+                        
                     score_img = f"/static/scorepost_generator_images/screenshots/{screenshot_file_name}"
                     results = "Screenshot successfully generated"
                     print("successfully made ss!")

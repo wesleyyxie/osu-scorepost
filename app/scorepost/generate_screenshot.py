@@ -11,6 +11,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageEnhance
 
 import requests
 import random
+import time
 
 from .util.score import ScoreInfo
 from .util.get_score import get_score_info
@@ -177,12 +178,12 @@ def generate_ss(score : ScoreInfo):
     screenshot_file_name =  f"score{random_id}.png"
 
     img_data = requests.get(beatmap_img_url).content
-    path_to_backgrounds = os.path.join(scorepost_generator_dir,"backgrounds", f"background{random_id}.png")
-    with open(path_to_backgrounds, 'wb') as handler:
+    path_to_screenshot_dir = os.path.join(scorepost_generator_dir, "screenshots")
+    path_to_background = os.path.join(scorepost_generator_dir,"backgrounds", f"background{random_id}.png")
+    with open(path_to_background, 'wb') as handler:
         handler.write(img_data)
     try:
-        im = Image.open(path_to_backgrounds)
-        print("here")
+        im = Image.open(path_to_background)
     except Exception:
         path_to_default_background_dir = os.path.join(scorepost_generator_dir, "default_background")
         random_background = random.choice(os.listdir(path_to_default_background_dir))
@@ -201,8 +202,13 @@ def generate_ss(score : ScoreInfo):
     generate_mods_items(im, score)
     generate_statistics(im, score)
     
+    os.remove(path_to_background)
+    for ss in os.listdir(path_to_screenshot_dir):
+        past_screenshot = os.path.join(path_to_screenshot_dir, ss)
+        if time.time() - os.path.getmtime(past_screenshot) > (60 * 60):
+            os.remove(past_screenshot)
+            print("removed file!")
     im.save(os.path.join(scorepost_generator_dir, "screenshots", screenshot_file_name))
-    print("Success!")
     return screenshot_file_name
 
 #generate_ss("https://osu.ppy.sh/scores/328536")

@@ -160,7 +160,6 @@ def get_ranking_global(score: Score, oss: Ossapi):
 def get_score_info(input: str):
     oss = Ossapi(CLIENT_ID, CLIENT_SECRET)
     cg = Circleguard(API_KEY)
-    print(input)
     score_ossapi = get_ossapi_score(input, oss)
     if score_ossapi == -1:
         return -1
