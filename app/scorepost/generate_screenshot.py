@@ -1,5 +1,6 @@
 import os
 import sys
+import uuid
 
 scorepost = os.path.dirname(os.path.abspath(__file__))
 scorepost_generator_bg_dir = os.path.join(scorepost, "..", "static", "scorepost_generator_images")
@@ -171,8 +172,8 @@ def generate_statistics(im : Image.Image, score: ScoreInfo):
 
 def generate_ss(score : ScoreInfo):
     beatmapset_id = score.beatmapset_id
-    
     beatmap_img_url = f"https://assets.ppy.sh/beatmaps/{beatmapset_id}/covers/raw.jpg"
+    screenshot_file_name =  "score" + str(uuid.uuid4()) + ".png"
     img_data = requests.get(beatmap_img_url).content
     path_to_background = os.path.join(scorepost_generator_bg_dir, "background.png")
 
@@ -196,8 +197,9 @@ def generate_ss(score : ScoreInfo):
     generate_rank(im, score)
     generate_mods_items(im, score)
     generate_statistics(im, score)
-    im.save(os.path.join(scorepost_generator_bg_dir, "score.png"))
+    im.save(os.path.join(scorepost_generator_bg_dir, screenshot_file_name))
     print("Success!")
+    return screenshot_file_name
 
 #generate_ss("https://osu.ppy.sh/scores/328536")
 #generate_ss("https://osu.ppy.sh/scores/329583391")

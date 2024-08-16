@@ -45,8 +45,8 @@ def home():
             
             if checked and generated_title:
                 try:    
-                    generate_ss(score)
-                    score_img = "/static/scorepost_generator_images/score.png"
+                    screenshot_file_name = generate_ss(score)
+                    score_img = f"/static/scorepost_generator_images/{screenshot_file_name}"
                     results = "Screenshot successfully generated"
                     print("successfully made ss!")
                 except Exception as e: 
