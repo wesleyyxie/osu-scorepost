@@ -3,7 +3,7 @@ import sys
 import uuid
 
 scorepost = os.path.dirname(os.path.abspath(__file__))
-scorepost_generator_bg_dir = os.path.join(scorepost, "..", "static", "scorepost_generator_images")
+scorepost_generator_dir = os.path.join(scorepost, "..", "static", "scorepost_generator_images")
 assets_dir = os.path.join(scorepost, "assets")
 skin_dir = os.path.join(assets_dir, "skin")
 
@@ -173,19 +173,22 @@ def generate_statistics(im : Image.Image, score: ScoreInfo):
 def generate_ss(score : ScoreInfo):
     beatmapset_id = score.beatmapset_id
     beatmap_img_url = f"https://assets.ppy.sh/beatmaps/{beatmapset_id}/covers/raw.jpg"
-    screenshot_file_name =  "score" + str(uuid.uuid4()) + ".png"
-    img_data = requests.get(beatmap_img_url).content
-    path_to_background = os.path.join(scorepost_generator_bg_dir, "background.png")
+    random_id = str(uuid.uuid4())
+    screenshot_file_name =  f"score{random_id}.png"
 
-    with open(path_to_background, 'wb') as handler:
+    img_data = requests.get(beatmap_img_url).content
+    path_to_backgrounds = os.path.join(scorepost_generator_dir,"backgrounds", f"background{random_id}.png")
+    with open(path_to_backgrounds, 'wb') as handler:
         handler.write(img_data)
     try:
-        im = Image.open(path_to_background)
+        im = Image.open(path_to_backgrounds)
+        print("here")
     except Exception:
-        path_to_default_background_dir = os.path.join(scorepost_generator_bg_dir, "default_background")
+        path_to_default_background_dir = os.path.join(scorepost_generator_dir, "default_background")
         random_background = random.choice(os.listdir(path_to_default_background_dir))
         path_to_random_background = os.path.join(path_to_default_background_dir, random_background)
         im = Image.open(path_to_random_background)
+
     im = im.convert("RGB")
     color_enhancer = ImageEnhance.Color(im)
     brightness_enhance = ImageEnhance.Brightness(im)
@@ -197,7 +200,8 @@ def generate_ss(score : ScoreInfo):
     generate_rank(im, score)
     generate_mods_items(im, score)
     generate_statistics(im, score)
-    im.save(os.path.join(scorepost_generator_bg_dir, screenshot_file_name))
+    
+    im.save(os.path.join(scorepost_generator_dir, "screenshots", screenshot_file_name))
     print("Success!")
     return screenshot_file_name
 
