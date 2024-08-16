@@ -4,3 +4,4 @@ rosu-pp-py==1.1.0
 pillow==10.4.0
 Flask==3.0.3
 python-dotenv==1.0.1
+circleguard==2.15.6
