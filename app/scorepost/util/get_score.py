@@ -14,6 +14,38 @@ API_KEY = os.getenv("API_KEY")
 
 from .score import ScoreInfo
 
+def extract_id_from_link(input: str, oss: Ossapi):
+    link_parts = input.split("/")
+
+    if link_parts[-1] == '':
+        link_parts.pop()
+
+    if len(link_parts) == 2 or len(link_parts) == 3:
+        if link_parts[0] == "users":
+            try:
+                link_id = int(link_parts[1])
+                print("got user id!")
+            except ValueError:
+                try:
+                    user = oss.user(link_parts[1])
+                    print("got username!")
+                except ValueError:
+                    return None
+                link_id = user.id
+        elif link_parts[0] == "scores":
+            if len(link_parts) == 3:
+                i = 2
+            else:
+                i = 1
+            try:
+                link_id = int(link_parts[i])
+                print("got score id!")
+            except ValueError:
+                return None
+        return link_id
+    else:
+        return None
+    
 def get_recent_score(user_id: int, mode:str | None, oss: Ossapi):
     try:
         if mode != None:
@@ -35,11 +67,9 @@ def get_score_by_id(score_id: int, mode:str | None, oss: Ossapi):
             score = oss.score_mode(mode, score_id)
         else:
             score = oss.score(score_id)
-        print(mode)
         print("got score by id!")
     except ValueError:
             return None
-    print(score.id)
     return score
 
 def get_ossapi_score(input: str, oss: Ossapi):
@@ -47,39 +77,10 @@ def get_ossapi_score(input: str, oss: Ossapi):
     if "osu.ppy.sh/" in input:
         is_link = True
         input = input.split("osu.ppy.sh/")[1]
-        link_parts = input.split("/")
-
-        if link_parts[-1] == '':
-            link_parts.pop()
-
-        if len(link_parts) == 2 or len(link_parts) == 3:
-            if link_parts[0] == "users":
-                try:
-                    link_id = int(link_parts[1])
-                    print("got user id!")
-                    print(link_id)
-                except ValueError:
-                    try:
-                        user = oss.user(link_parts[1])
-                        print("got username!")
-                    except ValueError:
-                        return None
-                    print(user.username)
-                    link_id = user.id
-            elif link_parts[0] == "scores":
-                if len(link_parts) == 3:
-                    i = 2
-                else:
-                    i = 1
-                try:
-                    link_id = int(link_parts[i])
-                    print("got score id!")
-                except ValueError:
-                    return None
-        else:
-            return None
+        link_id = extract_id_from_link(input, oss)
+        if link_id == None:
+            return link_id
     else:
-        # Assume the input is a username
         is_link = False
         try:
             user = oss.user(input)
@@ -87,7 +88,7 @@ def get_ossapi_score(input: str, oss: Ossapi):
         except ValueError:
              return None
         link_id = user.id
-    # Search by score or user
+    
     if "users/" in input or is_link == False:
         if is_link == False:
             score = get_recent_score(link_id, None, oss)
@@ -122,13 +123,6 @@ def count_geki_katu_osu(score: Score, beatmap_id : int, user_id : int, cg : Circ
     else:
         return (None, None)
      
-def get_beatmap(id : int, oss: Ossapi):
-     bm = oss.beatmap(beatmap_id=id)
-     return bm
-
-def get_difficulty_attributes(score_ossapi: Score, oss: Ossapi):
-    return oss.beatmap_attributes(beatmap_id=score_ossapi.beatmap.id, mods=score_ossapi.mods, ruleset=score_ossapi.mode.value)
-
 def get_beatmap_max_combo(map):
     diff = rosu.Difficulty()
     max_combo = diff.calculate(map).max_combo
@@ -183,15 +177,15 @@ def get_ranking_global(score: Score, oss: Ossapi):
     score_list = scores.scores
 
     # Calculate ranking by iterating through list of scores
-    rank = 0
-    for s in score_list:
-        rank += 1
-        if s.id == score.id:
-            return rank
-    
+    try:
+        rank = next(i for i, s in enumerate(score_list, start=1) if s.id == score.id)
+        return rank
+    except StopIteration:
+        # Returns 0 if score is not in leaderboard
+        return 0
+
     # Returns 0 if score is not in leaderboard
-    return 0
-     
+
 def get_score_info(input: str):
     oss = Ossapi(CLIENT_ID, CLIENT_SECRET)
     cg = Circleguard(API_KEY)
@@ -200,7 +194,7 @@ def get_score_info(input: str):
         return -1
     elif score_ossapi == None:
         return None
-    difficulty_attributes = get_difficulty_attributes(score_ossapi, oss)
+    difficulty_attributes = oss.beatmap_attributes(beatmap_id=score_ossapi.beatmap.id, mods=score_ossapi.mods, ruleset=score_ossapi.mode.value)
     
     geki, katu = count_geki_katu_osu(score_ossapi, score_ossapi.beatmap.id, score_ossapi.user_id, cg)
 

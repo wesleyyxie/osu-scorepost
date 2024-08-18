@@ -11,8 +11,6 @@ def resize_image(im: Image.Image, n: float):
     return im.resize((round(w * n), round(h * n)))
 
 def write_with_img(s: str, x: int, y: int, size: float, im: Image.Image):
-    char_width = 25
-    char_height = 35
     dot_width = 15
     dot_height = 35
     percent_width = 33
@@ -34,11 +32,9 @@ def write_with_img(s: str, x: int, y: int, size: float, im: Image.Image):
     path = os.path.join(skin_dir, "Aristia(Edit)", "num/")
     left = 0
     space_size = 25
-    #print(f"{s} : {x + left}")
-
     if s == "None":
         char_img =  Image.open(os.path.join(path, letters_dict['0']))
-        char_img = char_img.resize((round(char_width * size), round(char_height * size)))
+        char_img = resize_image(char_img, size)
         im.paste(char_img, (x + left, y), char_img)
     else:
         for char in s:
@@ -53,7 +49,7 @@ def write_with_img(s: str, x: int, y: int, size: float, im: Image.Image):
                 im.paste(char_img, (x + left, y), char_img)
                 left += round(space_size * size)
             else:
-                char_img = char_img.resize((round(char_width * size), round(char_height * size)))
+                char_img = resize_image(char_img, size)
                 im.paste(char_img, (x + left, y), char_img)
                 if space_size != 25:
                     space_size = 25

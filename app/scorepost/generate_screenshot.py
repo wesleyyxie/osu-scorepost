@@ -50,7 +50,6 @@ def set_up_skeleton(im: Image.Image, score : ScoreInfo):
                 skeleton = Image.open(os.path.join(skin_dir, "Aristia(Edit)", "skeletons", "osu_replay_skeleton.png"))
             else:
                 skeleton = Image.open(os.path.join(skin_dir, "Aristia(Edit)", "skeletons", "osu_noreplay_skeleton.png"))
-                print(skeleton.mode)
         case "taiko":
             skeleton = Image.open(os.path.join(skin_dir, "Aristia(Edit)", "skeletons", "taiko_skeleton.png"))
         case "mania":
@@ -120,17 +119,14 @@ def generate_mods_items(im : Image.Image, score: ScoreInfo):
     }
     
     mods_array = [mods[i:i+2] for i in range(0, len(mods), 2)]
+    mods_img_arr = [mods_img_dict[m] for m in mods_array]
 
-    mods_img_arr = []
-    for m in mods_array:
-        mods_img_arr.append(mods_img_dict[m])
-    
-    right = 50
+    RIGHT = 50
     for n in mods_img_arr:
-        mod_img =  Image.open(os.path.join(skin_dir, "Aristia(Edit)", n))
-        mod_img = mod_img.resize((109, 106))
-        im.paste(mod_img, (1834 - right, 550), mod_img)
-        right += 50
+        mod_img = Image.open(os.path.join(skin_dir, "Aristia(Edit)", n))
+        mod_img = resize_image(mod_img, 0.7)
+        im.paste(mod_img, (1834 - RIGHT, 550), mod_img)
+        RIGHT += 50
 
 def generate_rank(im: Image.Image, score: ScoreInfo):
     rank = f"{score.rank}"
@@ -175,14 +171,12 @@ def generate_statistics(im : Image.Image, score: ScoreInfo):
 def generate_ss(score : ScoreInfo):
     beatmapset_id = score.beatmapset_id
     beatmap_img_url = f"https://assets.ppy.sh/beatmaps/{beatmapset_id}/covers/raw.png"
-    print(beatmap_img_url)
     random_id = str(uuid.uuid4())
     screenshot_file_name =  f"score{random_id}.jpg"
 
     img_data = requests.get(beatmap_img_url).content
     path_to_screenshot_dir = os.path.join(scorepost_generator_dir, "screenshots")
     path_to_background = os.path.join(scorepost_generator_dir,"backgrounds", f"background{random_id}.jpg")
-    print("hi")
     with open(path_to_background, 'wb') as handler:
         handler.write(img_data)
     
