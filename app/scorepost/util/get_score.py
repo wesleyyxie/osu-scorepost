@@ -14,66 +14,101 @@ API_KEY = os.getenv("API_KEY")
 
 from .score import ScoreInfo
 
-def get_ossapi_score(input: str, oss: Ossapi):
-        # Sets id whether the input is a link or not
-    if "osu.ppy.sh/" in input:
-         # If it is a link, the id would be the number inside of the link
-         is_link = True
-         link_id = int(re.search(r'\d+', input).group())
-         input = input.split("osu.ppy.sh")[1]
+def get_recent_score(user_id: int, mode:str | None, oss: Ossapi):
+    try:
+        if mode != None:
+            recent_scores = oss.user_scores(user_id=user_id, legacy_only=False, type="recent", mode=mode, limit=1, include_fails=True)
+        else:
+            recent_scores = oss.user_scores(user_id=user_id, legacy_only=False, type="recent", limit=1, include_fails=True)
+        print("got recent score!")
+    except ValueError:
+            return None
+    if recent_scores != []:
+        return recent_scores[0]
     else:
-         # Assume the input is a username
-         is_link = False
-         user = oss.user(input)
-         link_id = user.id
-    # Search by score or user
-    if "/users/" in input or is_link == False:
-          if "/osu" in input:
-                recent_scores = oss.user_scores(user_id=link_id, legacy_only=False, type="recent", mode="osu", limit=1, include_fails=True)
-                if recent_scores != []:
-                     score = recent_scores[0]
-                else:
-                     score = None
-          elif "/taiko" in input:
-                print("hi")
-                recent_scores = oss.user_scores(user_id=link_id, legacy_only=False, type="recent", mode="taiko", limit=1, include_fails=True)
-                if recent_scores != []:
-                     score = recent_scores[0]
-                else:
-                     score = None
-          elif "/fruits" in input:
-                recent_scores = oss.user_scores(user_id=link_id, legacy_only=False, type="recent", mode="fruits", limit=1, include_fails=True)
-                if recent_scores != []:
-                     score = recent_scores[0]
-                else:
-                     score = None
-          elif "/mania" in input:
-                recent_scores = oss.user_scores(user_id=link_id, legacy_only=False, type="recent", mode="mania", limit=1, include_fails=True)
-                if recent_scores != []:
-                     score = recent_scores[0]
-                else:
-                     score = None
-          else:
-                recent_scores = oss.user_scores(user_id=link_id, legacy_only=False, type="recent", include_fails=True)
-                if recent_scores != []: 
-                    score = recent_scores[0]
-                else:
-                     score = None
-
-    elif "/osu/" in input:
-        score = oss.score_mode("osu", link_id)
-    elif "/taiko/" in input:
-        score = oss.score_mode("taiko", link_id)
-    elif "/mania/" in input:
-        score = oss.score_mode("mania", link_id)
-    elif "/fruits/" in input:
-        score = oss.score_mode("fruits", link_id)
-    else:
-        score = oss.score(link_id)
-
-    if score == None:
-        print("ERROR NO SCORE FOUND")
+        print("no recent score!")
         return -1
+        
+def get_score_by_id(score_id: int, mode:str | None, oss: Ossapi):
+    try:
+        if mode != None:
+            score = oss.score_mode(mode, score_id)
+        else:
+            score = oss.score(score_id)
+        print(mode)
+        print("got score by id!")
+    except ValueError:
+            return None
+    print(score.id)
+    return score
+
+def get_ossapi_score(input: str, oss: Ossapi):
+    
+    if "osu.ppy.sh/" in input:
+        is_link = True
+        input = input.split("osu.ppy.sh/")[1]
+        link_parts = input.split("/")
+
+        if link_parts[-1] == '':
+            link_parts.pop()
+
+        if len(link_parts) == 2 or len(link_parts) == 3:
+            if link_parts[0] == "users":
+                try:
+                    link_id = int(link_parts[1])
+                    print("got user id!")
+                    print(link_id)
+                except ValueError:
+                    try:
+                        user = oss.user(link_parts[1])
+                        print("got username!")
+                    except ValueError:
+                        return None
+                    print(user.username)
+                    link_id = user.id
+            elif link_parts[0] == "scores":
+                if len(link_parts) == 3:
+                    i = 2
+                else:
+                    i = 1
+                try:
+                    link_id = int(link_parts[i])
+                    print("got score id!")
+                except ValueError:
+                    return None
+        else:
+            return None
+    else:
+        # Assume the input is a username
+        is_link = False
+        try:
+            user = oss.user(input)
+            print("is not link! got username!")
+        except ValueError:
+             return None
+        link_id = user.id
+    # Search by score or user
+    if "users/" in input or is_link == False:
+        if is_link == False:
+            score = get_recent_score(link_id, None, oss)
+        else:
+            modes = {
+                "/osu": "osu",
+                "/taiko": "taiko",
+                "/fruits": "fruits",
+                "/mania": "mania"
+            }
+            mode = next((modes[i] for i in modes if i in input), None)
+            score = get_recent_score(link_id, mode, oss)
+    else:
+        modes = {
+            "/osu/": "osu",
+            "/taiko/": "taiko",
+            "/fruits/": "fruits",
+            "/mania/": "mania"
+        }
+        mode = next((modes[i] for i in modes if i in input), None)
+        score = get_score_by_id(link_id, mode, oss)
     return score
 
 def count_geki_katu_osu(score: Score, beatmap_id : int, user_id : int, cg : Circleguard):
@@ -163,6 +198,8 @@ def get_score_info(input: str):
     score_ossapi = get_ossapi_score(input, oss)
     if score_ossapi == -1:
         return -1
+    elif score_ossapi == None:
+        return None
     difficulty_attributes = get_difficulty_attributes(score_ossapi, oss)
     
     geki, katu = count_geki_katu_osu(score_ossapi, score_ossapi.beatmap.id, score_ossapi.user_id, cg)

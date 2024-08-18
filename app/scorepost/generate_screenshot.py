@@ -7,7 +7,7 @@ scorepost_generator_dir = os.path.join(scorepost, "..", "static", "scorepost_gen
 assets_dir = os.path.join(scorepost, "assets")
 skin_dir = os.path.join(assets_dir, "skin")
 
-from PIL import Image, ImageDraw, ImageFont, ImageEnhance
+from PIL import Image, ImageDraw, ImageFont, ImageEnhance, UnidentifiedImageError
 
 import requests
 import random
@@ -47,9 +47,10 @@ def set_up_skeleton(im: Image.Image, score : ScoreInfo):
     match score.mode.value:
         case "osu":
             if score.id == score.best_id:
-                skeleton = Image.open(os.path.join(skin_dir, "Aristia(Edit)", "skeletons", "osu_skeleton_replay.png"))
+                skeleton = Image.open(os.path.join(skin_dir, "Aristia(Edit)", "skeletons", "osu_replay_skeleton.png"))
             else:
-                skeleton = Image.open(os.path.join(skin_dir, "Aristia(Edit)", "skeletons", "osu_skeleton_noreplay.png"))
+                skeleton = Image.open(os.path.join(skin_dir, "Aristia(Edit)", "skeletons", "osu_noreplay_skeleton.png"))
+                print(skeleton.mode)
         case "taiko":
             skeleton = Image.open(os.path.join(skin_dir, "Aristia(Edit)", "skeletons", "taiko_skeleton.png"))
         case "mania":
@@ -173,22 +174,34 @@ def generate_statistics(im : Image.Image, score: ScoreInfo):
 
 def generate_ss(score : ScoreInfo):
     beatmapset_id = score.beatmapset_id
-    beatmap_img_url = f"https://assets.ppy.sh/beatmaps/{beatmapset_id}/covers/raw.jpg"
+    beatmap_img_url = f"https://assets.ppy.sh/beatmaps/{beatmapset_id}/covers/raw.png"
+    print(beatmap_img_url)
     random_id = str(uuid.uuid4())
-    screenshot_file_name =  f"score{random_id}.png"
+    screenshot_file_name =  f"score{random_id}.jpg"
 
     img_data = requests.get(beatmap_img_url).content
     path_to_screenshot_dir = os.path.join(scorepost_generator_dir, "screenshots")
-    path_to_background = os.path.join(scorepost_generator_dir,"backgrounds", f"background{random_id}.png")
+    path_to_background = os.path.join(scorepost_generator_dir,"backgrounds", f"background{random_id}.jpg")
+    print("hi")
     with open(path_to_background, 'wb') as handler:
         handler.write(img_data)
+    
     try:
         im = Image.open(path_to_background)
-    except Exception:
-        path_to_default_background_dir = os.path.join(scorepost_generator_dir, "default_background")
-        random_background = random.choice(os.listdir(path_to_default_background_dir))
-        path_to_random_background = os.path.join(path_to_default_background_dir, random_background)
-        im = Image.open(path_to_random_background)
+    except UnidentifiedImageError:
+        beatmap_img_url = f"https://assets.ppy.sh/beatmaps/{beatmapset_id}/covers/raw.jpg"
+        img_data = requests.get(beatmap_img_url).content
+        with open(path_to_background, 'wb') as handler:
+            handler.write(img_data)
+        try:
+            im = Image.open(path_to_background)
+        except UnidentifiedImageError:
+            path_to_default_background_dir = os.path.join(scorepost_generator_dir, "default_background")
+            random_background = random.choice(os.listdir(path_to_default_background_dir))
+            path_to_random_background = os.path.join(path_to_default_background_dir, random_background)
+            im = Image.open(path_to_random_background)
+        
+    
 
     im = im.convert("RGB")
     color_enhancer = ImageEnhance.Color(im)

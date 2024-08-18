@@ -7,8 +7,11 @@ import os
 app = Flask(__name__)
 
 default_title = 'Player | Artist - Beatmap Title [Version] (Creator, 0.00*) 0.00% SS | 0pp'
-default_score_img = '/static/default_score.png'
+default_score_img = '/static/default_score.jpg'
 not_valid_link_msg = "No score found, please enter a valid score link, user link, or username"
+no_score_found = "No score found to generate screenshot"
+
+no_recent_score = "No recent scores"
 
 @app.route('/how_it_works')
 def how_it_works():
@@ -25,44 +28,27 @@ def home():
         url = request.form['content']
         checkbox = request.form.getlist('checkbox')
         checked = len(checkbox) > 0
-        try:
-            score = get_score_info(url)
-            print("successfully got score!")
-        except Exception as e:
-            print(e)
-            score = False
-            print("error did not get score!")
+        results = ""
+        #try:
+        score = get_score_info(url)
+        if score == None:
+            if checked:
+                results = no_score_found
+            return render_template("home.html", score_title=not_valid_link_msg, image_src=default_score_img, results=results, input=url, checked=checked)
+        elif score == -1:
+            if checked:
+                results = no_score_found
+            return render_template("home.html", score_title=no_recent_score, image_src=default_score_img, results=results, input=url, checked=checked)
 
-        if score != False:
-            try:
-                title = create_title(score)
-                generated_title = True
-                print("successfully created title!")
-            except Exception as e: 
-                print(e)
-                title = not_valid_link_msg
-                generated_title = False
-                print("ERROR IN CREATING TITLE!")
-            
-            if checked and generated_title:
-                try:    
-                    screenshot_file_name = generate_ss(score)
-                        
-                    score_img = f"/static/scorepost_generator_images/screenshots/{screenshot_file_name}"
-                    results = "Screenshot successfully generated"
-                    print("successfully made ss!")
-                except Exception as e: 
-                    print(e)
-                    score_img = default_score_img
-                    results = "There was a problem generating your screenshot"
-                    print("ERROR IN MAKING SS!")
-            else:
-                score_img = default_score_img
-                results = ""
-        else:
-            score_img = default_score_img
-            results = ""
-            title = not_valid_link_msg
+        print("successfully got score!")
+
+        title = create_title(score)
+        
+        if checked:
+            screenshot_file_name = generate_ss(score)
+            score_img = f"/static/scorepost_generator_images/screenshots/{screenshot_file_name}"
+            results = "Screenshot successfully generated"
+            print("successfully made ss!")
             
         et = time.time()
         elapsed_time = et - st

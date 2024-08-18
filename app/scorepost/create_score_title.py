@@ -8,8 +8,6 @@ from .util.score import ScoreInfo
 
 # Creates title for osu
 def create_title(score: ScoreInfo):
-    if score == -1:
-        return "No recent scores found"
     # Score object from Ossapi
     username = score.username
     artist = score.beatmapset_artist
@@ -77,14 +75,15 @@ def create_title(score: ScoreInfo):
                 fc += f" {score.count_miss}xMiss"
             elif score.mode.value == "osu":
                 fc += " S-Rank"
-            if f"{score.rank}" == "F":
-                fc += " FAIL"
             performance_points += f" ({if_fc_pp}pp if FC)"
     # If SS
     elif score.accuracy == 1:
         fc = " SS"
     else:
         fc = " FC"
+    
+    if f"{score.rank}" == "F":
+        fc += " FAIL"
 
 
     # Global ranking if on leaderboard
