@@ -1,6 +1,21 @@
+from PIL import Image, ImageDraw, ImageFont, ImageEnhance, UnidentifiedImageError
+
+import requests
+import random
+import time
 import os
 import uuid
 
+from .util.score import ScoreInfo
+from .util.ranking_panel import (
+    ranking_panel_fruits,
+    ranking_panel_mania,
+    ranking_panel_osu,
+    ranking_panel_taiko,
+)
+from .util.screenshot_util import skin_dir, resize_image
+
+# Scorepost generator images directory, skin and assets paths
 scorepost = os.path.dirname(os.path.abspath(__file__))
 scorepost_generator_dir = os.path.join(
     scorepost, "..", "static", "scorepost_generator_images"
@@ -8,28 +23,27 @@ scorepost_generator_dir = os.path.join(
 assets_dir = os.path.join(scorepost, "assets")
 skin_dir = os.path.join(assets_dir, "skin")
 
-from PIL import Image, ImageDraw, ImageFont, ImageEnhance, UnidentifiedImageError
-
-import requests
-import random
-import time
-
-from .util.score import ScoreInfo
-from .util.screenshot_util import skin_dir, resize_image, write_with_img
-from .util.statistics_fruits import generate_statistics_fruits
-from .util.statistics_osu import generate_statistics_osu
-from .util.statistics_taiko import generate_statistics_taiko
-from .util.statistics_mania import generate_statistics_mania
-
 
 def set_up_image_dimensions(im: Image.Image):
+    """Returns a copy of im with 1920/1080 ratio
+
+    Args:
+        im (Image.Image): Image
+
+    Returns:
+        _type_: _description_
+    """
+
+    # Constants of dimensions and ratio
     DESIRED_WIDTH = 1920
     DESIRED_HEIGHT = 1080
     DESIRED_RATIO = DESIRED_WIDTH / DESIRED_HEIGHT
 
+    # Image current dimensions and ratio
     width, height = im.size
     current_ratio = width / height
 
+    # Crop im to be 1920/1080 ratio to prevent stretching
     if current_ratio > DESIRED_RATIO:
         new_width = round(DESIRED_RATIO * height)
         new_height = height
@@ -46,7 +60,15 @@ def set_up_image_dimensions(im: Image.Image):
 
 
 def set_up_skeleton(im: Image.Image, score: ScoreInfo):
+    """Pastes the skeleton according to the gamemode of the score
+
+    Args:
+        im (Image.Image): _description_
+        score (ScoreInfo): _description_
+    """
+
     match score.mode.value:
+        # Osu gamemode has different skeleton whether it has a replay or not
         case "osu":
             if score.id == score.best_id:
                 skeleton = Image.open(
@@ -88,12 +110,32 @@ def set_up_skeleton(im: Image.Image, score: ScoreInfo):
 
 
 def aller_write_on_img(s: str, xy: tuple, font_size: int, im: Image):
+    """Writes s onto im on coordinates xy with font size of font_size and
+    Aller font
+
+    Args:
+        s (str): String
+        xy (tuple): Coordinates
+        font_size (int): Font size
+        im (Image): Image
+    """
+    # Write onto image
     draw_text = ImageDraw.Draw(im)
     myFont = ImageFont.truetype(os.path.join(assets_dir, "Aller_Lt.ttf"), font_size)
     draw_text.text(xy, s, font=myFont, fill=(255, 255, 255))
 
 
 def generate_top_left_text(im: Image.Image, score: ScoreInfo):
+    """Generates the score's beatmap title, artist, version, and creator.
+    As well as the score's player, and the date and time the play was set
+
+
+    Args:
+        im (Image.Image): Image
+        score (ScoreInfo): Score
+    """
+
+    # Initialize the string to be drawn
     title = (
         score.beatmapset_artist
         + " - "
@@ -106,28 +148,35 @@ def generate_top_left_text(im: Image.Image, score: ScoreInfo):
     player = f"Played by {score.username} on "
     datetime = f'{score.created_at.strftime("%d.%m.%Y %H:%M:%S")}.'
 
-    draw_datetime = ImageDraw.Draw(im)
+    # For datetime, it is after player, so calculate player text size
+    size = ImageDraw.Draw(im)
+    font_path = os.path.join(assets_dir, "Aller_Lt.ttf")
+    myFont_medium = ImageFont.truetype(font_path, 30)
+    datetime_position_left = (
+        size.textlength(player, font=myFont_medium, font_size=30) + 15
+    )
 
+    # Write onto image
+    aller_write_on_img(datetime, (datetime_position_left, 97), 25, im)
     aller_write_on_img(title, (10, 10), 45, im)
     aller_write_on_img(creator, (13, 60), 30, im)
     aller_write_on_img(player, (13, 94), 30, im)
 
-    size = ImageDraw.Draw(im)
-    font_path = os.path.join(assets_dir, "Aller_Lt.ttf")
-    myFont_medium = ImageFont.truetype(font_path, 30)
-    datetime_postition_left = (
-        size.textlength(player, font=myFont_medium, font_size=30) + 15
-    )
-    f = ImageFont.truetype(font_path, 25)
-    draw_datetime.text(
-        (datetime_postition_left, 97), datetime, font=f, fill=(255, 255, 255)
-    )
-
 
 def generate_mods_items(im: Image.Image, score: ScoreInfo):
+    """Paste mods onto image
+
+    Args:
+        im (Image.Image): Image
+        score (ScoreInfo): Score
+    """
+
+    # Initialize score mods, if NM then no need to paste anything
     mods = f"{score.mods}"
     if mods == "NM":
         return
+
+    # Mods dictionary with corresponding image
     mods_img_dict = {
         "AT": "selection-mod-autoplay@2x.png",
         "CM": "selection-mod-cinema@2x.png",
@@ -159,10 +208,15 @@ def generate_mods_items(im: Image.Image, score: ScoreInfo):
         "TP": "selection-mod-target@2x.png",
     }
 
+    # mods will be one long string, so divide the string
+    # into an array with every 2 characters to get each mod name.
+    # Then create an array for the corresponding image file names
     mods_array = [mods[i : i + 2] for i in range(0, len(mods), 2)]
     mods_img_arr = [mods_img_dict[m] for m in mods_array]
 
-    RIGHT = 50
+    RIGHT = 50  # Amount of spacing between each mod image
+
+    # Paste each mod image onto image
     for n in mods_img_arr:
         mod_img = Image.open(os.path.join(skin_dir, "Aristia(Edit)", n))
         mod_img = resize_image(mod_img, 0.7)
@@ -171,6 +225,13 @@ def generate_mods_items(im: Image.Image, score: ScoreInfo):
 
 
 def generate_rank(im: Image.Image, score: ScoreInfo):
+    """Paste the rank of the score onto im
+
+    Args:
+        im (Image.Image): Image
+        score (ScoreInfo): Score
+    """
+    # Initialize score rank and dictionary
     rank = f"{score.rank}"
     rank_img_dict = {
         "A": "Ranking-A@2x.png",
@@ -183,41 +244,56 @@ def generate_rank(im: Image.Image, score: ScoreInfo):
         "XH": "Ranking-XH@2x.png",
         "F": "Ranking-D@2x.png",
     }
+
+    # Skin directory
     skin_folder = os.path.join(skin_dir, "Aristia(Edit)")
+
+    # Initialize corresponding rank image, resize and paste onto im
     rank_img = Image.open(os.path.join(skin_folder, rank_img_dict[rank]))
-    rank_img = rank_img.resize((378, 491))
+    rank_img = resize_image(rank_img, 0.7)
     im.paste(rank_img, (1460, 260), rank_img)
 
 
-def generate_statistics(im: Image.Image, score: ScoreInfo):
-    score_amount = score.score
-    score_amount_str = f"{score_amount}"
+def ranking_panel(im: Image.Image, score: ScoreInfo):
+    """Pastes ranking panel information onto im
+
+    Args:
+        im (Image.Image): Image
+        score (ScoreInfo): Score
+    """
+
+    # Different gamemodes has different statistics to display
     score_mode = score.mode.value
-
-    if score_amount < 10000000:
-        if score_mode == "mania":
-            score_amount_str = ("0" * (7 - len(score_amount_str))) + score_amount_str
-        else:
-            score_amount_str = ("0" * (8 - len(score_amount_str))) + score_amount_str
-
-    write_with_img(score_amount_str, 265, 180, 1.8, im)
     if score_mode == "osu":
-        generate_statistics_osu(im, score)
+        ranking_panel_osu(im, score)
     elif score_mode == "mania":
-        generate_statistics_mania(im, score)
+        ranking_panel_mania(im, score)
     elif score_mode == "taiko":
-        generate_statistics_taiko(im, score)
+        ranking_panel_taiko(im, score)
     elif score_mode == "fruits":
-        generate_statistics_fruits(im, score)
+        ranking_panel_fruits(im, score)
 
 
 def generate_ss(score: ScoreInfo):
-    beatmapset_id = score.beatmapset_id
-    beatmap_img_url = f"https://assets.ppy.sh/beatmaps/{beatmapset_id}/covers/raw.png"
-    random_id = str(uuid.uuid4())
+    """Generates a screenshot of the scorepost
+
+    Args:
+        score (ScoreInfo): Score
+
+    Returns:
+        str: The name of the file of the screenshot
+    """
+
+    # Initialize screenshot file name
+    random_id = str(uuid.uuid4())  # Unique name for each screenshot
     screenshot_file_name = f"score{random_id}.jpg"
 
+    # Get beatmapset background data from link
+    beatmapset_id = score.beatmapset_id
+    beatmap_img_url = f"https://assets.ppy.sh/beatmaps/{beatmapset_id}/covers/raw.png"
     img_data = requests.get(beatmap_img_url).content
+
+    # Path to screenshots directory
     path_to_screenshot_dir = os.path.join(scorepost_generator_dir, "screenshots")
     path_to_background = os.path.join(
         scorepost_generator_dir, "backgrounds", f"background{random_id}.jpg"
@@ -225,18 +301,21 @@ def generate_ss(score: ScoreInfo):
     with open(path_to_background, "wb") as handler:
         handler.write(img_data)
 
+    # If the link does not return any data for the background, it could be that it is
+    # not a png file, so try again for jpg. If it does not return any data again, then
+    # assume that the beatmapset has no background, so the background file is a random choice
+    # in default_background directory.
     try:
         im = Image.open(path_to_background)
     except UnidentifiedImageError:
-        beatmap_img_url = (
-            f"https://assets.ppy.sh/beatmaps/{beatmapset_id}/covers/raw.jpg"
-        )
+        beatmap_img_url = f"https://assets.ppy.sh/beatmaps/{beatmapset_id}/covers/raw.jpg"  # Try with jpg
         img_data = requests.get(beatmap_img_url).content
         with open(path_to_background, "wb") as handler:
             handler.write(img_data)
         try:
             im = Image.open(path_to_background)
         except UnidentifiedImageError:
+            # If it doesn't work, pick a random default background
             path_to_default_background_dir = os.path.join(
                 scorepost_generator_dir, "default_background"
             )
@@ -248,23 +327,33 @@ def generate_ss(score: ScoreInfo):
             )
             im = Image.open(path_to_random_background)
 
+    # Dim beatmap background
     im = im.convert("RGB")
     color_enhancer = ImageEnhance.Color(im)
     brightness_enhance = ImageEnhance.Brightness(im)
     im = color_enhancer.enhance(0.50)
     im = brightness_enhance.enhance(0.6)
+
+    # Set up image dimensions and paste skeleton
     im = set_up_image_dimensions(im)
     set_up_skeleton(im, score)
+
+    # Paste score information
     generate_top_left_text(im, score)
     generate_rank(im, score)
     generate_mods_items(im, score)
-    generate_statistics(im, score)
+    ranking_panel(im, score)
 
+    # Delete the saved background file
     os.remove(path_to_background)
+
+    # Delete all previous screenshot files that are older than 1 hour
     for ss in os.listdir(path_to_screenshot_dir):
         past_screenshot = os.path.join(path_to_screenshot_dir, ss)
         if time.time() - os.path.getmtime(past_screenshot) > (60 * 60):
             os.remove(past_screenshot)
             print("removed file!")
+
+    # Save the screenshot and return the file name
     im.save(os.path.join(scorepost_generator_dir, "screenshots", screenshot_file_name))
     return screenshot_file_name

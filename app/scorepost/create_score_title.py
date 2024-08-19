@@ -57,7 +57,7 @@ def create_title(score: ScoreInfo):
     # Beatmap status
     if score.beatmapset_status in {4, 3, -2}:
         performance_points += " if ranked"
-        status = {4: "LOVED ", 3: "QUALIFIED ", -2: "WIP "}.get(status)
+        status = {4: "LOVED ", 3: "QUALIFIED ", -2: "WIP "}.get(score.beatmapset_status)
 
     # If score is not FC (score combo is 20 less than max combo or count miss > 0)
     if score.max_combo < score.beatmap_max_combo - 20 or score.count_miss > 0:
