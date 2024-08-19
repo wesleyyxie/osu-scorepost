@@ -10,6 +10,10 @@
     <script src="https://kit.fontawesome.com/a5b2cefb49.js" crossorigin="anonymous" async></script>
     {% block home_scripts %}{% endblock %}
     <script async>
+        /**
+         * Copies the text inside of elementId and displays copy_notification
+         * @param  {String} elementId The ID of the element you would like to copy the text of
+         */
         function copyToClipboard(elementId) {
             scoreTitleText = document.getElementById(elementId).innerText;
             navigator.clipboard.writeText(scoreTitleText);
@@ -19,6 +23,9 @@
             setTimeout(function(){ notif.className = notif.className.replace("show", ""); }, 3000);
         }
 
+        /**
+         * Loading... message and disable button
+         */
         function loading() {
             setTimeout(function(){
             loading_element = document.getElementById('loading')
@@ -27,12 +34,15 @@
             }, 100)
 
         }
+
+        /* reset site on refresh */
         if (window.history.replaceState) {
             window.history.replaceState(null, null, window.location.href);
         }
     </script>
   </head>
   <body>
+    <!--Navigation bar-->
     <div class="top_navbar">
         <a class="site_title" href="/">
             <img class="site_logo" src="/static/osu_scorepost_generator_logo.png">
@@ -59,8 +69,8 @@
         </div>
 
     </div>
-    <!-- generator starts here -->
     {% block generator %}{% endblock %}
+    <!--Copy notification-->
     <div id="copy_notification" class="">Copied to clipboard</div>
   </body>
 </html>

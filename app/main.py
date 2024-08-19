@@ -99,6 +99,9 @@ def home():
             )
             results = "Screenshot successfully generated"
             print("successfully made ss!")
+        else:
+            score_img = default_score_img
+            results = no_score_found
 
         et = time.time()
         elapsed_time = et - st

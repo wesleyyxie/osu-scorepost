@@ -13,6 +13,7 @@ body {
     font-family: exo2;
 }
 
+/* Navigation bar */
 .top_navbar{
     position: relative;
     overflow: hidden;
@@ -76,17 +77,7 @@ body {
     background-color: white;
 }
 
-
-
-/* generator css */
-.generator_container{
-    flex-direction: column;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    top: 80px;
-}
+/* Copy notification */
 
 #copy_notification{
     visibility: hidden;
@@ -130,6 +121,18 @@ body {
     from {bottom: 30px; opacity: 1;}
     to {bottom: 0; opacity: 0;}
   }
+
+/* Scorepost Generator css */
+.generator_container{
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    top: 80px;
+}
+
+/* input */
 .form{
     display: flex;
     justify-content: center;
@@ -142,11 +145,11 @@ body {
 
 .score_input {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     row-gap: 0px;
     width: 18vw;
     row-gap: 10px;
-    justify-content: center;
+    align-items: center;
 }
 
 .input_container{
@@ -186,16 +189,16 @@ body {
 
 .url_input{
     font-family: exo2;
-    padding: 6px 5px 4px 5px;
+    padding: 6px 5px 4px 10px;
     border-radius: 10000000px;
     border: none;
-    box-shadow: 0 4px 8px 0 black, 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     width: 30vw;
     font-size: 9em;
 }
 
-.url_input:active{
-    border: none;
+.url_input:focus{
+    outline: none;
+    box-shadow: 0 0 8px #c2c2c2;
 }
 
 .checkbox_container{
@@ -215,6 +218,7 @@ body {
     cursor: pointer;
 }
 
+/* Generated title */
 .generated_title {
     color: white;
     margin: 30px 10px 10px 10px;
@@ -240,6 +244,8 @@ body {
     width: 80vw;
 }
 
+/* Generated image */
+
 .score_image {
     border-radius: 5px;
     box-shadow: 0 0 20px #676767;
@@ -255,8 +261,8 @@ body {
     color: white;
     font-size: 8em;
 }
-/*contacts css*/
 
+/* Contacts css */
 .contacts_container{
     display: flex;
     align-items: center;
@@ -338,7 +344,6 @@ body {
 
 
 .tooltiptext{
-    visibility: hidden;
     color: white;
 }
 
@@ -348,10 +353,8 @@ body {
     cursor: pointer;
 }
 
-.social_icon:hover .tooltiptext{
-    visibility: visible;
-}
 
+/* Generator responsive css */
 @media (min-width: 660px) {
     .score_input{
         row-gap: 0px;
@@ -500,8 +503,9 @@ body {
     }
 }
 
-
+/* Navigation bar and other responsive css */
 @media (min-width: 575px) {
+    /* Nav bar */
     .site_logo{
         height: 40px;
     }
@@ -520,7 +524,7 @@ body {
         font-size: 15rem;
     }
 
-    /* contacts */
+    /* Contacts */
     .contacts_container{
         font-size: 1.5em;
     }
@@ -544,6 +548,7 @@ body {
 
 
 @media (min-width: 880px) {
+    /* Navbar */
     .top_navbar{
         display: flex;
     }
@@ -567,7 +572,7 @@ body {
         font-size: 20rem;
     }
 
-    /* contacts */
+    /* Contacts */
     .contacts_container{
         font-size: 2em;
     }
