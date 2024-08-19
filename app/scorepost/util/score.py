@@ -1,7 +1,35 @@
 from ossapi import Score
 
+
 class ScoreInfo:
-    def __init__(self, score_ossapi: Score, pp: int, pp_if_fc: int, katu: int, geki: int, beatmap_max_combo: int, stars_converted: int, global_ranking: int):
+    """
+    Represents score information needed for scorepost title and screenshot.
+    """
+
+    def __init__(
+        self,
+        score_ossapi: Score,
+        pp: int,
+        pp_if_fc: int,
+        katu: int | None,
+        geki: int | None,
+        beatmap_max_combo: int,
+        stars_converted: int,
+        global_ranking: int,
+    ):
+        """
+        Initializes ScoreInfo with score details.
+
+        Args:
+            score_ossapi (Score): The score object from ossapi.
+            pp (int): Performance points for the score.
+            pp_if_fc (int): Performance points if full combo.
+            katu (int | None): Number of katu.
+            geki (int | None): Number of geki.
+            beatmap_max_combo (int): Max combo possible on the beatmap.
+            stars_converted (int): Converted star difficulty.
+            global_ranking (int): Score's global ranking on the beatmap (0 if not in top 50).
+        """
         self.username = score_ossapi._user.username
         self.id = score_ossapi.id
         self.best_id = score_ossapi.best_id
@@ -33,10 +61,3 @@ class ScoreInfo:
 
         self.beatmap_max_combo = beatmap_max_combo
         self.stars_converted = stars_converted
-    
-
-        
-
-
-    
-        
