@@ -382,6 +382,10 @@ body {
     padding-bottom: 80px
 }
 
+.content_container a{
+    color:rgb(56, 134, 172);
+}
+
 .example_scorepost{
     width: 80vw;
     font-weight:lighter;
@@ -418,7 +422,7 @@ body {
     }
 
     .generated_title{
-        font-size: 14em;
+        font-size: 12em;
         width: 80vw;
     }
 
@@ -445,7 +449,6 @@ body {
         justify-content: center;
     }
     .content_container{
-        font-size: 14rem;
         width: 80vw;
     }
     .content_container img{
@@ -500,8 +503,8 @@ body {
     }
     /* How to use */
     .content_container{
-        font-size: 16rem;
         width: 70vw;
+        font-size: 14rem;
     }
     .content_container img{
         width: 40vw
@@ -560,11 +563,6 @@ body {
 
     .notif{
         font-size: 17em;
-    }
-
-    /* How to use */
-    .content_container{
-        font-size: 24rem;
     }
 }
 
