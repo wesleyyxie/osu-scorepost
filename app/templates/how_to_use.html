@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block generator %}
+<div class="how_to_use_container">
+    <div class="content_container">
+        <h1>Welcome</h1>
+        <p>
+            This is osu!scorepost, the easiest way to quickly generate a scorepost to be posted on r/osugame and be apart of osu! history!
+        </p>
+        <p>
+            A scorepost would consist of a title for your post and an image that replicates
+            a screenshot on the osu! results screen. Example:
+        </p>
+        <h4>9MlCE | VINXIS - Sidetracked Day [Infinity Inside] +HDDT (DendyHere, 10.50*) 96.69% FC #1 | 1711pp</h1>
+        <img class="example_scorepost" src="./static/score9f14403d-1463-42e0-9a84-04c193824944.jpg">
+        <p>
+            This scorepost was generate with just a score link <a target="_blank" href="https://osu.ppy.sh/scores/1777987420">https://osu.ppy.sh/scores/1777987420</a> and a click of a button!
+        </p>
+        <hr>
+        <h3>There are 3 ways to generate a scorepost:</h3>
+        <ol>
+            <li>
+                <p><b>Link of a score</b></p>
+                <p>
+                    As mentioned, simply entering a link of a score would generate a scorepost. 
+                    Even links in the "old id" format works. (e.g. <a target="_blank" href="https://osu.ppy.sh/scores/osu/4100884541">https://osu.ppy.sh/scores/osu/4100884541</a>)
+                    Please be sure that the full link is entered properly without leaving "osu.ppy.sh".
+                </p>
+            </li>
+            <li>
+                <p><b>Link of a user</b></p>
+                <p>
+                    Entering the link of a user's profile would create a scorepost of the user's most recent score. (even if it is counted as a fail!) You can also specify the gamemode by using 
+                    the links that includes the gamemode (e.g. <a target="_blank" href="https://osu.ppy.sh/users/4504101/taiko">https://osu.ppy.sh/users/4504101/taiko</a>)
+                </p>
+            </li>
+            <li>
+                <p><b>Username</b></p>
+                <p>
+                    Just entering a username will also create a scorepost of the user's most recent score! Just by entering the username will only work for the user's default gamemode.
+                </p>
+            </li>
+        </ol>
+        <hr>
+        <h3>After scorepost is created</h3>
+        <p>
+            After the scorepost have been successfully generated with the scorepost title, you can copy the title onto your clipboard 
+            by clicking the clipboard icon right beside the scorepost title. 
+        </p>
+        <img class="tutorial_clipboard"src="/static/tutorial_clipboard.jpg">
+        <p>
+            If your screenshot was created, you can click the Reddit logo in the navigation bar to open the r/osugame submit page 
+            in a new tab and drag the created screenshot into the image dropfield.
+        </p>
+        <img class="tutorial_reddit" src="/static/tutorial_reddit.jpg">
+        <p>
+            Paste your copied scorepost title into the post title field in Reddit, 
+            set the flair to "Gameplay" and click Post!
+        </p>
+        <hr>
+        <h3>Limitations</h3>
+        <ul>
+            <li>
+                <p>
+                Unfortunately, scores that are not the user's best score on the map will not display geki and katu count.
+                </p>
+            </li>
+            <li>
+                <p>
+                Differentiating between S-Ranks with sliderbreaks and FC's with some sliderend drops is not perfect. This is because the osu! 
+                API does not differientiate between the 2 scenarios. The current temporary solution is that a score that has a 0 miss count and a max combo of more than or equal to 
+                20 less than the beatmap's max combo is counted as an FC. 
+                </p>
+                <p>
+                TLDR: A score is counted as an FC if score max combo >= beatmap max combo - 20
+                </p>
+            </li>
+            <li>
+                <p>
+                This website is still very early in development so there may be bugs. Please refer to the <a href="/contact">contact</a> page to message me to have them addressed.
+                </p>
+            </li>
+        </ul>
+        <hr>
+        <h3>Sample Posts</h3>
+        <p>
+            These are some samples of real scoreposts on Reddit I have created using this website!
+            This is so you can be assured that they are up to the scorepost criteria on r/osugame.
+            <ul>
+                <li>
+                    <a target="_blank" href="https://www.reddit.com/r/osugame/comments/1ew5hin/abyssal_pathfinder_the_whisper_of_ancient_rocks/">https://www.reddit.com/r/osugame/comments/1ew5hin/abyssal_pathfinder_the_whisper_of_ancient_rocks/</a>
+                </li>
+                <li>
+                    <a target="_blank" href="https://www.reddit.com/r/osugame/comments/1eqk6v7/sytho_xi_over_the_top_expert_nc_tynamo_1035_9627/">https://www.reddit.com/r/osugame/comments/1eqk6v7/sytho_xi_over_the_top_expert_nc_tynamo_1035_9627/</a>
+                </li>
+                <li>
+                    <a target="_blank" href="https://www.reddit.com/r/osugame/comments/1ew5hin/abyssal_pathfinder_the_whisper_of_ancient_rocks/">https://www.reddit.com/r/osugame/comments/1ew5hin/abyssal_pathfinder_the_whisper_of_ancient_rocks/</a>
+                </li>
+            </ul>
+        </p>
+
+    </div>
+</div>
+{% endblock %}

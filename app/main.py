@@ -21,14 +21,14 @@ no_score_found = "No score found to generate screenshot"
 no_recent_score = "No recent scores"
 
 
-@app.route("/how_it_works")
+@app.route("/how_to_use")
 def how_it_works():
     """How it works page
 
     Returns:
-        str: how_it_works.html
+        str: how_to_use.html
     """
-    return render_template("how_it_works.html")
+    return render_template("how_to_use.html")
 
 
 @app.route("/contact")

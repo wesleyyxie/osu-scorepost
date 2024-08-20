@@ -34,17 +34,37 @@ body {
 
 .site_title{
     color: white;
-    font-size: 15em;
     font-weight: bold;
     text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+.title_source_code_container{
+    display: flex;
+    flex-direction: column;
+}
+.credit{
+    font-size: 5rem;
+    padding-left: 3px;
+}
+
+.credit a{
+    color: white
+}
+.credit a:hover{
+    color:#c2c2c2
+}
+
+
+.title{
+    font-size: 15rem;
+    text-decoration: none;
+    color: white;
 }
 
 .site_title > *{
     vertical-align: middle;
-}
-
-.site_title:hover{
-    cursor: pointer;
 }
 
 .links_container{
@@ -129,7 +149,7 @@ body {
     justify-content: center;
     align-items: center;
     position: relative;
-    top: 80px;
+    top: 50px;
 }
 
 /* input */
@@ -353,6 +373,27 @@ body {
     cursor: pointer;
 }
 
+/* How to use css */
+.content_container{
+    font-size: 12rem;
+    color: white;
+    padding: 10px;
+    word-wrap: break-word;
+    padding-bottom: 80px
+}
+
+.example_scorepost{
+    width: 80vw;
+    font-weight:lighter;
+}
+
+.tutorial_clipboard{
+    width: 80vw
+}
+
+.tutorial_reddit{
+    width: 80vw
+}
 
 /* Generator responsive css */
 @media (min-width: 660px) {
@@ -399,6 +440,17 @@ body {
     #copy_notification{
         font-size: 13em;
     }
+    .how_to_use_container{
+        display: flex;
+        justify-content: center;
+    }
+    .content_container{
+        font-size: 14rem;
+        width: 80vw;
+    }
+    .content_container img{
+        width: 60vw
+    }
 
 }
 
@@ -424,7 +476,7 @@ body {
 
     .generated_title{
         font-size: 17em;
-        width: 75vw;
+        width: 53vw;
     }
 
     .copy_button{
@@ -432,7 +484,7 @@ body {
     }
 
     .image_container{
-        width: 75vw;
+        width: 53vw;
         max-width: 850px;
     }
 
@@ -445,6 +497,14 @@ body {
     }
     #copy_notification{
         font-size: 15em;
+    }
+    /* How to use */
+    .content_container{
+        font-size: 16rem;
+        width: 70vw;
+    }
+    .content_container img{
+        width: 40vw
     }
 }
 
@@ -501,6 +561,11 @@ body {
     .notif{
         font-size: 17em;
     }
+
+    /* How to use */
+    .content_container{
+        font-size: 24rem;
+    }
 }
 
 /* Navigation bar and other responsive css */
@@ -510,8 +575,14 @@ body {
         height: 40px;
     }
     .site_title{
-        font-size: 20em;
         margin: 10px;
+    }
+    .title{
+        font-size: 25rem;   
+    }
+    .credit{
+        font-size: 7rem;
+        padding-bottom: 4px
     }
     .links_container{
         flex-direction: row;
@@ -553,11 +624,18 @@ body {
         display: flex;
     }
     .site_logo{
-        height: 50px;
+        height: 60px;
     }
     .site_title{
-        font-size: 30em;
         margin: 10px;
+    }
+
+    .title{
+        font-size: 32rem;   
+    }
+    .credit{
+        font-size: 12rem;
+        padding-bottom: 8px
     }
     .links_container{
         align-items: center;
