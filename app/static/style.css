@@ -17,8 +17,8 @@ body {
 .top_navbar{
     position: relative;
     overflow: hidden;
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
     padding-top: 10px; 
     background-color: rgb(56, 134, 172);
     display: block;
@@ -386,6 +386,11 @@ body {
     color:rgb(56, 134, 172);
 }
 
+.content_container hr{
+    margin-block-start: 2.5em;
+    margin-block-end: 2.5em;
+}
+
 .example_scorepost{
     width: 80vw;
     font-weight:lighter;
@@ -569,6 +574,10 @@ body {
 /* Navigation bar and other responsive css */
 @media (min-width: 575px) {
     /* Nav bar */
+    .top_navbar{
+        padding-left: 0px;
+        padding-top: 0px; 
+    }
     .site_logo{
         height: 40px;
     }
@@ -620,6 +629,8 @@ body {
     /* Navbar */
     .top_navbar{
         display: flex;
+        padding-left: 0px;
+        padding-top: 0px; 
     }
     .site_logo{
         height: 60px;
