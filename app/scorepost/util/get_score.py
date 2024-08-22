@@ -232,15 +232,20 @@ def count_geki_katu_osu(score: Score, beatmap_id: int, user_id: int, cg: Circleg
     # If score is the user's best play on the map, try to get replay, else return
     # A tuple of None. It may raise a NoInfoAvailableException error so
     # return a tuple of None.
-    if score.id == score.best_id:
-        try:
-            replay = ReplayMap(beatmap_id, user_id)
-            cg.load(replay)
-            return (replay.count_geki, replay.count_katu)
-        except NoInfoAvailableException:  # Some replays are unavailable for some reason
+    if score.mode.value == "osu":
+        if score.id == score.best_id:
+            try:
+                replay = ReplayMap(beatmap_id, user_id)
+                cg.load(replay)
+                return (replay.count_geki, replay.count_katu)
+            except (
+                NoInfoAvailableException
+            ):  # Some replays are unavailable for some reason
+                return (None, None)
+        else:
             return (None, None)
     else:
-        return (None, None)
+        return (score.statistics.count_geki, score.statistics.count_katu)
 
 
 def get_beatmap_max_combo(map: rosu.Beatmap):
