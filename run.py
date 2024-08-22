@@ -1,6 +1,9 @@
 from app.main import app
-
+import sys
 
 if __name__ == "__main__":
-
-    app.run(debug=True, host="0.0.0.0")
+    if len(sys.argv) > 1 and sys.argv[1] == "host":
+        host = "0.0.0.0"
+    else:
+        host = ""
+    app.run(debug=True, host=host)
