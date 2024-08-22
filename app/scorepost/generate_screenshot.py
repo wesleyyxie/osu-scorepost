@@ -351,8 +351,8 @@ def generate_ss(score: ScoreInfo):
     for ss in os.listdir(path_to_screenshot_dir):
         past_screenshot = os.path.join(path_to_screenshot_dir, ss)
         if time.time() - os.path.getmtime(past_screenshot) > (60 * 60):
+            print("Removing past screenshots")
             os.remove(past_screenshot)
-            print("removed file!")
 
     # Save the screenshot and return the file name
     im.save(os.path.join(scorepost_generator_dir, "screenshots", screenshot_file_name))

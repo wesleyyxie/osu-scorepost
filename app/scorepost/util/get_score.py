@@ -45,11 +45,9 @@ def extract_id_from_link(input: str, oss: Ossapi):
         if link_parts[0] == "users":
             try:
                 link_id = int(link_parts[1])
-                print("got user id!")
             except ValueError:
                 try:
                     user = oss.user(link_parts[1])  # user object from Ossapi
-                    print("got username!")
                 except ValueError:
                     return None
                 link_id = user.id
@@ -64,7 +62,6 @@ def extract_id_from_link(input: str, oss: Ossapi):
                 i = 1
             try:
                 link_id = int(link_parts[i])
-                print("got score id!")
             except ValueError:
                 return None
         return link_id
@@ -108,7 +105,6 @@ def get_recent_score(user_id: int, mode: str | None, oss: Ossapi):
                 limit=1,
                 include_fails=True,
             )
-        print("got recent score!")
     except ValueError:
         return None
 
@@ -117,7 +113,6 @@ def get_recent_score(user_id: int, mode: str | None, oss: Ossapi):
     if recent_scores != []:
         return recent_scores[0]
     else:
-        print("no recent score!")
         return -1
 
 
@@ -143,7 +138,6 @@ def get_score_by_id(score_id: int, mode: str | None, oss: Ossapi):
             score = oss.score_mode(mode, score_id)
         else:
             score = oss.score(score_id)
-        print("got score by id!")
     except ValueError:
         return None
     return score
@@ -178,7 +172,6 @@ def get_ossapi_score(input: str, oss: Ossapi):
         is_link = False
         try:
             user = oss.user(input)
-            print("is not link! got username!")
         except ValueError:
             return None
         link_id = user.id

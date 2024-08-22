@@ -86,10 +86,11 @@ def home():
                 checked=checked,
             )
 
-        print("successfully got score!")
+        print("Successfully got ScoreInfo")
 
         # Get title of score
         title = create_title(score)
+        print("Successfully generated title")
 
         # If checked, get screenshot and path to the screenshot with results
         if checked:
@@ -98,14 +99,14 @@ def home():
                 f"/static/scorepost_generator_images/screenshots/{screenshot_file_name}"
             )
             results = "Screenshot successfully generated"
-            print("successfully made ss!")
+            print("Successfully generated screenshot")
         else:
             score_img = default_score_img
             results = no_score_found
 
         et = time.time()
         elapsed_time = et - st
-        print("Execution time:", elapsed_time, "seconds")
+        print(f"Generated scorepost in: {elapsed_time} seconds")
     else:  # Default page
         score_img = default_score_img
         title = default_title

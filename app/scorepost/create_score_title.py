@@ -93,13 +93,5 @@ def create_title(score: ScoreInfo):
             fc += f" #{rank_global}"
 
     # Create title
-    print(status)
     title = f"{score_mode}{username} | {artist} - {title} [{version}]{mods} ({creator}, {stars_converted:.2f}*) {acc}{fc} {status}| {performance_points}"
     return title
-
-
-# print(create_title("https://osu.ppy.sh/scores/329583391"))
-# print(create_title("https://osu.ppy.sh/scores/328536"))
-# print(create_title("https://osu.ppy.sh/users/11367222"))
-# print(create_title("https://osu.ppy.sh/users/11367222/osu"))
-# print(create_title(get_score_info("https://osu.ppy.sh/scores/3337662645")))
