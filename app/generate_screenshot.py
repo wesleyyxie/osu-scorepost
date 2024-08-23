@@ -350,7 +350,10 @@ def generate_screenshot(score: ScoreInfo):
     # Delete all previous screenshot files that are older than 1 hour
     for ss in os.listdir(path_to_screenshot_dir):
         past_screenshot = os.path.join(path_to_screenshot_dir, ss)
-        if time.time() - os.path.getmtime(past_screenshot) > (60 * 60):
+        file_name = os.path.basename(past_screenshot)
+        if file_name != ".gitkeep" and time.time() - os.path.getmtime(
+            past_screenshot
+        ) > (60 * 60):
             print("Removing past screenshots")
             os.remove(past_screenshot)
 
