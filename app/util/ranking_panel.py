@@ -133,9 +133,6 @@ def ranking_panel_taiko(im: Image.Image, score: ScoreInfo):
     count_100 = f"{score.count_100}"
     count_miss = f"{score.count_miss}"
 
-    count_300k = f"{score.count_geki}"
-    count_100k = f"{score.count_katu}"
-
     accuracy = f"{score.accuracy * 100 :.2f}%"
     max_combo = f"{score.max_combo}"
 

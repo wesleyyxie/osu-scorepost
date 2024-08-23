@@ -6,21 +6,21 @@ import time
 import os
 import uuid
 
-from .util.score import ScoreInfo
-from .util.ranking_panel import (
+from util.score import ScoreInfo
+from util.ranking_panel import (
     ranking_panel_fruits,
     ranking_panel_mania,
     ranking_panel_osu,
     ranking_panel_taiko,
 )
-from .util.screenshot_util import skin_dir, resize_image
+from util.screenshot_util import skin_dir, resize_image
 
 # Scorepost generator images directory, skin and assets paths
 scorepost = os.path.dirname(os.path.abspath(__file__))
 scorepost_generator_dir = os.path.join(
-    scorepost, "..", "static", "scorepost_generator_images"
+    scorepost, "static", "scorepost_generator_images"
 )
-assets_dir = os.path.join(scorepost, "assets")
+assets_dir = os.path.join(scorepost, "util", "assets")
 skin_dir = os.path.join(assets_dir, "skin")
 
 
@@ -274,7 +274,7 @@ def ranking_panel(im: Image.Image, score: ScoreInfo):
         ranking_panel_fruits(im, score)
 
 
-def generate_ss(score: ScoreInfo):
+def generate_screenshot(score: ScoreInfo):
     """Generates a screenshot of the scorepost
 
     Args:

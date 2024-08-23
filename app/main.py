@@ -2,9 +2,9 @@ from flask import render_template, request, Flask
 
 import time
 
-from scorepost.create_score_title import create_title
-from scorepost.generate_screenshot import generate_ss
-from scorepost.util.get_score import get_score_info
+from create_score_title import create_title
+from generate_screenshot import generate_screenshot
+from util.get_score import get_score_info
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -94,7 +94,7 @@ def home():
 
         # If checked, get screenshot and path to the screenshot with results
         if checked:
-            screenshot_file_name = generate_ss(score)
+            screenshot_file_name = generate_screenshot(score)
             score_img = (
                 f"/static/scorepost_generator_images/screenshots/{screenshot_file_name}"
             )

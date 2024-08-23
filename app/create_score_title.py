@@ -1,4 +1,4 @@
-from .util.score import ScoreInfo
+from util.score import ScoreInfo
 
 
 def create_title(score: ScoreInfo):

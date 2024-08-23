@@ -4,7 +4,7 @@ from PIL import Image
 
 # paths to current directory and skin directory
 current_dir = os.path.dirname(os.path.abspath(__file__))
-skin_dir = os.path.join(current_dir, "..", "assets", "skin")
+skin_dir = os.path.join(current_dir, "assets", "skin")
 
 
 def resize_image(im: Image.Image, n: float):
