@@ -74,7 +74,7 @@ def set_up_skeleton(im: Image.Image, score: ScoreInfo):
                 skeleton = Image.open(
                     os.path.join(
                         skin_dir,
-                        "Aristia(Edit)",
+                        "Aristia",
                         "skeletons",
                         "osu_replay_skeleton.png",
                     )
@@ -83,28 +83,22 @@ def set_up_skeleton(im: Image.Image, score: ScoreInfo):
                 skeleton = Image.open(
                     os.path.join(
                         skin_dir,
-                        "Aristia(Edit)",
+                        "Aristia",
                         "skeletons",
                         "osu_noreplay_skeleton.png",
                     )
                 )
         case "taiko":
             skeleton = Image.open(
-                os.path.join(
-                    skin_dir, "Aristia(Edit)", "skeletons", "taiko_skeleton.png"
-                )
+                os.path.join(skin_dir, "Aristia", "skeletons", "taiko_skeleton.png")
             )
         case "mania":
             skeleton = Image.open(
-                os.path.join(
-                    skin_dir, "Aristia(Edit)", "skeletons", "mania_skeleton.png"
-                )
+                os.path.join(skin_dir, "Aristia", "skeletons", "mania_skeleton.png")
             )
         case "fruits":
             skeleton = Image.open(
-                os.path.join(
-                    skin_dir, "Aristia(Edit)", "skeletons", "fruits_skeleton.png"
-                )
+                os.path.join(skin_dir, "Aristia", "skeletons", "fruits_skeleton.png")
             )
     im = im.paste(skeleton, (0, 0), skeleton)
 
@@ -218,7 +212,7 @@ def generate_mods_items(im: Image.Image, score: ScoreInfo):
 
     # Paste each mod image onto image
     for n in mods_img_arr:
-        mod_img = Image.open(os.path.join(skin_dir, "Aristia(Edit)", n))
+        mod_img = Image.open(os.path.join(skin_dir, "Aristia", n))
         mod_img = resize_image(mod_img, 0.7)
         im.paste(mod_img, (1834 - RIGHT, 550), mod_img)
         RIGHT += 50
@@ -246,7 +240,7 @@ def generate_rank(im: Image.Image, score: ScoreInfo):
     }
 
     # Skin directory
-    skin_folder = os.path.join(skin_dir, "Aristia(Edit)")
+    skin_folder = os.path.join(skin_dir, "Aristia")
 
     # Initialize corresponding rank image, resize and paste onto im
     rank_img = Image.open(os.path.join(skin_folder, rank_img_dict[rank]))

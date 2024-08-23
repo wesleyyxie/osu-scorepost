@@ -59,7 +59,7 @@ def write_with_img(s: str, x: int, y: int, size: float, im: Image.Image):
     }
 
     # Path to skin folder
-    path = os.path.join(skin_dir, "Aristia(Edit)", "num/")
+    path = os.path.join(skin_dir, "Aristia", "num/")
 
     # Start from the left
     left = 0
