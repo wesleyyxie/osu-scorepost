@@ -1,0 +1,683 @@
+html{
+    font-size: 1px;
+}
+
+@font-face {
+    font-family: exo2;
+    src: url(Exo2-Medium.ttf);
+}
+body {
+    font-size: 1px;
+    margin: 0px;
+    background-color: rgb(22, 26, 29);
+    font-family: exo2;
+}
+
+/* Navigation bar */
+.top_navbar{
+    position: relative;
+    overflow: hidden;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px; 
+    background-color: rgb(56, 134, 172);
+    display: block;
+    justify-content: space-between;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.site_logo{
+    aspect-ratio: 1;
+    margin-right: 5px;
+    height: 30px;
+}
+
+.site_title{
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+.title_source_code_container{
+    display: flex;
+    flex-direction: column;
+}
+.credit{
+    font-size: 5rem;
+    padding-left: 3px;
+}
+
+.credit a{
+    color: white
+}
+.credit a:hover{
+    color:#c2c2c2
+}
+
+
+.title{
+    font-size: 15rem;
+    text-decoration: none;
+    color: white;
+}
+
+.site_title > *{
+    vertical-align: middle;
+}
+
+.links_container{
+    flex-direction: column;
+    align-items:flex-start;
+    display: flex;
+    column-gap: 10px;
+}
+
+.links_container a{
+    display: inline-block;
+    font-size: 10em;
+    text-decoration: none;
+    color: white;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.links_container i{
+    font-size: 10rem;
+    padding: 2px;
+}
+
+
+.links_container a:hover{
+    background-color: rgb(46, 124, 162);
+}
+
+.reddit_submit:hover{
+    background-color: white;
+}
+
+/* Copy notification */
+
+#copy_notification{
+    visibility: hidden;
+    min-width: 250px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 30px;
+    font-size: 15rem;
+    font-size: 11em;
+}
+
+#copy_notification.show{
+    visibility: visible;
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  }
+  
+  /* Animations to fade the snackbar in and out */
+  @-webkit-keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 30px; opacity: 1;}
+  }
+  
+  @keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 30px; opacity: 1;}
+  }
+  
+  @-webkit-keyframes fadeout {
+    from {bottom: 30px; opacity: 1;}
+    to {bottom: 0; opacity: 0;}
+  }
+  
+  @keyframes fadeout {
+    from {bottom: 30px; opacity: 1;}
+    to {bottom: 0; opacity: 0;}
+  }
+
+/* Scorepost Generator css */
+.generator_container{
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    top: 50px;
+}
+
+/* input */
+.form{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    width: 80%;
+    height: 50%;
+}
+
+.score_input {
+    display: flex;
+    flex-direction: column;
+    row-gap: 0px;
+    width: 18vw;
+    row-gap: 10px;
+    align-items: center;
+}
+
+.input_container{
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.submit_button{
+    aspect-ratio: 1 / 1;
+    font-family: exo2;
+    background-color: rgb(56, 134, 172);
+    color: white;
+    border: none;
+    font-weight: bold;
+    border-radius: 50%;
+    font-size: 10em;
+    right: auto;
+    position: absolute;
+    right: 0.6%;
+    display: inline-block;
+    text-align: center;
+    vertical-align: bottom;
+
+}
+
+.submit_button:hover{
+    cursor: pointer;
+    background-color: rgb(46, 124, 162);
+}
+
+.submit_button:disabled {
+    background-color: hsl(200,100%,70%);
+    color: white;
+    cursor: not-allowed;
+}
+
+.url_input{
+    font-family: exo2;
+    padding: 6px 5px 4px 10px;
+    border-radius: 10000000px;
+    border: none;
+    width: 30vw;
+    font-size: 9em;
+}
+
+.url_input:focus{
+    outline: none;
+    box-shadow: 0 0 8px #c2c2c2;
+}
+
+.checkbox_container{
+    display: flex;
+    align-items: center;
+}
+
+.checkbox_label{
+    color: white;
+    font-size: 8rem;
+}
+.checkbox_label:hover{
+    cursor: pointer;
+    color: rgb(205, 205, 205);
+}
+.get_screenshot:hover{
+    cursor: pointer;
+}
+
+/* Generated title */
+.generated_title {
+    color: white;
+    margin: 30px 10px 10px 10px;
+    font-size: 11em;
+    width: 80vw;
+    text-align: center;
+}
+
+.copy_button{
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 10rem;
+}
+
+.fa-clipboard:hover{
+    color: rgb(205, 205, 205);
+}
+
+.image_container{
+    aspect-ratio: 1920/1080;
+    margin-top: 20px;
+    width: 80vw;
+}
+
+/* Generated image */
+
+.score_image {
+    border-radius: 5px;
+    box-shadow: 0 0 20px #676767;
+    width: 100%;
+    object-fit: contain;
+    height: auto;
+}
+.score_image:hover{
+    cursor: pointer;
+}
+
+.results{
+    color: white;
+    font-size: 8em;
+}
+
+/* Contacts css */
+.contacts_container{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin: 60px;
+}
+
+.contact_title{
+    color: white;
+    font-size: 20em;
+    margin-bottom: 0;
+}
+
+.contact_prompt{
+    color: white;
+    font-size: 12em;
+}
+
+.socials_container{
+    font-size: 20em;
+    display: flex;
+    column-gap: 10px;
+    margin: 20px;
+}
+.socials_container a{
+    text-align: center;
+    font-size: 10rem;
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.socials_container i{
+    font-size: 20rem;
+}
+.socials_container p{
+    color: white;
+    margin-top: 7px;
+    margin-bottom: 0;
+}
+
+.osu_wrapper{
+    background-color: rgb(242, 98, 159);
+    display: inline-block;
+    border-radius: 100%;
+}
+
+.reddit_wrapper{
+    background-color: white;
+    display: inline-block;
+    border-radius: 100%;
+}
+
+.github_prompt{
+    font-size: 12em;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.github{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: white;
+    font-size: 10rem;
+}
+
+.github i{
+    font-size: 20rem;
+    margin-bottom: 7px;
+}
+
+
+.tooltiptext{
+    color: white;
+}
+
+.social_icon:hover{
+    background-color: rgb(42, 46, 49);
+    box-shadow: 0 0 20px #c2c2c2;
+    cursor: pointer;
+}
+
+/* How to use css */
+.content_container{
+    font-size: 12rem;
+    color: white;
+    padding: 10px;
+    word-wrap: break-word;
+    padding-bottom: 80px
+}
+
+.content_container a{
+    color:rgb(56, 134, 172);
+}
+
+.content_container hr{
+    margin-block-start: 2.5em;
+    margin-block-end: 2.5em;
+}
+
+.example_scorepost{
+    width: 80vw;
+    font-weight:lighter;
+}
+
+.tutorial_clipboard{
+    width: 80vw
+}
+
+.tutorial_reddit{
+    width: 80vw
+}
+
+/* Generator responsive css */
+@media (min-width: 660px) {
+    .score_input{
+        row-gap: 0px;
+    }
+    .submit_button{
+        font-size: 13em;
+    }
+
+    .checkbox_container{
+        padding: 5px;
+    }
+
+    .url_input{
+        width: 35vw;
+        font-size: 10em;
+    }
+
+    .checkbox_label{
+        font-size: 11rem;
+    }
+
+    .generated_title{
+        font-size: 12em;
+        width: 80vw;
+    }
+
+    .copy_button{
+        font-size: 13rem;
+    }
+
+    .image_container{
+        width: 80vw;
+    }
+
+    .score_image{
+        border-radius: 10px;
+    }
+
+    .results{
+        font-size: 11em;
+    }
+    #copy_notification{
+        font-size: 13em;
+    }
+    .how_to_use_container{
+        display: flex;
+        justify-content: center;
+    }
+    .content_container{
+        width: 80vw;
+    }
+    .content_container img{
+        width: 60vw
+    }
+
+}
+
+@media (min-width: 820px) {
+    .score_input{
+        row-gap: 0px;
+    }
+    .submit_button{
+        font-size: 18em;
+    }
+    .checkbox_container{
+        padding: 5px;
+    }
+    .url_input{
+        font-size: 13em;
+        width: 40vw;
+        max-width: 360px;
+    }
+
+    .checkbox_label{
+        font-size: 14rem;
+    }
+
+    .generated_title{
+        font-size: 17em;
+        width: 53vw;
+    }
+
+    .copy_button{
+        font-size: 16rem;
+    }
+
+    .image_container{
+        width: 53vw;
+        max-width: 850px;
+    }
+
+    .score_image{
+        border-radius: 10px;
+    }
+
+    .results{
+        font-size: 14em;
+    }
+    #copy_notification{
+        font-size: 15em;
+    }
+    /* How to use */
+    .content_container{
+        width: 70vw;
+        font-size: 14rem;
+    }
+    .content_container img{
+        width: 40vw
+    }
+}
+
+@media (min-width: 1440px) {
+
+    .score_input{
+        row-gap: 0px;
+    }
+    .submit_button{
+        font-size: 19em;
+
+    }
+
+    .url_input{
+        width: 42.5vw;
+        font-size: 15em;
+    }
+
+    .checkbox_label{
+        font-size: 17rem;
+    }
+
+    .checkbox_container{
+        margin-top: 6px;
+    }
+
+    .get_screenshot{
+        aspect-ratio: 1/1;
+        height: 15rem;
+    }
+
+    .generated_title{
+        font-size: 21em;
+        width: 60vw;
+    }
+
+    .copy_button{
+        font-size: 19rem;
+    }
+
+    .image_container{
+        width: 60vw;
+        max-width: 1250px;
+    }
+
+    .score_image{
+        border-radius: 20px;
+    }
+
+    .results{
+        font-size: 17em;
+    }
+
+    .notif{
+        font-size: 17em;
+    }
+}
+
+/* Navigation bar and other responsive css */
+@media (min-width: 575px) {
+    /* Nav bar */
+    .top_navbar{
+        padding-left: 0px;
+        padding-top: 0px; 
+    }
+    .site_logo{
+        height: 40px;
+    }
+    .site_title{
+        margin: 10px;
+    }
+    .title{
+        font-size: 25rem;   
+    }
+    .credit{
+        font-size: 7rem;
+        padding-bottom: 4px
+    }
+    .links_container{
+        flex-direction: row;
+    }
+    .links_container a{
+        font-size: 15em;
+        padding: 12px;
+    }
+    .links_container i{
+        font-size: 15rem;
+    }
+
+    /* Contacts */
+    .contacts_container{
+        font-size: 1.5em;
+    }
+    .socials_container{
+        column-gap: 30px;
+    }
+    .socials_container i{
+        font-size: 35rem;
+    }
+    .socials_container a{
+        font-size: 15rem;
+    }
+
+    .github{
+        font-size: 15rem;
+    }
+    .github i{
+        font-size: 35rem;
+    }
+}
+
+
+@media (min-width: 880px) {
+    /* Navbar */
+    .top_navbar{
+        display: flex;
+        padding-left: 0px;
+        padding-top: 0px; 
+    }
+    .site_logo{
+        height: 60px;
+    }
+    .site_title{
+        margin: 10px;
+    }
+
+    .title{
+        font-size: 32rem;   
+    }
+    .credit{
+        font-size: 12rem;
+        padding-bottom: 8px
+    }
+    .links_container{
+        align-items: center;
+        flex-direction: row;
+    }
+    .links_container a{
+        font-size: 20em;
+        padding: 12px;
+    }
+    .links_container i{
+        align-items: center;
+        font-size: 20rem;
+    }
+
+    /* Contacts */
+    .contacts_container{
+        font-size: 2em;
+    }
+    .socials_container{
+        column-gap: 40px;
+    }
+    .socials_container i{
+        font-size: 45rem;
+    }
+    .socials_container a{
+        font-size: 25rem;
+    }
+    
+    .github{
+        font-size: 25rem;
+    }
+    .github i{
+        font-size: 45rem;
+    }
+    
+}

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block generator %}
+<div class="contacts_container">
+    <h1 class="contact_title">Contact</h1>
+    <p class="contact_prompt">If you encounter any issues, bugs, or have questions, please don't hesitate to reach out using your preferred method of contact.</p>
+    <div class="socials_container">
+        <a class="discord social_icon" onclick="copyToClipboard('discordName')">
+            <i class="fa-brands fa-discord" style="color: rgb(114,137,218)"></i>
+            <p>Discord</p>
+            <span class="tooltiptext" id="discordName">smaako</span>
+        </a>
+        <a class="osu social_icon" href="https://osu.ppy.sh/users/26080649" target="_blank">
+            <div class="osu_wrapper">
+                <i class="fa-regular fa-circle-dot" style="color: white;"></i> 
+            </div>           
+            <p>osu!</p>
+            <span class="tooltiptext">sm4ko</span>
+        </a>
+        <a class="reddit social_icon" href="https://www.reddit.com/user/dopeapple/" target="_blank">
+            <div class="reddit_wrapper">
+                <i class="fa-brands fa-reddit" style="color: rgb(255,99,20);"></i>
+            </div>
+            <p>Reddit</p>
+            <span class="tooltiptext">dopeapple</span>
+        </a>
+    </div>
+    <div class="github_prompt">
+        <p>This project is also available on GitHub. Feel free to submit pull requests, feature requests, or bug reports.</p>
+    </div>
+    <a class="github social_icon" href="https://github.com/wesleyyxie/osuScorepost" target="_blank">
+        <i class="fa-brands fa-github"></i>
+        Github
+        <span class="tooltiptext">wesleyyxie</span>
+    </a>
+</div>
+{% endblock %}
