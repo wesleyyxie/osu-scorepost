@@ -55,7 +55,8 @@ API_KEY = # Paste API key
 ```
 5. Start the Development Server
 ```
-python run.py
+cd app
+python main.py
 ```
 ## Limitations
 - Unfortunately, scores that are not the user's best on the map will not display the Geki and Katu counts.

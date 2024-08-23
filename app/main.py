@@ -2,9 +2,9 @@ from flask import render_template, request, Flask
 
 import time
 
-from .scorepost.create_score_title import create_title
-from .scorepost.generate_screenshot import generate_ss
-from .scorepost.util.get_score import get_score_info
+from scorepost.create_score_title import create_title
+from scorepost.generate_screenshot import generate_ss
+from scorepost.util.get_score import get_score_info
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -121,3 +121,7 @@ def home():
         input=url,
         checked=checked,
     )
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
