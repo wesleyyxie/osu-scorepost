@@ -347,7 +347,7 @@ def generate_screenshot(score: ScoreInfo):
         file_name = os.path.basename(past_screenshot)
         if file_name != ".gitkeep" and time.time() - os.path.getmtime(
             past_screenshot
-        ) > (60 * 60):
+        ) > (60 * 15):
             print("Removing past screenshots")
             os.remove(past_screenshot)
 

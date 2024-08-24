@@ -313,6 +313,7 @@ body {
     text-decoration: none;
     padding: 10px;
     border-radius: 10px;
+    width: 48.42px;
 }
 
 .socials_container i{
@@ -614,6 +615,7 @@ body {
     }
     .socials_container a{
         font-size: 15rem;
+        width: 78.42px;
     }
 
     .github{
@@ -671,6 +673,7 @@ body {
     }
     .socials_container a{
         font-size: 25rem;
+        width: 120.42px;
     }
     
     .github{

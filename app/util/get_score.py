@@ -64,6 +64,8 @@ def extract_id_from_link(input: str, oss: Ossapi):
                 link_id = int(link_parts[i])
             except ValueError:
                 return None
+        else:
+            return None
         return link_id
     else:
         return None
@@ -228,7 +230,7 @@ def count_geki_katu_osu(score: Score, beatmap_id: int, user_id: int, cg: Circleg
     if score.mode.value == "osu":
         if score.id == score.best_id:
             try:
-                replay = ReplayMap(beatmap_id, user_id)
+                replay = ReplayMap(beatmap_id, user_id, mods=score.mods)
                 cg.load(replay)
                 return (replay.count_geki, replay.count_katu)
             except (
