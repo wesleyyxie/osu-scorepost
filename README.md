@@ -4,7 +4,6 @@ This is osu!scorepost, the quickest and easiest way to generate a scorepost for 
 
 A generated scorepost includes a post title and an image that replicates a screenshot of the osu! results screen. Here's an example:
 
-**9MlCE | VINXIS - Sidetracked Day [Infinity Inside] +HDDT (DendyHere, 10.50\*) 96.69% FC #1 | 1711pp**
 ![Example scorepost](/app/static/example.jpg)
 
 This scorepost was generated with just a score link, [https://osu.ppy.sh/scores/1777987420](https://osu.ppy.sh/scores/1777987420), and a single click!
