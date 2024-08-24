@@ -47,7 +47,7 @@ cd osuScorepost
 ```
 pip install -r requirements.txt
 ```
-3. Copy your API key, and create a Client to get Client Secret and Client ID from your [osu! profile settings](https://osu.ppy.sh/home/account/edit#oauth).<details open><summary>Instructions</summary><ul>
+3. Copy your API key, and create a Client to get Client Secret and Client ID from your [osu! profile settings](https://osu.ppy.sh/home/account/edit#oauth).<details><summary>Instructions</summary><ul>
     <li>
         Scroll to new the bottom and click "New OAuth Application" in the OAuth section and give it any name you want. Copy the client ID and client secret for later.
     </li>
