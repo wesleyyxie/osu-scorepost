@@ -2,20 +2,28 @@
 
 This is osu!scorepost, the quickest and easiest way to generate a scorepost for sharing on r/osugame and becoming a part of osu! history!
 
-A scorepost includes a post title and an image that replicates a screenshot of the osu! results screen. Here's an example:
+A generated scorepost includes a post title and an image that replicates a screenshot of the osu! results screen. Here's an example:
 
 **9MlCE | VINXIS - Sidetracked Day [Infinity Inside] +HDDT (DendyHere, 10.50\*) 96.69% FC #1 | 1711pp**
 ![Example scorepost](/app/static/example.jpg)
 
-This scorepost was generated with just a score link, <a  target="_blank"  href="https://osu.ppy.sh/scores/1777987420">https://osu.ppy.sh/scores/1777987420</a>, and a single click!
+This scorepost was generated with just a score link, [https://osu.ppy.sh/scores/1777987420](https://osu.ppy.sh/scores/1777987420), and a single click!
+
+## Features
+* A scorepost can be generated for all 4 gamemodes
+* Supports Ranked, Qualified, Loved, Graveyarded, and WIP maps
+* Click the r/osugame button to conveniently open the submit post page of r/osugame
+* Clipboard button to easily copy the generated scorepost title
+* All scoreposts titles matches the [criteria]("https://www.reddit.com/r/osugame/wiki/scoreposting/") set on r/osugame
+
 
 ## Usage
 ### Here are three ways to generate a scorepost:
 1. **Using a Score Link (e.g., https://osu.ppy.sh/scores/2803336922):** \
-Simply enter a score link to generate a scorepost. Even links in the "old ID" format work (e.g., <a  target="_blank" href="https://osu.ppy.sh/scores/osu/4100884541">https://osu.ppy.sh/scores/osu/4100884541</a>). Just make sure the full link is entered correctly, without omitting "osu.ppy.sh."
+Simply enter a score link to generate a scorepost. Even links in the "old ID" format work (e.g., [https://osu.ppy.sh/scores/osu/4100884541](https://osu.ppy.sh/scores/osu/4100884541)). Just make sure the full link is entered correctly, without omitting "osu.ppy.sh."
 
 2. **Using a User Profile Link (e.g., https://osu.ppy.sh/users/26080649):** \
-Entering the link to a user's profile will generate a scorepost of that user's most recent score (even if it's a failed attempt!). You can also specify the game mode by using links that include the game mode in the URL (e.g., <a  target="_blank"  href="https://osu.ppy.sh/users/4504101/taiko">https://osu.ppy.sh/users/4504101/taiko</a>).
+Entering the link to a user's profile will generate a scorepost of that user's most recent score (even if it's a failed attempt!). You can also specify the game mode by using links that include the game mode in the URL (e.g., [https://osu.ppy.sh/users/4504101/taiko](https://osu.ppy.sh/users/4504101/taiko</a>)).
 3. **Using a Username (e.g., lifeline):** \
 Entering just a username will also generate a scorepost of the user's most recent score! This method will only work for the user's default game mode.
 
@@ -23,12 +31,6 @@ Entering just a username will also generate a scorepost of the user's most recen
 * You can easily copy the title to your clipboard by clicking the clipboard icon located right next to the scorepost title.
 * If your screenshot was created, you can click the Reddit logo in the navigation bar to open the r/osugame submit page in a new tab, then simply drag the generated screenshot into the image drop field.
 * Paste your copied scorepost title into the post title field on Reddit, set the flair to "Gameplay," and click "Post!"
-
-## Features
-* A scorepost can be generated for all 4 gamemodes! (osu!, osu!mania, osu!taiko, and osu!catch)
-* Click the r/osugame button to conveniently open the submit post page of r/osugame
-* Clipboard button to easily copy the generated scorepost title
-* All scoreposts titles matches the <a target="_blank" href="https://www.reddit.com/r/osugame/wiki/scoreposting/">criteria</a> set on r/osugame
 
 ## Setup
 
