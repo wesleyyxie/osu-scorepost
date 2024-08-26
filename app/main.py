@@ -23,7 +23,7 @@ screenshot_dir = os.path.join(
 default_title = (
     "Player | Artist - Beatmap Title [Version] (Creator, 0.00*) 0.00% SS | 0pp"
 )
-default_score_img = "/static/default_score.jpg"
+default_score_img = "/static/default_score.jpeg"
 not_valid_link_msg = (
     "No score found, please enter a valid score link, user link, or username"
 )
@@ -51,7 +51,7 @@ def contact():
     return render_template("contact.html")
 
 
-@app.route("/screenshot/<screenshot_file_name>/<encoded_json_data>")
+@app.route("/screenshot/<screenshot_file_name>/<encoded_json_data>.jpeg")
 def screenshot(screenshot_file_name: str, encoded_json_data: str):
     screenshot_path = os.path.join(screenshot_dir, screenshot_file_name)
     try:
@@ -66,7 +66,7 @@ def screenshot(screenshot_file_name: str, encoded_json_data: str):
     ss.save(ss_io, format="JPEG")
     ss_io.seek(0)
     os.remove(screenshot_path)
-    return send_file(ss_io, mimetype="image/jpg")
+    return send_file(ss_io, mimetype="image/jpeg")
 
 
 @app.route("/", methods=["POST", "GET"])
