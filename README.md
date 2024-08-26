@@ -17,7 +17,7 @@ This scorepost was generated with just a score link, [https://osu.ppy.sh/scores/
 
 
 ## Usage
-### Here are three ways to generate a scorepost:
+ Here are three ways to generate a scorepost:
 1. **Using a Score Link (e.g., https://osu.ppy.sh/scores/2803336922):** \
 Simply enter a score link to generate a scorepost. Even links in the "old ID" format work (e.g., [https://osu.ppy.sh/scores/osu/4100884541](https://osu.ppy.sh/scores/osu/4100884541)). Just make sure the full link is entered correctly, without omitting "osu.ppy.sh."
 
@@ -74,15 +74,21 @@ python main.py
 - Geki and Katu counts for Taiko scores are not available yet.
 - Differentiating between S-Ranks with sliderbreaks and FC's with some sliderend drops is not perfect. This is because the osu! API does not differientiate between the 2 scenarios. The current temporary solution is that a score that has a 0 miss count and a max combo of more than or equal to 20 less than the beatmap's max combo is counted as an FC. (TLDR: A score is counted as an FC if score max combo >= beatmap max combo - 20)
 - This website is still in the early stages of development, so there may be bugs. Please report any issues, and I'll address them as soon as possible.
+- Screenshot generator can only use the beatmapset background instead of beatmap background.
 
-## Credits
+## Acknowledgements
 - The skin used for the results screen is [Aristia(Edit)](https://skins.osuck.net/skins/485?v=0).
 - All icons are from [FontAwesome](https://fontawesome.com/icons)
-
-## Internals
 - Performance points calculation: [rosu-pp-py](https://github.com/MaxOhn/rosu-pp-py)
 - osu!api: [ossapi](https://github.com/tybug/ossapi)
 - Geki and Katu count from replay data: [circlecore](https://github.com/circleguard/circlecore)
+
+## Contact
+Feel free to reach out to report any bugs or ask any questions
+
+- osu! profile: [sm4ko](https://osu.ppy.sh/users/26080649)
+- Reddit: [dopeapple](https://www.reddit.com/user/dopeapple/)
+- Discord: smaako
 
 ## License
 osu!scorepost is released under the [GNU General Public License v3.0](https://github.com/wesleyyxie/osuScorepost/blob/main/LICENSE). See `LICENSE` for more info.
