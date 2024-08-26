@@ -13,14 +13,12 @@ from util.ranking_panel import (
     ranking_panel_osu,
     ranking_panel_taiko,
 )
-from util.screenshot_util import skin_dir, resize_image
+from util.screenshot_util import skin_dir
 
 # Scorepost generator images directory, skin and assets paths
-scorepost = os.path.dirname(os.path.abspath(__file__))
-scorepost_generator_dir = os.path.join(
-    scorepost, "static", "scorepost_generator_images"
-)
-assets_dir = os.path.join(scorepost, "util", "assets")
+app = os.path.dirname(os.path.abspath(__file__))
+scorepost_generator_dir = os.path.join(app, "static", "scorepost_generator_images")
+assets_dir = os.path.join(app, "util", "assets")
 skin_dir = os.path.join(assets_dir, "skin")
 
 
@@ -67,7 +65,7 @@ def set_up_skeleton(im: Image.Image, score: ScoreInfo):
         score (ScoreInfo): _description_
     """
 
-    match score.mode.value:
+    match score.mode:
         # Osu gamemode has different skeleton whether it has a replay or not
         case "osu":
             if score.id == score.best_id:
@@ -140,7 +138,7 @@ def generate_top_left_text(im: Image.Image, score: ScoreInfo):
     )
     creator = f"Beatmap by {score.beatmapset_creator}"
     player = f"Played by {score.username} on "
-    datetime = f'{score.created_at.strftime("%d.%m.%Y %H:%M:%S")}.'
+    datetime = score.created_at
 
     # For datetime, it is after player, so calculate player text size
     size = ImageDraw.Draw(im)
@@ -200,6 +198,7 @@ def generate_mods_items(im: Image.Image, score: ScoreInfo):
         "SO": "selection-mod-spunout@2x.png",
         "SD": "selection-mod-suddendeath@2x.png",
         "TP": "selection-mod-target@2x.png",
+        "MR": "selection-mod-mirror@2x.png",
     }
 
     # mods will be one long string, so divide the string
@@ -213,7 +212,6 @@ def generate_mods_items(im: Image.Image, score: ScoreInfo):
     # Paste each mod image onto image
     for n in mods_img_arr:
         mod_img = Image.open(os.path.join(skin_dir, "Aristia", n))
-        mod_img = resize_image(mod_img, 0.7)
         im.paste(mod_img, (1834 - RIGHT, 550), mod_img)
         RIGHT += 50
 
@@ -242,9 +240,8 @@ def generate_rank(im: Image.Image, score: ScoreInfo):
     # Skin directory
     skin_folder = os.path.join(skin_dir, "Aristia")
 
-    # Initialize corresponding rank image, resize and paste onto im
+    # Initialize corresponding rank image and paste onto im
     rank_img = Image.open(os.path.join(skin_folder, rank_img_dict[rank]))
-    rank_img = resize_image(rank_img, 0.7)
     im.paste(rank_img, (1460, 260), rank_img)
 
 
@@ -257,7 +254,7 @@ def ranking_panel(im: Image.Image, score: ScoreInfo):
     """
 
     # Different gamemodes has different statistics to display
-    score_mode = score.mode.value
+    score_mode = score.mode
     if score_mode == "osu":
         ranking_panel_osu(im, score)
     elif score_mode == "mania":

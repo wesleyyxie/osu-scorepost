@@ -353,7 +353,7 @@ def get_score_info(input: str):
 
     # Geki and katu counts are only available for some scores that are
     # the user's best on the map
-    geki, katu = count_geki_katu_osu(
+    count_geki, count_katu = count_geki_katu_osu(
         score_ossapi, score_ossapi.beatmap.id, score_ossapi.user_id, cg
     )
 
@@ -385,9 +385,9 @@ def get_score_info(input: str):
     # Initialize ScoreInfo
     score = ScoreInfo(
         score_ossapi=score_ossapi,
-        geki=geki,
+        count_geki=count_geki,
         stars_converted=stars_converted,
-        katu=katu,
+        count_katu=count_katu,
         pp=pp_score,
         pp_if_fc=pp_if_fc,
         beatmap_max_combo=beatmap_max_combo,

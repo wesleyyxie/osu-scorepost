@@ -1,13 +1,23 @@
-from flask import render_template, request, Flask
+from flask import render_template, request, Flask, send_file, url_for
+from PIL import Image
 
 import time
+import os
+from io import BytesIO
+import urllib.parse
+import json
 
 from create_score_title import create_title
 from generate_screenshot import generate_screenshot
-from util.get_score import get_score_info
+from util.get_score import get_score_info, ScoreInfo
 
 # Initialize Flask app
 app = Flask(__name__)
+
+app_dir = os.path.dirname(os.path.abspath(__file__))
+screenshot_dir = os.path.join(
+    app_dir, "static", "scorepost_generator_images", "screenshots"
+)
 
 # Initialize messages and default score path
 default_title = (
@@ -39,6 +49,25 @@ def contact():
         str: contact.html
     """
     return render_template("contact.html")
+
+
+@app.route("/screenshot/<screenshot_file_name>/<encoded_json_data>")
+def screenshot(screenshot_file_name: str, encoded_json_data: str):
+    screenshot_path = os.path.join(screenshot_dir, screenshot_file_name)
+    try:
+        ss = Image.open(screenshot_path)
+    except FileNotFoundError:
+        score_json = urllib.parse.unquote_plus(encoded_json_data)
+        j = json.loads(score_json)
+        print(j)
+        score = ScoreInfo(**j, score_ossapi=None)
+        screenshot_path = os.path.join(screenshot_dir, generate_screenshot(score))
+        ss = Image.open(screenshot_path)
+    ss_io = BytesIO()
+    ss.save(ss_io, format="JPEG")
+    ss_io.seek(0)
+    os.remove(screenshot_path)
+    return send_file(ss_io, mimetype="image/jpg")
 
 
 @app.route("/", methods=["POST", "GET"])
@@ -95,11 +124,15 @@ def home():
         # If checked, get screenshot and path to the screenshot with results
         if checked:
             screenshot_file_name = generate_screenshot(score)
-            score_img = (
-                f"/static/scorepost_generator_images/screenshots/{screenshot_file_name}"
+            print("Successfully generated screenshot")
+            score_json = json.dumps(score.__dict__)
+            encoded_json_data = urllib.parse.quote_plus(score_json)
+            score_img = url_for(
+                "screenshot",
+                screenshot_file_name=screenshot_file_name,
+                encoded_json_data=encoded_json_data,
             )
             results = "Screenshot successfully generated"
-            print("Successfully generated screenshot")
         else:
             score_img = default_score_img
             results = no_score_found

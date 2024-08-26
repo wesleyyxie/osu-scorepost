@@ -25,7 +25,8 @@ def create_title(score: ScoreInfo):
     # If score is set with NM, do not
     # display mods in title
     mods = ""
-    if score.mods.value != 0:
+    print(score.mods)
+    if score.mods != "NM":
         mods = f" +{score.mods}"
 
     # Difficulty attributes of score to get
@@ -40,7 +41,7 @@ def create_title(score: ScoreInfo):
 
     # Mania players tend to display score number
     # rounded to thousands
-    if score.mode.value == "mania":
+    if score.mode == "mania":
         score_amt = score.score // 1000
         acc = f"{score_amt}k {acc}"
 
@@ -50,24 +51,26 @@ def create_title(score: ScoreInfo):
         "taiko": "[osu!taiko] ",
         "mania": "[osu!mania] ",
         "osu": "",
-    }.get(score.mode.value, "")
+    }.get(score.mode, "")
 
     performance_points = f"{score.pp}pp"
-
+    print(score.beatmapset_status)
     # Beatmap status
-    if score.beatmapset_status in {4, 3, -2}:
+    if score.beatmapset_status != 1 and score.beatmapset_status != 2:
         performance_points += " if ranked"
-        status = {4: "LOVED ", 3: "QUALIFIED ", -2: "WIP "}.get(score.beatmapset_status)
+        status = {4: "LOVED ", 3: "QUALIFIED ", -1: "WIP ", -2: " ", 0: " "}.get(
+            score.beatmapset_status
+        )
 
     # If score is not FC (score combo is 20 less than max combo or count miss > 0)
     if score.max_combo < score.beatmap_max_combo - 20 or score.count_miss > 0:
         # pp if FC (mania does not care about FC)
-        if score.mode.value != "mania":
+        if score.mode != "mania":
             fc = f" {score.max_combo}/{score.beatmap_max_combo}x"
             if_fc_pp = score.pp_if_fc
             if score.count_miss > 0:
                 fc += f" {score.count_miss}xMiss"
-            elif score.mode.value == "osu" and (
+            elif score.mode == "osu" and (
                 f"{score.rank}" == "S" or f"{score.rank}" == "SH"
             ):
                 fc += " S-Rank"
