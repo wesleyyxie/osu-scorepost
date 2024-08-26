@@ -635,18 +635,19 @@ body {
         padding-top: 0px; 
     }
     .site_logo{
-        height: 45px;
+        height: 40px;
     }
     .site_title{
         margin: 10px;
     }
 
     .title{
-        font-size: 24rem;   
+        font-size: 20rem;   
     }
     .credit{
-        font-size: 10rem;
-        padding-bottom: 8px
+        font-size: 8.5rem;
+        padding-bottom: 8px;
+        padding-left: 0px;
     }
     .links_container{
         align-items: center;
