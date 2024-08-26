@@ -22,7 +22,7 @@ This scorepost was generated with just a score link, [https://osu.ppy.sh/scores/
 Simply enter a score link to generate a scorepost. Even links in the "old ID" format work (e.g., [https://osu.ppy.sh/scores/osu/4100884541](https://osu.ppy.sh/scores/osu/4100884541)). Just make sure the full link is entered correctly, without omitting "osu.ppy.sh."
 
 2. **Using a User Profile Link (e.g., https://osu.ppy.sh/users/26080649):** \
-Entering the link to a user's profile will generate a scorepost of that user's most recent score (even if it's a failed attempt!). You can also specify the game mode by using links that include the game mode in the URL (e.g., [https://osu.ppy.sh/users/4504101/taiko](https://osu.ppy.sh/users/4504101/taiko</a>)).
+Entering the link to a user's profile will generate a scorepost of that user's most recent score (even if it's a failed attempt!). You can also specify the game mode by using links that include the game mode in the URL (e.g., [https://osu.ppy.sh/users/4504101/taiko](https://osu.ppy.sh/users/4504101/taiko)).
 3. **Using a Username (e.g., lifeline):** \
 Entering just a username will also generate a scorepost of the user's most recent score! This method will only work for the user's default game mode.
 
@@ -34,7 +34,7 @@ Entering just a username will also generate a scorepost of the user's most recen
 ## Setup
 
 ### Prerequisites 
-- Python (version 3.12.4) 
+- Python (version 3.12.4 or 3.12.5) 
 - pip (Python package installer)
 
 ### Steps
