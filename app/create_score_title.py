@@ -25,7 +25,6 @@ def create_title(score: ScoreInfo):
     # If score is set with NM, do not
     # display mods in title
     mods = ""
-    print(score.mods)
     if score.mods != "NM":
         mods = f" +{score.mods}"
 
@@ -54,7 +53,8 @@ def create_title(score: ScoreInfo):
     }.get(score.mode, "")
 
     performance_points = f"{score.pp}pp"
-    print(score.beatmapset_status)
+    if score.beatmapset_status == 1 and score.id != score.best_id and score.rank != "F":
+        performance_points += " if submitted"
     # Beatmap status
     if score.beatmapset_status != 1 and score.beatmapset_status != 2:
         performance_points += " if ranked"

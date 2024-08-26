@@ -59,7 +59,6 @@ def screenshot(screenshot_file_name: str, encoded_json_data: str):
     except FileNotFoundError:
         score_json = urllib.parse.unquote_plus(encoded_json_data)
         j = json.loads(score_json)
-        print(j)
         score = ScoreInfo(**j, score_ossapi=None)
         screenshot_path = os.path.join(screenshot_dir, generate_screenshot(score))
         ss = Image.open(screenshot_path)
