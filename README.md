@@ -53,7 +53,7 @@ pip install -r requirements.txt
     </li>
     <li>
         Under the "Legacy API" tab, create an API key.
-        The application name and URL can be whatever you like. Copy the API key for later.
+        The application name can be anything and the URL can be any localhost (e.g. http://localhost:5000/). Copy the API key for later.
     </li>
 </ul>
 </details>
