@@ -29,7 +29,7 @@ body {
 .site_logo{
     aspect-ratio: 1;
     margin-right: 5px;
-    height: 30px;
+    height: 20px;
 }
 
 .site_title{
@@ -580,13 +580,13 @@ body {
         padding-top: 0px; 
     }
     .site_logo{
-        height: 40px;
+        height: 30px;
     }
     .site_title{
         margin: 10px;
     }
     .title{
-        font-size: 25rem;   
+        font-size: 22rem;   
     }
     .credit{
         font-size: 7rem;
@@ -635,17 +635,17 @@ body {
         padding-top: 0px; 
     }
     .site_logo{
-        height: 60px;
+        height: 45px;
     }
     .site_title{
         margin: 10px;
     }
 
     .title{
-        font-size: 32rem;   
+        font-size: 24rem;   
     }
     .credit{
-        font-size: 12rem;
+        font-size: 10rem;
         padding-bottom: 8px
     }
     .links_container{
