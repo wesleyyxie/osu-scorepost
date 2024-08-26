@@ -1,4 +1,4 @@
-# osu!Scorepost
+# osu!scorepost
 
 This is osu!scorepost, the quickest and easiest way to generate a scorepost for sharing on r/osugame and becoming a part of osu! history!
 
