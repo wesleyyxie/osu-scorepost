@@ -40,8 +40,8 @@ Entering just a username will also generate a scorepost of the user's most recen
 ### Steps
 1. Clone the repository: 
 ```
-git clone https://github.com/wesleyyxie/osuScorepost.git
-cd osuScorepost
+git clone https://github.com/wesleyyxie/osu-scorepost.git
+cd osu-scorepost
 ```
 2. Install requirements
 ```
