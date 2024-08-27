@@ -44,22 +44,22 @@ def write_with_img(s: str, x: int, y: int, size: float, im: Image.Image):
 
     # Number to corresponding image file
     letters_dict = {
-        "0": "berlin-0.png",
-        "1": "berlin-1.png",
-        "2": "berlin-2.png",
-        "3": "berlin-3.png",
-        "4": "berlin-4.png",
-        "5": "berlin-5.png",
-        "6": "berlin-6.png",
-        "7": "berlin-7.png",
-        "8": "berlin-8.png",
-        "9": "berlin-9.png",
+        "0": "berlin-0x",
+        "1": "berlin-1x",
+        "2": "berlin-2x",
+        "3": "berlin-3x",
+        "4": "berlin-4x",
+        "5": "berlin-5x",
+        "6": "berlin-6x",
+        "7": "berlin-7x",
+        "8": "berlin-8x",
+        "9": "berlin-9x",
         ".": "berlin-dot.png",
         "%": "berlin-percent.png",
     }
 
     # Path to skin folder
-    path = os.path.join(skin_dir, "Aristia", "num/")
+    path = os.path.join(skin_dir, "Aristia", "num")
 
     # Start from the left
     left = 0
@@ -67,28 +67,23 @@ def write_with_img(s: str, x: int, y: int, size: float, im: Image.Image):
 
     # IF s is "None", then write 0, else, write the number
     if s == "None":
-        char_img = Image.open(os.path.join(path, letters_dict["0"]))
-        char_img = resize_image(char_img, size)
+        char_name = f"{letters_dict["0"]}{size}.png"
+        char_img = Image.open(os.path.join(path, char_name))
         im.paste(char_img, (x + left, y), char_img)
     else:
         # "." and "%" has different space sizes
         for char in s:
-            char_img = Image.open(os.path.join(path + letters_dict[char]))
             if char == ".":
-                char_img = char_img.resize(
-                    (round(dot_width * size), round(dot_height * size))
-                )
+                char_img = Image.open(os.path.join(path, letters_dict[char]))
                 im.paste(char_img, (x + left, y), char_img)
                 space_size = space_size - 11  # adjust space size for after "."
                 left += round(space_size * size)
             elif char == "%":
-                char_img = char_img.resize(
-                    (round(percent_width * size), round(percent_height * size))
-                )
+                char_img = Image.open(os.path.join(path, letters_dict[char]))
                 im.paste(char_img, (x + left, y), char_img)
                 left += round(space_size * size)
             else:
-                char_img = resize_image(char_img, size)
+                char_img = Image.open(os.path.join(path, f"{letters_dict[char]}{size}.png"))
                 im.paste(char_img, (x + left, y), char_img)
                 if space_size != 25:  # convert back space size
                     space_size = 25

@@ -5,10 +5,9 @@
          * Loading... message and disable button
          */
          function loading() {
-          console.log('submitted!')
-              loading_element = document.getElementById('loading')
-              loading_element.innerText = "Loading..."
               document.getElementById('submit_button fa-solid fa-arrow-right').disabled = true;
+              document.getElementById('loading_screen').classList.add('loading')
+              document.getElementById('loading_animation').style.display = 'block'
         }
 
         async function submit(event) {
@@ -93,9 +92,14 @@
     </button>
   </p>
   <!--Screenshot-->
-  <a class="image_container" href=" {{ image_src }}" target="_blank">
-    <img id="score_image" class="score_image" src="{{ image_src }}">
-  </a>
+  <div class="image_wrapper">
+    <div class="loading_screen" id="loading_screen">
+      <div class="loading_animation" id="loading_animation" style="display: none;"></div>
+    </div>
+    <a class="image_container" id="image_container" href=" {{ image_src }}" target="_blank">
+        <img id="score_image" class="score_image" src="{{ image_src }}">
+    </a>
+  </div>
   <p class = "results" id="loading">{{ results }}</p>
 </div>
 {% endblock %}
