@@ -11,9 +11,9 @@ This scorepost was generated with just a score link, [https://osu.ppy.sh/scores/
 ## Features
 * A scorepost can be generated for all 4 gamemodes
 * Supports Ranked, Qualified, Loved, Graveyarded, and WIP maps
-* Click the r/osugame button (or use shortcut CTRL + SHIFT + R) to open the [submissions page](https://www.reddit.com/r/osugame/submit/?type=IMAGE) of r/osugame, the scorepost title is already written for you
+* Click the r/osugame button (or use shortcut CTRL + SPACE) to open the [submissions page](https://www.reddit.com/r/osugame/submit/?type=IMAGE) of r/osugame, the scorepost title is already written for you
 * Clipboard button to easily copy the generated scorepost title
-* Shortcut (CTRL + SHIFT + C) to copy the scorepost screenshot
+* Shortcut (CTRL + S) to copy the scorepost screenshot
 * All scoreposts titles matches the [criteria]("https://www.reddit.com/r/osugame/wiki/scoreposting/") set on r/osugame
 
 
@@ -28,8 +28,9 @@ Entering the link to a user's profile will generate a scorepost of that user's m
 Entering just a username will also generate a scorepost of the user's most recent score! This method will only work for the user's default game mode.
 
 ### After your scorepost is created
-* If your screenshot was created, you can copy the screenshot (CTRL + SHIFT + C) and paste (CTRL + V) it in the submissions page.
-* You do not need to copy the scorepost title! You can click the r/osugame button in the navigation bar (CTRL + SHIFT + R) and the title is automatically generated in the title section.
+* If your screenshot was created, you can copy the screenshot (CTRL + S).
+* You do not need to copy the scorepost title! You can click the r/osugame button in the navigation bar (CTRL + SPACE) and the title is automatically generated in the title section.
+* Paste the screenshot (CTRL + V).
 * Change the flair to "Gameplay" and click Post!
 
 ## Setup
