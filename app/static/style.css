@@ -586,7 +586,7 @@ body {
         margin: 10px;
     }
     .title{
-        font-size: 22rem;   
+        font-size: 14rem;   
     }
     .credit{
         font-size: 7rem;
@@ -628,6 +628,65 @@ body {
 
 
 @media (min-width: 880px) {
+    /* Navbar */
+    .top_navbar{
+        display: flex;
+        padding-left: 0px;
+        padding-top: 0px; 
+    }   
+    .site_logo{
+        height: 35px;
+    }
+    .site_title{
+        margin: 10px;
+    }
+
+    .title{
+        font-size: 15rem;   
+    }
+    .credit{
+        font-size: 7rem;
+        padding-bottom: 8px;
+        padding-left: 0px;
+    }
+    .links_container{
+        align-items: center;
+        flex-direction: row;
+    }
+    .links_container a{
+        font-size: 15em;
+        padding: 8px;
+    }
+    .links_container i{
+        align-items: center;
+        font-size: 15rem;
+    }
+
+    /* Contacts */
+    .contacts_container{
+        font-size: 2em;
+    }
+    .socials_container{
+        column-gap: 40px;
+    }
+    .socials_container i{
+        font-size: 45rem;
+    }
+    .socials_container a{
+        font-size: 25rem;
+        width: 120.42px;
+    }
+    
+    .github{
+        font-size: 25rem;
+    }
+    .github i{
+        font-size: 45rem;
+    }
+    
+}
+
+@media (min-width: 1100px) {
     /* Navbar */
     .top_navbar{
         display: flex;
