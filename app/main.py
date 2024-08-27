@@ -125,7 +125,7 @@ def home():
             screenshot_file_name = generate_screenshot(score)
             print("Successfully generated screenshot")
             score_json = json.dumps(score.__dict__)
-            encoded_json_data = urllib.parse.quote_plus(score_json)
+            encoded_json_data = urllib.parse.quote(score_json, safe="")
             score_img = url_for(
                 "screenshot",
                 screenshot_file_name=screenshot_file_name,
@@ -134,7 +134,7 @@ def home():
             results = "Screenshot successfully generated"
         else:
             score_img = default_score_img
-            results = no_score_found
+            results = "Title successfully generated"
 
         et = time.time()
         elapsed_time = et - st

@@ -23,21 +23,10 @@
             setTimeout(function(){ notif.className = notif.className.replace("show", ""); }, 3000);
         }
 
-        /**
-         * Loading... message and disable button
-         */
-        function loading() {
-            setTimeout(function(){
-            loading_element = document.getElementById('loading')
-            loading_element.innerText = "Loading..."
-            document.getElementById('submit_button').disabled = true;
-            }, 100)
-
-        }
-
-        async function shortcuts(event) {
-            if (event.key.toLowerCase() === "r"
-            && event.ctrlKey && event.shiftKey) {
+        async function openReddit(event) {
+            if ((event.key ===  " "
+            && event.ctrlKey) || (event.key ===  " "
+            && event.metaKey)){
                 if ('{{ score_title }} ' != "Player | Artist - Beatmap Title [Version] (Creator, 0.00*) 0.00% SS | 0pp "
                 &&  '{{ score_title }} ' != "No recent scores  "
                 && '{{ score_title }} ' != "No score found, please enter a valid score link, user link, or username ") {
@@ -48,39 +37,6 @@
                 }
                 // Your action to perform when the key is pressed
             }
-            else if (event.key.toLowerCase() === "c"
-            && event.ctrlKey && event.shiftKey) {
-                event.preventDefault();
-                var img = document.getElementById('score_image');
-                var canvas = document.createElement('canvas');
-                var ctx = canvas.getContext('2d');
-
-                canvas.width = img.naturalWidth;
-                canvas.height = img.naturalHeight;
-
-                ctx.drawImage(img, 0, 0);
-                var imageData = canvas.toDataURL();
-
-                canvas.toBlob(async function(blob) {
-                    try {
-                        await navigator.clipboard.write([
-                            new ClipboardItem({
-                                [blob.type]: blob
-                            })
-                        ]);
-                        console.log('Image copied to clipboard!');
-                        notif = document.getElementById('copy_notification')
-                        notif.classList.add('show');
-                        setTimeout(function(){ notif.className = notif.className.replace("show", ""); }, 3000);
-                    } catch (error) {
-                        console.error('Failed to copy image to clipboard:', error);
-                        notif = document.getElementById('fail_notification')
-                        notif.classList.add('show');
-                        setTimeout(function(){ notif.className = notif.className.replace("show", ""); }, 3000);
-                    }
-                }, 'image/png');
-                // Your action to perform when the key is pressed
-            };
         }
 
         /* reset site on refresh */
@@ -88,7 +44,7 @@
             window.history.replaceState(null, null, window.location.href);
         }
 
-        document.addEventListener("keydown", shortcuts);
+        document.addEventListener("keydown", openReddit);
 
 
     </script>

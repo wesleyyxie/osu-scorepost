@@ -1,21 +1,78 @@
 {% extends "base.html" %}
 {% block home_scripts %}
 <script>
+              /**
+         * Loading... message and disable button
+         */
+         function loading() {
+          console.log('submitted!')
+              loading_element = document.getElementById('loading')
+              loading_element.innerText = "Loading..."
+              document.getElementById('submit_button fa-solid fa-arrow-right').disabled = true;
+        }
+
+        async function submit(event) {
+          if (event.key === "Enter" && !(document.getElementById('url_input') === document.activeElement) && !document.getElementById('submit_button fa-solid fa-arrow-right').disabled) {
+            event.preventDefault()
+            document.getElementById('submit_button fa-solid fa-arrow-right').click()
+          }
+      }
+
+    async function copyScreenshot(event) {
+      if ((event.key.toLowerCase() === "s"
+            && event.ctrlKey) || (event.key.toLowerCase() === "s"
+            && event.metaKey)) {
+                event.preventDefault();
+                var img = document.getElementById('score_image');
+                var canvas = document.createElement('canvas');
+                var ctx = canvas.getContext('2d');
+
+                canvas.width = img.naturalWidth;
+                canvas.height = img.naturalHeight;
+
+                ctx.drawImage(img, 0, 0);
+                var imageData = canvas.toDataURL();
+
+                canvas.toBlob(async function(blob) {
+                    try {
+                        await navigator.clipboard.write([
+                            new ClipboardItem({
+                                [blob.type]: blob
+                            })
+                        ]);
+                        console.log('Image copied to clipboard!');
+                        notif = document.getElementById('copy_notification')
+                        notif.classList.add('show');
+                        setTimeout(function(){ notif.className = notif.className.replace("show", ""); }, 3000);
+                    } catch (error) {
+                        console.error('Failed to copy image to clipboard:', error);
+                        notif = document.getElementById('fail_notification')
+                        notif.classList.add('show');
+                        setTimeout(function(){ notif.className = notif.className.replace("show", ""); }, 3000);
+                    }
+                }, 'image/png');
+                // Your action to perform when the key is pressed
+            };
+    }
   window.onload = function () {
     var input = document.getElementById('content');
     input.focus();
     input.select();
+    document.addEventListener("keyup", submit)
+    document.addEventListener("keydown", copyScreenshot)
+    document.getElementById('submit_button fa-solid fa-arrow-right').disabled = false;
+    console.log('hi')
   }
 </script>
 
 {% endblock %}
 {% block generator %}
 <div class="generator_container">
-  <form class="score_input" action="/" method="POST">
+  <form class="score_input" action="/" onsubmit="loading()" method="POST">
     <!--Generator input-->
     <div class="input_container">
       <input class="url_input" type="text" name="content" id="content" value="{{ input }}" placeholder="Enter Score URL, User URL, or Username">
-      <button class="submit_button" id="submit_button fa-solid fa-arrow-right" onclick="loading()" type="submit" onsubmit="keepInputs()">
+      <button class="submit_button" id="submit_button fa-solid fa-arrow-right" type="submit">
         <i class="fa-solid fa-angle-right" data-fa-transform="down-40"></i>
       </button>
     </div>
