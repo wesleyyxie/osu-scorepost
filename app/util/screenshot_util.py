@@ -67,7 +67,7 @@ def write_with_img(s: str, x: int, y: int, size: float, im: Image.Image):
 
     # IF s is "None", then write 0, else, write the number
     if s == "None":
-        char_name = f"{letters_dict["0"]}{size}.png"
+        char_name = f'{letters_dict["0"]}{size}.png'
         char_img = Image.open(os.path.join(path, char_name))
         im.paste(char_img, (x + left, y), char_img)
     else:
@@ -83,7 +83,9 @@ def write_with_img(s: str, x: int, y: int, size: float, im: Image.Image):
                 im.paste(char_img, (x + left, y), char_img)
                 left += round(space_size * size)
             else:
-                char_img = Image.open(os.path.join(path, f"{letters_dict[char]}{size}.png"))
+                char_img = Image.open(
+                    os.path.join(path, f"{letters_dict[char]}{size}.png")
+                )
                 im.paste(char_img, (x + left, y), char_img)
                 if space_size != 25:  # convert back space size
                     space_size = 25
