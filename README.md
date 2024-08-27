@@ -11,8 +11,9 @@ This scorepost was generated with just a score link, [https://osu.ppy.sh/scores/
 ## Features
 * A scorepost can be generated for all 4 gamemodes
 * Supports Ranked, Qualified, Loved, Graveyarded, and WIP maps
-* Click the r/osugame button to conveniently open the submit post page of r/osugame
+* Click the r/osugame button (or use shortcut CTRL + SHIFT + R) to open the [submissions page](https://www.reddit.com/r/osugame/submit/?type=IMAGE) of r/osugame, the scorepost title is already written for you
 * Clipboard button to easily copy the generated scorepost title
+* Shortcut (CTRL + SHIFT + C) to copy the scorepost screenshot
 * All scoreposts titles matches the [criteria]("https://www.reddit.com/r/osugame/wiki/scoreposting/") set on r/osugame
 
 
@@ -27,9 +28,9 @@ Entering the link to a user's profile will generate a scorepost of that user's m
 Entering just a username will also generate a scorepost of the user's most recent score! This method will only work for the user's default game mode.
 
 ### After your scorepost is created
-* You can easily copy the title to your clipboard by clicking the clipboard icon located right next to the scorepost title.
-* If your screenshot was created, you can click the Reddit logo in the navigation bar to open the r/osugame submit page in a new tab, then simply drag the generated screenshot into the image drop field.
-* Paste your copied scorepost title into the post title field on Reddit, set the flair to "Gameplay," and click "Post!"
+* If your screenshot was created, you can copy the screenshot (CTRL + SHIFT + C) and paste (CTRL + V) it in the submissions page.
+* You do not need to copy the scorepost title! You can click the r/osugame button in the navigation bar (CTRL + SHIFT + R) and the title is automatically generated in the title section.
+* Change the flair to "Gameplay" and click Post!
 
 ## Setup
 
@@ -73,8 +74,9 @@ python main.py
 - Unfortunately, scores that are not the user's best on the map will not display the Geki and Katu counts.
 - Geki and Katu counts for Taiko scores are not available yet.
 - Differentiating between S-Ranks with sliderbreaks and FC's with some sliderend drops is not perfect. This is because the osu! API does not differientiate between the 2 scenarios. The current temporary solution is that a score that has a 0 miss count and a max combo of more than or equal to 20 less than the beatmap's max combo is counted as an FC. (TLDR: A score is counted as an FC if score max combo >= beatmap max combo - 20)
-- This website is still in the early stages of development, so there may be bugs. Please report any issues, and I'll address them as soon as possible.
+- The generated screenshot is not draggable
 - Screenshot generator can only use the beatmapset background instead of beatmap background.
+- This website is still in the early stages of development, so there may be bugs. Please report any issues, and I'll address them as soon as possible.
 
 ## Acknowledgements
 - The skin used for the results screen is [Aristia(Edit)](https://skins.osuck.net/skins/485?v=0).

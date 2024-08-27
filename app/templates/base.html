@@ -35,10 +35,62 @@
 
         }
 
+        async function shortcuts(event) {
+            if (event.key.toLowerCase() === "r"
+            && event.ctrlKey && event.shiftKey) {
+                if ('{{ score_title }} ' != "Player | Artist - Beatmap Title [Version] (Creator, 0.00*) 0.00% SS | 0pp "
+                &&  '{{ score_title }} ' != "No recent scores  "
+                && '{{ score_title }} ' != "No score found, please enter a valid score link, user link, or username ") {
+                    window.open("https://www.reddit.com/r/osugame/submit/?type=IMAGE&title={{ score_title | urlencode | replace('/', '%2F') }}");
+                }
+                else {
+                    window.open("https://www.reddit.com/r/osugame/submit/?type=IMAGE")
+                }
+                // Your action to perform when the key is pressed
+            }
+            else if (event.key.toLowerCase() === "c"
+            && event.ctrlKey && event.shiftKey) {
+                event.preventDefault();
+                var img = document.getElementById('score_image');
+                var canvas = document.createElement('canvas');
+                var ctx = canvas.getContext('2d');
+
+                canvas.width = img.naturalWidth;
+                canvas.height = img.naturalHeight;
+
+                ctx.drawImage(img, 0, 0);
+                var imageData = canvas.toDataURL();
+
+                canvas.toBlob(async function(blob) {
+                    try {
+                        await navigator.clipboard.write([
+                            new ClipboardItem({
+                                [blob.type]: blob
+                            })
+                        ]);
+                        console.log('Image copied to clipboard!');
+                        notif = document.getElementById('copy_notification')
+                        notif.classList.add('show');
+                        setTimeout(function(){ notif.className = notif.className.replace("show", ""); }, 3000);
+                    } catch (error) {
+                        console.error('Failed to copy image to clipboard:', error);
+                        notif = document.getElementById('fail_notification')
+                        notif.classList.add('show');
+                        setTimeout(function(){ notif.className = notif.className.replace("show", ""); }, 3000);
+                    }
+                }, 'image/png');
+                // Your action to perform when the key is pressed
+            };
+        }
+
         /* reset site on refresh */
         if (window.history.replaceState) {
             window.history.replaceState(null, null, window.location.href);
         }
+
+        document.addEventListener("keydown", shortcuts);
+
+
     </script>
   </head>
   <body>
@@ -62,7 +114,7 @@
                 <i class="fa-solid fa-house"></i>
                 Home
             </a>
-            <a class="reddit_submit" href="https://www.reddit.com/r/osugame/submit/?type=IMAGE" target="_blank">
+            <a class="reddit_submit" href="https://www.reddit.com/r/osugame/submit/?type=IMAGE&title={{ score_title | urlencode | replace('/', '%2F') }}" target="_blank">
                 <i class="fa-brands fa-reddit"></i>
                 r/osugame
             </a>
@@ -80,5 +132,6 @@
     {% block generator %}{% endblock %}
     <!--Copy notification-->
     <div id="copy_notification" class="">Copied to clipboard</div>
+    <div id="fail_notification" class="">You are copying too fast. Please wait for image to fully load.</div>
   </body>
 </html>
