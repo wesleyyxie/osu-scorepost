@@ -4,7 +4,7 @@ This is osu!scorepost, the quickest and easiest way to generate a scorepost for 
 
 A generated scorepost includes a post title and an image that replicates a screenshot of the osu! results screen. Here's an example:
 
-![Example scorepost](/app/static/example.jpg)
+![Example scorepost](/app/static/example.gif)
 
 This scorepost was generated with just a score link, [https://osu.ppy.sh/scores/1777987420](https://osu.ppy.sh/scores/1777987420), and a single click!
 
@@ -32,6 +32,8 @@ Entering just a username will also generate a scorepost of the user's most recen
 * You do not need to copy the scorepost title! You can click the r/osugame button in the navigation bar (CTRL + SPACE) and the title is automatically generated in the title section.
 * Paste the screenshot (CTRL + V).
 * Change the flair to "Gameplay" and click Post!
+
+![Example post](/app/static/after.gif)
 
 ## Setup
 
