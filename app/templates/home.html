@@ -1,13 +1,31 @@
 {% extends "base.html" %}
 {% block home_scripts %}
 <script>
-              /**
+  var isLoading = false
+        /**
          * Loading... message and disable button
          */
          function loading() {
+              loading_element = document.getElementById('loading')
+              loading_element.innerText = "Loading..."
+              isLoading = true
               document.getElementById('submit_button fa-solid fa-arrow-right').disabled = true;
               document.getElementById('loading_screen').classList.add('loading')
-              document.getElementById('loading_animation').style.display = 'block'
+              if (document.getElementById('shortcuts_menu').style.display != 'flex') {
+                document.getElementById('loading_animation').style.display = 'block'
+              }
+        }
+
+        function showShortcutMenu() {
+          document.getElementById('loading_animation').style.display = 'none'
+          document.getElementById('shortcuts_menu').style.display = 'flex'
+        }
+
+        function exitShortcutMenu() {
+          if (isLoading) {
+            document.getElementById('loading_animation').style.display = 'block'
+          }
+          document.getElementById('shortcuts_menu').style.display = 'none'
         }
 
         async function submit(event) {
@@ -53,8 +71,10 @@
                 // Your action to perform when the key is pressed
             };
     }
+
   window.onload = function () {
     var input = document.getElementById('content');
+    isLoading = false
     input.focus();
     input.select();
     document.addEventListener("keyup", submit)
@@ -92,9 +112,20 @@
     </button>
   </p>
   <!--Screenshot-->
-  <div class="image_wrapper">
+  <div onmouseleave="exitShortcutMenu()" onmouseover="showShortcutMenu()" onclick="location.href='{{ image_src }}'" class="image_wrapper" >
     <div class="loading_screen" id="loading_screen">
-      <div class="loading_animation" id="loading_animation" style="display: none;"></div>
+      <div class="loading_animation" id="loading_animation"></div>
+      <div class="shortcuts_menu" id="shortcuts_menu">
+        <p>
+          CTRL + S - copy screenshot
+        </p>
+        <p>
+          CTRL + SPACE - open Reddit submission page
+        </p>
+        <p>
+          On Reddit submission page, CTRL + V to paste screenshot
+        </p>
+      </div>
     </div>
     <a class="image_container" id="image_container" href=" {{ image_src }}" target="_blank">
         <img id="score_image" class="score_image" src="{{ image_src }}">

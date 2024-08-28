@@ -53,6 +53,15 @@ def contact():
 
 @app.route("/screenshot/<screenshot_file_name>/<encoded_json_data>.jpeg")
 def screenshot(screenshot_file_name: str, encoded_json_data: str):
+    """Screenshot path
+
+    Args:
+        screenshot_file_name (str): Screenshot file name
+        encoded_json_data (str): Score object as json
+
+    Returns:
+        Response: Screenshot data
+    """
     screenshot_path = os.path.join(screenshot_dir, screenshot_file_name)
     try:
         ss = Image.open(screenshot_path)
@@ -120,8 +129,10 @@ def home():
         title = create_title(score)
         print("Successfully generated title")
 
-        # If checked, get screenshot and path to the screenshot with results
+        # If checked, get screenshot and path to the screenshot and send
+        # the score object as a json to /screenshot
         if checked:
+            # TODO: make this better
             screenshot_file_name = generate_screenshot(score)
             print("Successfully generated screenshot")
             score_json = json.dumps(score.__dict__)

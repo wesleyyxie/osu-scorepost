@@ -283,6 +283,7 @@ body {
     opacity: 75%;
 }
 .loading_animation{
+    display: none;
     aspect-ratio: 1;
     width: 30px;
     height: auto;
@@ -302,7 +303,23 @@ body {
 .image_wrapper{
     position: relative;
 }
+.image_wrapper:hover{
+    cursor: pointer;
+}
+.shortcuts_menu{
+    font-size: 8rem;
+    flex-direction: column;
+    color: white;
+    background-color: rgb(22, 26, 29);
+    display: none;
+    padding: 10px;
+    border-radius: 5px;
+}
 
+.shortcuts_menu > p{
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
 /* Generated image */
 
 .score_image {
@@ -466,6 +483,7 @@ body {
     .checkbox_label{
         font-size: 11rem;
     }
+    
 
     .generated_title{
         font-size: 12em;
@@ -478,6 +496,9 @@ body {
 
     .image_container{
         width: 80vw;
+    }
+    .shortcuts_menu{
+        font-size: 11rem;
     }
 
     .loading_screen{
@@ -539,7 +560,9 @@ body {
         width: 53vw;
         max-width: 850px;
     }
-
+    .shortcuts_menu{
+        font-size: 13rem;
+    }
     .results{
         font-size: 14em;
     }
@@ -597,7 +620,13 @@ body {
         width: 60vw;
         max-width: 1250px;
     }
-
+    .shortcuts_menu{
+        font-size: 15rem;
+    }
+    .shortcuts_menu > p{
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
     .loading_screen{
         border-radius: 20px;
     }
