@@ -81,6 +81,13 @@ python main.py
 - Screenshot generator can only use the beatmapset background instead of beatmap background.
 - This website is still in the early stages of development, so there may be bugs. Please report any issues, and I'll address them as soon as possible.
 
+## Sample Posts
+Here are some examples of real scoreposts on Reddit that I have created using this website. This will help assure you that they meet the scorepost criteria for r/osugame.
+
+- [https://www.reddit.com/r/osugame/comments/1ew5hin/abyssal_pathfinder_the_whisper_of_ancient_rocks/](https://www.reddit.com/r/osugame/comments/1ew5hin/abyssal_pathfinder_the_whisper_of_ancient_rocks/)
+- [https://www.reddit.com/r/osugame/comments/1eqk6v7/sytho_xi_over_the_top_expert_nc_tynamo_1035_9627/](https://www.reddit.com/r/osugame/comments/1eqk6v7/sytho_xi_over_the_top_expert_nc_tynamo_1035_9627/)
+- [https://www.reddit.com/r/osugame/comments/1f0hkss/lexu2s_mitsukiyo_unwelcome_school_sotarks/](https://www.reddit.com/r/osugame/comments/1f0hkss/lexu2s_mitsukiyo_unwelcome_school_sotarks/)
+
 ## Acknowledgements
 - The skin used for the results screen is [Aristia(Edit)](https://skins.osuck.net/skins/485?v=0).
 - All icons are from [FontAwesome](https://fontawesome.com/icons)
