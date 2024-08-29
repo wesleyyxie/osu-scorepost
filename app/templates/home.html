@@ -2,100 +2,118 @@
 {% block home_scripts %}
 <script>
   var isLoading = false
-        /**
-         * Loading... message and disable button
-         */
-         function loading() {
-              loading_element = document.getElementById('loading')
-              loading_element.innerText = "Loading..."
-              isLoading = true
-              document.getElementById('submit_button fa-solid fa-arrow-right').disabled = true;
-              document.getElementById('loading_screen').classList.add('loading')
-              document.getElementById('shortcuts_menu').style.backgroundColor = 'transparent'
-              if (document.getElementById('shortcuts_menu').style.display != 'flex') {
-                document.getElementById('loading_animation').style.display = 'block'
-              }
-        }
-        /**
-         * Shows shortcuts menu
-         */
-        function showShortcutMenu() {
-          document.getElementById('loading_animation').style.display = 'none'
-          document.getElementById('shortcuts_menu').style.display = 'flex'
-        }
+  
+  /**
+   * toggle checkbox
+   */
+   function toggleCheckbox(id)
+  {
+    document.getElementById(id).checked = !document.getElementById(id).checked;
+  }
 
-        /**
-         * Exist shortcuts menu
-         */
-        function exitShortcutMenu() {
-          if (isLoading) {
-            document.getElementById('loading_animation').style.display = 'block'
-          }
-          document.getElementById('shortcuts_menu').style.display = 'none'
+  /**
+   * Loading... message and disable button
+   */
+    function loading() {
+        loading_element = document.getElementById('loading')
+        loading_element.innerText = "Loading..."
+        isLoading = true
+        document.getElementById('submit_button fa-solid fa-arrow-right').disabled = true;
+        document.getElementById('loading_screen').classList.add('loading')
+        document.getElementById('shortcuts_menu').style.backgroundColor = 'transparent'
+        if (document.getElementById('shortcuts_menu').style.display != 'flex') {
+          document.getElementById('loading_animation').style.display = 'block'
         }
+  }
+  
+  /**
+   * Shows shortcuts menu
+   */
+  function showShortcutMenu() {
+    document.getElementById('loading_animation').style.display = 'none'
+    document.getElementById('shortcuts_menu').style.display = 'flex'
+  }
 
-        /**
-         * Submit form
-         */
-        async function submit(event) {
-          if (event.key === "Enter" && !(document.getElementById('url_input') === document.activeElement) && !document.getElementById('submit_button fa-solid fa-arrow-right').disabled) {
-            event.preventDefault()
-            document.getElementById('submit_button fa-solid fa-arrow-right').click()
-          }
-        }
+  /**
+   * Exist shortcuts menu
+   */
+  function exitShortcutMenu() {
+    if (isLoading) {
+      document.getElementById('loading_animation').style.display = 'block'
+    }
+    document.getElementById('shortcuts_menu').style.display = 'none'
+  }
+
+  /**
+   * Submit form
+   */
+  async function submit(event) {
+    if (event.key === "Enter" && !(document.getElementById('url_input') === document.activeElement) && !document.getElementById('submit_button fa-solid fa-arrow-right').disabled) {
+      event.preventDefault()
+      document.getElementById('submit_button fa-solid fa-arrow-right').click()
+    }
+  }
         
-        /**
-         * Copy image shortcut
-         */
-        async function copyScreenshot(event) {
-          if ((event.key.toLowerCase() === "s"
-                && event.ctrlKey) || (event.key.toLowerCase() === "s"
-                && event.metaKey)) {
-                  // Copy the image data to clipboard
-                    event.preventDefault();
-                    var img = document.getElementById('score_image');
-                    var canvas = document.createElement('canvas');
-                    var ctx = canvas.getContext('2d');
 
-                    canvas.width = img.naturalWidth;
-                    canvas.height = img.naturalHeight;
+  /**
+   * Copy Screemshot
+   */
+    async function copyScreenshot() {
+    var img = document.getElementById('score_image');
+              var canvas = document.createElement('canvas');
+              var ctx = canvas.getContext('2d');
 
-                    ctx.drawImage(img, 0, 0);
-                    var imageData = canvas.toDataURL();
+              canvas.width = img.naturalWidth;
+              canvas.height = img.naturalHeight;
 
-                    canvas.toBlob(async function(blob) {
-                        try {
-                            await navigator.clipboard.write([
-                                new ClipboardItem({
-                                    [blob.type]: blob
-                                })
-                            ]);
-                            console.log('Image copied to clipboard!');
+              ctx.drawImage(img, 0, 0);
+              var imageData = canvas.toDataURL();
 
-                            notif = document.getElementById('copy_notification')
-                            notif.classList.add('show');
-                            setTimeout(function(){ notif.className = notif.className.replace("show", ""); }, 3000);
-                        } catch (error) {
-                            console.error('Failed to copy image to clipboard:', error);
+              canvas.toBlob(async function(blob) {
+                  try {
+                      await navigator.clipboard.write([
+                          new ClipboardItem({
+                              [blob.type]: blob
+                          })
+                      ]);
+                      console.log('Image copied to clipboard!');
 
-                            notif = document.getElementById('fail_notification')
-                            notif.classList.add('show');
-                            setTimeout(function(){ notif.className = notif.className.replace("show", ""); }, 3000);
-                        }
-                    }, 'image/png');
-                };
+                      notif = document.getElementById('copy_notification')
+                      notif.classList.add('show');
+                      setTimeout(function(){ notif.className = notif.className.replace("show", ""); }, 3000);
+                  } catch (error) {
+                      console.error('Failed to copy image to clipboard:', error);
+
+                      notif = document.getElementById('fail_notification')
+                      notif.classList.add('show');
+                      setTimeout(function(){ notif.className = notif.className.replace("show", ""); }, 3000);
+                  }
+              }, 'image/png');
     }
 
-  window.onload = function () {
-    var input = document.getElementById('content');
-    isLoading = false
-    input.focus();
-    input.select();
-    document.addEventListener("keyup", submit)
-    document.addEventListener("keydown", copyScreenshot)
-    document.getElementById('submit_button fa-solid fa-arrow-right').disabled = false;
-    console.log('hi')
-  }
+    /**
+     * Copy image shortcut
+     */
+    async function copyScreenshotShortcut(event) {
+      if ((event.key.toLowerCase() === "s"
+            && event.ctrlKey) || (event.key.toLowerCase() === "s"
+            && event.metaKey)) {
+              // Copy the image data to clipboard
+                event.preventDefault();
+                copyScreenshot()
+            };
+    }
+
+      window.onload = function () {
+        var input = document.getElementById('content');
+        isLoading = false
+        input.focus();
+        input.select();
+        document.addEventListener("keyup", submit)
+        document.addEventListener("keydown", copyScreenshotShortcut)
+        document.getElementById('submit_button fa-solid fa-arrow-right').disabled = false;
+
+      }
 </script>
 
 {% endblock %}
@@ -109,10 +127,11 @@
         <i class="fa-solid fa-angle-right" data-fa-transform="down-40"></i>
       </button>
     </div>
+    <input class="custom_message_input" name="custom_message_content" value="{{ custom_message_input }}" type="text" placeholder="Enter Custom Message (optional)">
     <!--Screenshot checkbox-->
     <div class="checkbox_container">
-      <input class="get_screenshot" name="checkbox" type="checkbox" {% if checked %} checked {% endif %} id="checkbox" value="get screenshot">
-      <label for="checkbox" class="checkbox_label">Get score screenshot</label>
+      <input class="get_screenshot" name="screenshot_checkbox" type="checkbox" {% if checked %} checked {% endif %} id="get_screenshot" value="get screenshot">
+      <label for="get_screenshot" class="checkbox_label">Get score screenshot</label>
     </div>
   </form>
 

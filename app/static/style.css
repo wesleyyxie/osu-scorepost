@@ -166,10 +166,18 @@ body {
 .score_input {
     display: flex;
     flex-direction: column;
-    row-gap: 0px;
+    row-gap: 15px;
     width: 18vw;
-    row-gap: 10px;
     align-items: center;
+}
+
+.custom_message_input{
+    font-family: exo2;
+    padding: 6px 5px 4px 10px;
+    border-radius: 10000000px;
+    border: none;
+    width: 17vw;
+    font-size: 9em;
 }
 
 .input_container{
@@ -241,7 +249,7 @@ body {
 /* Generated title */
 .generated_title {
     color: white;
-    margin: 30px 10px 30px 10px;
+    margin: 15px 10px 25px 10px;
     font-size: 11em;
     width: 80vw;
     text-align: center;
@@ -471,19 +479,17 @@ body {
 
 /* Generator responsive css */
 @media (min-width: 660px) {
-    .score_input{
-        row-gap: 0px;
-    }
     .submit_button{
         font-size: 13em;
     }
 
-    .checkbox_container{
-        padding: 5px;
-    }
-
     .url_input{
         width: 35vw;
+        font-size: 10em;
+    }
+
+    .custom_message_input{
+        width: 22vw;
         font-size: 10em;
     }
 
@@ -535,19 +541,19 @@ body {
 }
 
 @media (min-width: 820px) {
-    .score_input{
-        row-gap: 0px;
-    }
     .submit_button{
         font-size: 18em;
-    }
-    .checkbox_container{
-        padding: 5px;
     }
     .url_input{
         font-size: 13em;
         width: 40vw;
         max-width: 360px;
+    }
+
+    .custom_message_input{
+        font-size: 13em;
+        width: 25vw;
+        max-width: 230px;
     }
 
     .checkbox_label{
@@ -588,9 +594,6 @@ body {
 
 @media (min-width: 1440px) {
 
-    .score_input{
-        row-gap: 0px;
-    }
     .submit_button{
         font-size: 19em;
 
@@ -601,15 +604,21 @@ body {
         font-size: 15em;
     }
 
+    .custom_message_input{
+        font-size: 15em;
+    }
+
     .checkbox_label{
         font-size: 17rem;
     }
 
-    .checkbox_container{
-        margin-top: 6px;
-    }
 
     .get_screenshot{
+        aspect-ratio: 1/1;
+        height: 15rem;
+    }
+
+    .custom_message_checkbox{
         aspect-ratio: 1/1;
         height: 15rem;
     }

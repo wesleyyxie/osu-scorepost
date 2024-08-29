@@ -91,8 +91,9 @@ def home():
         st = time.time()
         # Initialize input content and if screenshot checkbox was checked
         url = request.form["content"]
-        checkbox = request.form.getlist("checkbox")
-        checked = len(checkbox) > 0
+        checked = "get screenshot" in request.form.getlist("screenshot_checkbox")
+        custom_message_input = request.form["custom_message_content"]
+
         results = ""
 
         # Get score information from user input
@@ -110,6 +111,7 @@ def home():
                 results=results,
                 input=url,
                 checked=checked,
+                custom_message_input=custom_message_input,
             )
         elif score == -1:
             if checked:
@@ -121,6 +123,7 @@ def home():
                 results=results,
                 input=url,
                 checked=checked,
+                custom_message_input=custom_message_input,
             )
 
         print("Successfully got ScoreInfo")
@@ -128,6 +131,11 @@ def home():
         # Get title of score
         title = create_title(score)
         print("Successfully generated title")
+
+        # Insert custom message
+        custom_message_input = request.form["custom_message_content"]
+        if custom_message_input and not custom_message_input.isspace():
+            title += f" | {custom_message_input}"
 
         # If checked, get screenshot and path to the screenshot and send
         # the score object as a json to /screenshot
@@ -155,6 +163,7 @@ def home():
         title = default_title
         results = ""
         url = ""
+        custom_message_input = ""
         checked = True
     return render_template(
         "home.html",
@@ -163,6 +172,7 @@ def home():
         results=results,
         input=url,
         checked=checked,
+        custom_message_input=custom_message_input,
     )
 
 
