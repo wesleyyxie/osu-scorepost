@@ -29,7 +29,7 @@ Entering just a username will also generate a scorepost of the user's most recen
 
 ### After your scorepost is created
 * If your screenshot was created, you can copy the screenshot (CTRL + S).
-* You do not need to copy the scorepost title! You can click the r/osugame button in the navigation bar (CTRL + SPACE) and the title is automatically generated in the title section.
+* You do not need to copy the scorepost title! You can click the r/osugame button in the navigation bar (CTRL + D) and the title is automatically generated in the title section.
 * Paste the screenshot (CTRL + V).
 * Change the flair to "Gameplay" and click Post!
 
