@@ -11,7 +11,7 @@ This scorepost was generated with just a score link, [https://osu.ppy.sh/scores/
 ## Features
 * A scorepost can be generated for all 4 gamemodes
 * Supports Ranked, Qualified, Loved, Graveyarded, and WIP maps
-* Click the r/osugame button (or use shortcut CTRL + SPACE) to open the [submissions page](https://www.reddit.com/r/osugame/submit/?type=IMAGE) of r/osugame, the scorepost title is already written for you
+* Click the r/osugame button (or use shortcut CTRL + D) to open the [submissions page](https://www.reddit.com/r/osugame/submit/?type=IMAGE) of r/osugame, the scorepost title is already written for you
 * Clipboard button to easily copy the generated scorepost title
 * Shortcut (CTRL + S) to copy the scorepost screenshot
 * All scoreposts titles matches the [criteria]("https://www.reddit.com/r/osugame/wiki/scoreposting/") set on r/osugame
