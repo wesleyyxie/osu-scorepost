@@ -29,7 +29,7 @@
             && event.metaKey)){
                 event.preventDefault()
                 if ('{{ score_title }} ' != "Player | Artist - Beatmap Title [Version] (Creator, 0.00*) 0.00% SS | 0pp "
-                &&  '{{ score_title }} ' != "No recent scores  "
+                &&  '{{ score_title }} ' != "No recent scores "
                 && '{{ score_title }} ' != "No score found, please enter a valid score link, user link, or username ") {
                     window.open("https://www.reddit.com/r/osugame/submit/?type=IMAGE&title={{ score_title | urlencode | replace('/', '%2F') }}");
                 }
