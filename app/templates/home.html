@@ -11,6 +11,7 @@
               isLoading = true
               document.getElementById('submit_button fa-solid fa-arrow-right').disabled = true;
               document.getElementById('loading_screen').classList.add('loading')
+              document.getElementById('shortcuts_menu').style.backgroundColor = 'transparent'
               if (document.getElementById('shortcuts_menu').style.display != 'flex') {
                 document.getElementById('loading_animation').style.display = 'block'
               }
@@ -126,23 +127,23 @@
   </p>
   <!--Screenshot-->
   <div onmouseleave="exitShortcutMenu()" onmouseover="showShortcutMenu()" onclick="location.href='{{ image_src }}'" class="image_wrapper" >
+    <div class="shortcuts_menu" id="shortcuts_menu">
+      <p>
+        CTRL + S - copy screenshot
+      </p>
+      <p>
+        CTRL + SPACE - open Reddit submission page
+      </p>
+      <p>
+        On Reddit submission page, CTRL + V to paste screenshot
+      </p>
+    </div>
     <div class="loading_screen" id="loading_screen">
       <div class="loading_animation" id="loading_animation"></div>
-      <div class="shortcuts_menu" id="shortcuts_menu">
-        <p>
-          CTRL + S - copy screenshot
-        </p>
-        <p>
-          CTRL + SPACE - open Reddit submission page
-        </p>
-        <p>
-          On Reddit submission page, CTRL + V to paste screenshot
-        </p>
-      </div>
     </div>
-    <a class="image_container" id="image_container" href=" {{ image_src }}" target="_blank">
+    <div class="image_container" id="image_container">
         <img id="score_image" class="score_image" src="{{ image_src }}">
-    </a>
+    </div>
   </div>
   <p class = "results" id="loading">{{ results }}</p>
 </div>
