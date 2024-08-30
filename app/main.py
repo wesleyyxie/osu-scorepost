@@ -165,6 +165,7 @@ def home():
         url = ""
         custom_message_input = ""
         checked = True
+
     return render_template(
         "home.html",
         score_title=title,

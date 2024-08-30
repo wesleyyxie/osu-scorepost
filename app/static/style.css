@@ -149,7 +149,8 @@ body {
     justify-content: center;
     align-items: center;
     position: relative;
-    top: 50px;
+    top: 40px;
+    padding-bottom: 50px;
 }
 
 /* input */
@@ -171,6 +172,12 @@ body {
     align-items: center;
 }
 
+.custom_message_container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .custom_message_input{
     font-family: exo2;
     padding: 6px 5px 4px 10px;
@@ -178,6 +185,23 @@ body {
     border: none;
     width: 17vw;
     font-size: 9em;
+    color: white;
+    background-color: rgb(57, 66, 71);
+}
+
+.custom_message_label{
+    color: rgb(130, 148, 157);
+    font-size: 8rem;
+    padding-top: 7px;
+}
+
+.custom_message_input::placeholder{
+    color: rgb(130, 148, 157)
+}
+
+.custom_message_input:focus{
+    outline: none;
+    box-shadow: 0 0 8px rgb(130, 148, 157);
 }
 
 .input_container{
@@ -189,8 +213,8 @@ body {
 .submit_button{
     aspect-ratio: 1 / 1;
     font-family: exo2;
-    background-color: rgb(56, 134, 172);
-    color: white;
+    background-color: rgb(57, 66, 71);
+    color: rgb(130, 148, 157);
     border: none;
     font-weight: bold;
     border-radius: 50%;
@@ -206,27 +230,32 @@ body {
 
 .submit_button:hover{
     cursor: pointer;
-    background-color: rgb(46, 124, 162);
+    background-color: rgb(45, 53, 56);
 }
 
 .submit_button:disabled {
-    background-color: hsl(200,100%,70%);
-    color: white;
     cursor: not-allowed;
+    background-color: rgb(57, 66, 71);
 }
 
 .url_input{
     font-family: exo2;
-    padding: 6px 5px 4px 10px;
+    padding: 6px 15px 6px 15px;
     border-radius: 10000000px;
     border: none;
     width: 30vw;
     font-size: 9em;
+    color: white;
+    background-color: rgb(57, 66, 71);
+}
+
+.url_input::placeholder{
+    color: rgb(130, 148, 157)
 }
 
 .url_input:focus{
     outline: none;
-    box-shadow: 0 0 8px #c2c2c2;
+    box-shadow: 0 0 8px rgb(130, 148, 157);
 }
 
 .checkbox_container{
@@ -235,12 +264,12 @@ body {
 }
 
 .checkbox_label{
-    color: white;
+    color: rgb(130, 148, 157);
     font-size: 8rem;
 }
 .checkbox_label:hover{
     cursor: pointer;
-    color: rgb(205, 205, 205);
+    color: white;
 }
 .get_screenshot:hover{
     cursor: pointer;
@@ -249,7 +278,7 @@ body {
 /* Generated title */
 .generated_title {
     color: white;
-    margin: 15px 10px 25px 10px;
+    margin: 25px 10px 25px 10px;
     font-size: 11em;
     width: 80vw;
     text-align: center;
@@ -330,10 +359,70 @@ body {
     position: absolute;
     z-index: 1001;
 }
-
 .shortcuts_menu > p{
     margin-top: 3px;
     margin-bottom: 3px;
+}
+
+.toggle_auto_container{
+    top: 5px;
+    right: 5px;
+    position: absolute;
+    z-index: 1004;
+    aspect-ratio: 2;
+    height: auto;
+    display: flex;
+    justify-content: center;
+}
+
+.toggle_switch{
+    border-radius: 20px;
+    background-color: rgb(130, 148, 157);
+    aspect-ratio: 1.8;
+    height: 20px;
+    cursor: pointer;
+    transition: 0.2s;
+    font-size: 10rem;
+    color: white;
+    box-shadow: 0 0 8px rgb(130, 148, 157);
+}
+
+.slow{
+    position: absolute;
+    z-index: 1004;
+    left: 23px;
+    top: 5px;
+}
+.fast{
+    position: absolute;
+    top: 5px;
+    left: 6px;
+    display: none;
+}
+.toggle_switch_bubble{
+    position: absolute;
+    background-color: white;
+    width: 14px;
+    height: 14px;
+    margin-top: 3px;
+    margin-left: 4px;
+    border-radius: 20px;
+    font-size: 8rem;
+}
+.toggle_auto_checkbox{
+    display: none;
+}
+.toggle_auto_checkbox:checked + .toggle_switch{
+    background-color: rgb(46, 124, 162);
+}
+.toggle_auto_checkbox:checked + .toggle_switch .toggle_switch_bubble{
+    transform: translateX(15px);
+}
+.toggle_auto_checkbox:checked + .toggle_switch .slow{
+    display: none;
+}
+.toggle_auto_checkbox:checked + .toggle_switch .fast{
+    display: block;
 }
 /* Generated image */
 
@@ -477,188 +566,6 @@ body {
     width: 80vw
 }
 
-/* Generator responsive css */
-@media (min-width: 660px) {
-    .submit_button{
-        font-size: 13em;
-    }
-
-    .url_input{
-        width: 35vw;
-        font-size: 10em;
-    }
-
-    .custom_message_input{
-        width: 22vw;
-        font-size: 10em;
-    }
-
-    .checkbox_label{
-        font-size: 11rem;
-    }
-    
-
-    .generated_title{
-        font-size: 12em;
-        width: 80vw;
-    }
-
-    .copy_button{
-        font-size: 13rem;
-    }
-
-    .image_container{
-        width: 80vw;
-    }
-    .shortcuts_menu{
-        font-size: 11rem;
-    }
-
-    .loading_screen{
-        border-radius: 10px;
-    }
-    .score_image{
-        border-radius: 10px;
-    }
-
-    .results{
-        font-size: 11em;
-    }
-    #copy_notification{
-        font-size: 13em;
-    }
-    .how_to_use_container{
-        display: flex;
-        justify-content: center;
-    }
-    .content_container{
-        width: 80vw;
-    }
-    .content_container img{
-        width: 60vw
-    }
-
-}
-
-@media (min-width: 820px) {
-    .submit_button{
-        font-size: 18em;
-    }
-    .url_input{
-        font-size: 13em;
-        width: 40vw;
-        max-width: 360px;
-    }
-
-    .custom_message_input{
-        font-size: 13em;
-        width: 25vw;
-        max-width: 230px;
-    }
-
-    .checkbox_label{
-        font-size: 14rem;
-    }
-
-    .generated_title{
-        font-size: 17em;
-        width: 53vw;
-    }
-
-    .copy_button{
-        font-size: 16rem;
-    }
-
-    .image_container{
-        width: 53vw;
-        max-width: 850px;
-    }
-    .shortcuts_menu{
-        font-size: 13rem;
-    }
-    .results{
-        font-size: 14em;
-    }
-    #copy_notification{
-        font-size: 15em;
-    }
-    /* How to use */
-    .content_container{
-        width: 70vw;
-        font-size: 14rem;
-    }
-    .content_container img{
-        width: 40vw
-    }
-}
-
-@media (min-width: 1440px) {
-
-    .submit_button{
-        font-size: 19em;
-
-    }
-
-    .url_input{
-        width: 42.5vw;
-        font-size: 15em;
-    }
-
-    .custom_message_input{
-        font-size: 15em;
-    }
-
-    .checkbox_label{
-        font-size: 17rem;
-    }
-
-
-    .get_screenshot{
-        aspect-ratio: 1/1;
-        height: 15rem;
-    }
-
-    .custom_message_checkbox{
-        aspect-ratio: 1/1;
-        height: 15rem;
-    }
-
-    .generated_title{
-        font-size: 21em;
-        width: 60vw;
-    }
-
-    .copy_button{
-        font-size: 19rem;
-    }
-
-    .image_container{
-        width: 60vw;
-        max-width: 1250px;
-    }
-    .shortcuts_menu{
-        font-size: 15rem;
-    }
-    .shortcuts_menu > p{
-        margin-top: 10px;
-        margin-bottom: 10px;
-    }
-    .loading_screen{
-        border-radius: 20px;
-    }
-    .score_image{
-        border-radius: 20px;
-    }
-
-    .results{
-        font-size: 17em;
-    }
-
-    .notif{
-        font-size: 17em;
-    }
-}
-
 /* Navigation bar and other responsive css */
 @media (min-width: 575px) {
     /* Nav bar */
@@ -713,6 +620,160 @@ body {
     }
 }
 
+
+/* Generator responsive css */
+@media (min-width: 660px) {
+    .submit_button{
+        font-size: 13em;
+    }
+
+    .url_input{
+        width: 35vw;
+        font-size: 10em;
+    }
+
+    .custom_message_input{
+        width: 22vw;
+        font-size: 10em;
+    }
+
+    .checkbox_label{
+        font-size: 11rem;
+    }
+    
+    .custom_message_label{
+        font-size: 11rem;
+    }
+
+    .generated_title{
+        font-size: 12em;
+        width: 80vw;
+    }
+
+    .copy_button{
+        font-size: 13rem;
+    }
+
+    .image_container{
+        width: 80vw;
+    }
+
+    .toggle_auto_container{
+        top: 8px;
+        right: 8px;
+        aspect-ratio: 2;
+    }
+    
+    .toggle_switch{
+        border-radius: 20px;
+        height: 25px;
+        font-size: 12rem;
+    }
+    
+    .slow{
+        left: 27px;
+        top: 7px;
+    }
+    .fast{
+        top: 7px;
+        left: 7px;
+    }
+    .toggle_switch_bubble{
+        width: 17px;
+        height: 17px;
+        margin-top: 4px;
+        margin-left: 5px;
+        font-size: 8rem;
+    }
+
+    .toggle_auto_checkbox:checked + .toggle_switch .toggle_switch_bubble{
+        transform: translateX(17px);
+    }
+    .shortcuts_menu{
+        font-size: 11rem;
+    }
+
+    .loading_screen{
+        border-radius: 10px;
+    }
+    .score_image{
+        border-radius: 10px;
+    }
+
+    .results{
+        font-size: 11em;
+    }
+    #copy_notification{
+        font-size: 13em;
+    }
+    .how_to_use_container{
+        display: flex;
+        justify-content: center;
+    }
+    .content_container{
+        width: 80vw;
+    }
+    .content_container img{
+        width: 60vw
+    }
+
+}
+
+@media (min-width: 820px) {
+    .submit_button{
+        font-size: 18em;
+    }
+    .url_input{
+        font-size: 13em;
+        width: 40vw;
+        max-width: 360px;
+    }
+
+    .custom_message_input{
+        font-size: 13em;
+        width: 25vw;
+        max-width: 230px;
+    }
+
+    .checkbox_label{
+        font-size: 14rem;
+    }
+
+    .custom_message_label{
+        font-size: 14rem;
+    }
+
+    .generated_title{
+        font-size: 17em;
+        width: 53vw;
+    }
+
+    .copy_button{
+        font-size: 16rem;
+    }
+
+    .image_container{
+        width: 53vw;
+        max-width: 850px;
+    }
+    .shortcuts_menu{
+        font-size: 13rem;
+    }
+    .results{
+        font-size: 14em;
+    }
+    #copy_notification{
+        font-size: 15em;
+    }
+    /* How to use */
+    .content_container{
+        width: 70vw;
+        font-size: 14rem;
+    }
+    .content_container img{
+        width: 40vw
+    }
+}
 
 @media (min-width: 880px) {
     /* Navbar */
@@ -773,6 +834,7 @@ body {
     
 }
 
+
 @media (min-width: 1100px) {
     /* Navbar */
     .top_navbar{
@@ -807,7 +869,38 @@ body {
         align-items: center;
         font-size: 20rem;
     }
+    /* Toggle button */
+    .toggle_auto_container{
+        top: 15px;
+        right: 15px;
+        aspect-ratio: 2;
+    }
+    
+    .toggle_switch{
+        border-radius: 20px;
+        height: 37px;
+        font-size: 17rem;
+    }
+    
+    .slow{
+        left: 41px;
+        top: 11px;
+    }
+    .fast{
+        top: 11px;
+        left: 11px;
+    }
+    .toggle_switch_bubble{
+        width: 25px;
+        height: 25px;
+        margin-top: 6px;
+        margin-left: 7px;
+        font-size: 8rem;
+    }
 
+    .toggle_auto_checkbox:checked + .toggle_switch .toggle_switch_bubble{
+        transform: translateX(27px);
+    }
     /* Contacts */
     .contacts_container{
         font-size: 2em;
@@ -830,4 +923,106 @@ body {
         font-size: 45rem;
     }
     
+}
+
+@media (min-width: 1440px) {
+
+    .score_input{
+        row-gap: 25px;
+    }
+
+    .submit_button{
+        font-size: 19em;
+
+    }
+
+    .url_input{
+        width: 42.5vw;
+        font-size: 15em;
+    }
+
+    .custom_message_input{
+        font-size: 15em;
+    }
+
+    .checkbox_label{
+        font-size: 17rem;
+    }
+
+    .custom_message_label{
+        font-size: 17rem;
+    }
+
+    .get_screenshot{
+        aspect-ratio: 1/1;
+        height: 15rem;
+    }
+
+    .generated_title{
+        font-size: 21em;
+        width: 60vw;
+    }
+
+    .copy_button{
+        font-size: 19rem;
+    }
+
+    .image_container{
+        width: 60vw;
+        max-width: 1250px;
+    }
+
+    /* Toggle button */
+    .toggle_auto_container{
+        top: 15px;
+        right: 15px;
+        aspect-ratio: 2;
+    }
+    
+    .toggle_switch{
+        border-radius: 100px;
+        height: 45px;
+        font-size: 25rem;
+    }
+    
+    .slow{
+        left: 48px;
+        top: 11px;
+    }
+    .fast{
+        top: 11px;
+        left: 13px;
+    }
+    .toggle_switch_bubble{
+        width: 32px;
+        height: 32px;
+        margin-top: 7px;
+        margin-left: 10px;
+    }
+
+    .toggle_auto_checkbox:checked + .toggle_switch .toggle_switch_bubble{
+        transform: translateX(30px);
+    }
+
+    .shortcuts_menu{
+        font-size: 15rem;
+    }
+    .shortcuts_menu > p{
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    .loading_screen{
+        border-radius: 20px;
+    }
+    .score_image{
+        border-radius: 20px;
+    }
+
+    .results{
+        font-size: 17em;
+    }
+
+    .notif{
+        font-size: 17em;
+    }
 }

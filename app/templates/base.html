@@ -8,21 +8,7 @@
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='style.css') }}">
     <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static',filename='osu!scorepost.ico') }}" />
     <script src="https://kit.fontawesome.com/a5b2cefb49.js" crossorigin="anonymous" async></script>
-    {% block home_scripts %}{% endblock %}
-    <script async>
-        /**
-         * Copies the text inside of elementId and displays copy_notification
-         * @param  {String} elementId The ID of the element you would like to copy the text of
-         */
-        function copyToClipboard(elementId) {
-            scoreTitleText = document.getElementById(elementId).innerText;
-            navigator.clipboard.writeText(scoreTitleText);
-
-            notif = document.getElementById('copy_notification')
-            notif.classList.add('show');
-            setTimeout(function(){ notif.className = notif.className.replace("show", ""); }, 3000);
-        }
-
+    <script>
         async function openReddit(event) {
             if ((event.key.toLowerCase() === "d"
             && event.ctrlKey) || (event.key.toLowerCase() ===  "d"
@@ -39,16 +25,11 @@
                 // Your action to perform when the key is pressed
             }
         }
-
-        /* reset site on refresh */
-        if (window.history.replaceState) {
-            window.history.replaceState(null, null, window.location.href);
+        if ( window.history.replaceState ) {
+            window.history.replaceState( null, null, window.location.href );
         }
-
-        document.addEventListener("keydown", openReddit);
-
-
-    </script>
+        document.addEventListener('keydown', openReddit)
+        </script>
   </head>
   <body>
     <!--Navigation bar-->

@@ -1,134 +1,192 @@
 {% extends "base.html" %}
-{% block home_scripts %}
-<script>
+{% block generator %}
+<script async>
   var isLoading = false
-  
-  /**
-   * toggle checkbox
-   */
-   function toggleCheckbox(id)
-  {
-    document.getElementById(id).checked = !document.getElementById(id).checked;
-  }
-
-  /**
-   * Loading... message and disable button
-   */
-    function loading() {
-        loading_element = document.getElementById('loading')
-        loading_element.innerText = "Loading..."
-        isLoading = true
-        document.getElementById('submit_button fa-solid fa-arrow-right').disabled = true;
-        document.getElementById('loading_screen').classList.add('loading')
-        document.getElementById('shortcuts_menu').style.backgroundColor = 'transparent'
-        if (document.getElementById('shortcuts_menu').style.display != 'flex') {
-          document.getElementById('loading_animation').style.display = 'block'
-        }
-  }
-  
-  /**
-   * Shows shortcuts menu
-   */
-  function showShortcutMenu() {
-    document.getElementById('loading_animation').style.display = 'none'
-    document.getElementById('shortcuts_menu').style.display = 'flex'
-  }
-
-  /**
-   * Exist shortcuts menu
-   */
-  function exitShortcutMenu() {
-    if (isLoading) {
-      document.getElementById('loading_animation').style.display = 'block'
-    }
-    document.getElementById('shortcuts_menu').style.display = 'none'
-  }
-
-  /**
-   * Submit form
-   */
-  async function submit(event) {
-    if (event.key === "Enter" && !(document.getElementById('url_input') === document.activeElement) && !document.getElementById('submit_button fa-solid fa-arrow-right').disabled) {
-      event.preventDefault()
-      document.getElementById('submit_button fa-solid fa-arrow-right').click()
-    }
-  }
-        
-
-  /**
-   * Copy Screemshot
-   */
-    async function copyScreenshot() {
-    var img = document.getElementById('score_image');
-              var canvas = document.createElement('canvas');
-              var ctx = canvas.getContext('2d');
-
-              canvas.width = img.naturalWidth;
-              canvas.height = img.naturalHeight;
-
-              ctx.drawImage(img, 0, 0);
-              var imageData = canvas.toDataURL();
-
-              canvas.toBlob(async function(blob) {
-                  try {
-                      await navigator.clipboard.write([
-                          new ClipboardItem({
-                              [blob.type]: blob
-                          })
-                      ]);
-                      console.log('Image copied to clipboard!');
-
-                      notif = document.getElementById('copy_notification')
-                      notif.classList.add('show');
-                      setTimeout(function(){ notif.className = notif.className.replace("show", ""); }, 3000);
-                  } catch (error) {
-                      console.error('Failed to copy image to clipboard:', error);
-
-                      notif = document.getElementById('fail_notification')
-                      notif.classList.add('show');
-                      setTimeout(function(){ notif.className = notif.className.replace("show", ""); }, 3000);
-                  }
-              }, 'image/png');
-    }
-
+    
     /**
-     * Copy image shortcut
+     * toggle checkbox
      */
-    async function copyScreenshotShortcut(event) {
-      if ((event.key.toLowerCase() === "s"
-            && event.ctrlKey) || (event.key.toLowerCase() === "s"
-            && event.metaKey)) {
-              // Copy the image data to clipboard
-                event.preventDefault();
-                copyScreenshot()
-            };
+     function toggleCheckbox(id)
+    {
+      document.getElementById(id).checked = !document.getElementById(id).checked;
     }
-
+  
+    /**
+     * Loading... message and disable button
+     */
+      function loading() {
+          loading_element = document.getElementById('loading')
+          loading_element.innerText = "Loading..."
+          isLoading = true
+          document.getElementById('submit_button fa-solid fa-arrow-right').disabled = true;
+          document.getElementById('loading_screen').classList.add('loading')
+          document.getElementById('shortcuts_menu').style.backgroundColor = 'transparent'
+          if (document.getElementById('shortcuts_menu').style.display != 'flex') {
+            document.getElementById('loading_animation').style.display = 'block'
+          }
+    }
+    
+    /**
+     * Shows shortcuts menu
+     */
+    function showShortcutMenu() {
+      document.getElementById('loading_animation').style.display = 'none'
+      document.getElementById('shortcuts_menu').style.display = 'flex'
+    }
+  
+    /**
+     * Exist shortcuts menu
+     */
+    function exitShortcutMenu() {
+      if (isLoading) {
+        document.getElementById('loading_animation').style.display = 'block'
+      }
+      document.getElementById('shortcuts_menu').style.display = 'none'
+    }
+  
+    /**
+     * Submit form
+     */
+    async function submit(event) {
+      if (event.key === "Enter") {
+        
+        event.preventDefault()
+        if (document.getElementById('content') === document.activeElement) {
+          console.log('enter')
+          customMessage = document.getElementById("custom_message_input")
+          customMessage.focus();
+          customMessage.select();
+        }
+        else if (!document.getElementById('submit_button fa-solid fa-arrow-right').disabled) {
+          document.getElementById('submit_button fa-solid fa-arrow-right').click()
+        }
+      }
+    }
+    
+  
+    /**
+     * Copy Screemshot
+     */
+      function copyScreenshot(callback
+      ) {
+        console.log('hi')
+        var img = document.getElementById('score_image');
+        var canvas = document.createElement('canvas');
+        var ctx = canvas.getContext('2d');
+  
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+  
+        ctx.drawImage(img, 0, 0);
+        var imageData = canvas.toDataURL();
+  
+        canvas.toBlob(async function(blob) {
+            try {
+                await navigator.clipboard.write([
+                    new ClipboardItem({
+                        [blob.type]: blob
+                    })
+                ]);
+                console.log('Image copied to clipboard!');
+                notif = document.getElementById('copy_notification')
+                notif.classList.add('show');
+                setTimeout(function(){ notif.className = notif.className.replace("show", ""); }, 3000);
+                if (callback) callback(null); 
+            } catch (error) {
+                console.error('Failed to copy image to clipboard:', error);
+                notif = document.getElementById('fail_notification')
+                notif.classList.add('show');
+                setTimeout(function(){ notif.className = notif.className.replace("show", ""); }, 3000);
+                if (callback) callback(error); 
+            }
+        }, 'image/png');
+      }
+  
+      function copyScreenshotPromise() {
+      return new Promise((resolve, reject) => {
+          copyScreenshot((error) => {
+              if (error) {
+                  reject(error);
+              } else {
+                  resolve();
+              }
+          });
+      });
+  }
+  
+      /**
+       * Copy image shortcut
+       */
+      async function copyScreenshotShortcut(event) {
+        if ((event.key.toLowerCase() === "s"
+              && event.ctrlKey) || (event.key.toLowerCase() === "s"
+              && event.metaKey)) {
+                // Copy the image data to clipboard
+                  event.preventDefault();
+                  copyScreenshot()
+              };
+      }
+  
       window.onload = function () {
+        var scrollpos = localStorage.getItem('scrollpos');
+        if (scrollpos) {
+          window.scrollTo(0, scrollpos);
+        }
+  
         var input = document.getElementById('content');
+  
+        var toggleAutoCheckbox = document.getElementById('toggle_auto_checkbox')
+        let auto_toggled = localStorage.getItem('auto_toggled');
+        if (auto_toggled == 'true') {
+          toggleAutoCheckbox.checked = true;
+        }
+        else {
+          toggleAutoCheckbox.checked = false;
+        }
+        
         isLoading = false
         input.focus();
         input.select();
         document.addEventListener("keyup", submit)
         document.addEventListener("keydown", copyScreenshotShortcut)
         document.getElementById('submit_button fa-solid fa-arrow-right').disabled = false;
-
+  
+        window.onbeforeunload = function(e) {
+              localStorage.setItem('auto_toggled', document.getElementById('toggle_auto_checkbox').checked);
+              localStorage.setItem('scrollpos', window.scrollY);
+          };
+          if (toggleAutoCheckbox.checked) {
+            if ('{{ score_title }} ' != "Player | Artist - Beatmap Title [Version] (Creator, 0.00*) 0.00% SS | 0pp "
+                  &&  '{{ score_title }} ' != "No recent scores "
+                  && '{{ score_title }} ' != "No score found, please enter a valid score link, user link, or username ") {
+                      
+                    (async () => {
+                        try {
+                            await copyScreenshotPromise();
+                            window.open("https://www.reddit.com/r/osugame/submit/?type=IMAGE&title={{ score_title | urlencode | replace('/', '%2F') }}");
+                        } catch (error) {
+                            console.error("Failed to copy screenshot:", error);
+                        }
+                    })();
+                    
+                  }
+          }
       }
-</script>
-
-{% endblock %}
-{% block generator %}
+  </script>
 <div class="generator_container">
   <form class="score_input" action="/" onsubmit="loading()" method="POST">
     <!--Generator input-->
     <div class="input_container">
-      <input class="url_input" type="text" name="content" id="content" value="{{ input }}" placeholder="Enter Score URL, User URL, or Username">
+      <input class="url_input" type="text" onkeydown="return (event.key != 'Enter')" name="content" id="content" value="{{ input }}" placeholder="Enter Score URL, User URL, or Username">
       <button class="submit_button" id="submit_button fa-solid fa-arrow-right" type="submit">
         <i class="fa-solid fa-angle-right" data-fa-transform="down-40"></i>
       </button>
     </div>
-    <input class="custom_message_input" name="custom_message_content" value="{{ custom_message_input }}" type="text" placeholder="Enter Custom Message (optional)">
-    <!--Screenshot checkbox-->
+    <div class="custom_message_container">
+      <input class="custom_message_input"  id="custom_message_input" name="custom_message_content" value="{{ custom_message_input }}" type="text" placeholder="Enter Custom Message (optional)">
+      <span class="custom_message_label" for="custom_message_content">Leave blank and press enter if none</span>
+    </div>
+      <!--Screenshot checkbox-->
     <div class="checkbox_container">
       <input class="get_screenshot" name="screenshot_checkbox" type="checkbox" {% if checked %} checked {% endif %} id="get_screenshot" value="get screenshot">
       <label for="get_screenshot" class="checkbox_label">Get score screenshot</label>
@@ -145,7 +203,17 @@
     </button>
   </p>
   <!--Screenshot-->
-  <div onmouseleave="exitShortcutMenu()" onmouseover="showShortcutMenu()" onclick="location.href='{{ image_src }}'" class="image_wrapper" >
+  <div onmouseleave="exitShortcutMenu()" onmouseover="showShortcutMenu()" class="image_wrapper" >
+    <div class="toggle_auto_container">
+  
+      <input class="toggle_auto_checkbox" id="toggle_auto_checkbox" type="checkbox">
+      <label for="toggle_auto_checkbox" class="toggle_switch">
+        <i class="fa-solid fa-bolt fast"></i>
+        <div class="toggle_switch_bubble"></div>
+        <i class="fa-solid fa-hourglass slow"></i>
+      </label>
+    </div>
+
     <div class="shortcuts_menu" id="shortcuts_menu">
       <p>
         CTRL + S - copy screenshot
@@ -160,7 +228,7 @@
     <div class="loading_screen" id="loading_screen">
       <div class="loading_animation" id="loading_animation"></div>
     </div>
-    <div class="image_container" id="image_container">
+    <div class="image_container" id="image_container" onclick="location.href='{{ image_src }}'">
         <img id="score_image" class="score_image" src="{{ image_src }}">
     </div>
   </div>
