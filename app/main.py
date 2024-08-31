@@ -1,5 +1,6 @@
 from flask import render_template, request, Flask, send_file, url_for
 from PIL import Image
+from werkzeug.middleware.profiler import ProfilerMiddleware
 
 import time
 import os
@@ -29,6 +30,8 @@ not_valid_link_msg = (
 )
 no_score_found = "No score found to generate screenshot"
 no_recent_score = "No recent scores"
+not_user_error = "Please enter user information when generating next score"
+timeout_error = "Timeout!"
 
 
 @app.route("/how_to_use")
@@ -51,8 +54,8 @@ def contact():
     return render_template("contact.html")
 
 
-@app.route("/screenshot/<screenshot_file_name>/<encoded_json_data>.jpeg")
-def screenshot(screenshot_file_name: str, encoded_json_data: str):
+@app.route("/screenshot/<encoded_json_data>.webp")
+def screenshot(encoded_json_data: str):
     """Screenshot path
 
     Args:
@@ -62,20 +65,14 @@ def screenshot(screenshot_file_name: str, encoded_json_data: str):
     Returns:
         Response: Screenshot data
     """
-    screenshot_path = os.path.join(screenshot_dir, screenshot_file_name)
-    try:
-        ss = Image.open(screenshot_path)
-    except FileNotFoundError:
-        score_json = urllib.parse.unquote_plus(encoded_json_data)
-        j = json.loads(score_json)
-        score = ScoreInfo(**j, score_ossapi=None)
-        screenshot_path = os.path.join(screenshot_dir, generate_screenshot(score))
-        ss = Image.open(screenshot_path)
+    score_json = urllib.parse.unquote_plus(encoded_json_data)
+    j = json.loads(score_json)
+    score = ScoreInfo(**j, score_ossapi=None)
+    screenshot = generate_screenshot(score)
     ss_io = BytesIO()
-    ss.save(ss_io, format="JPEG")
+    screenshot.save(ss_io, format="webp")
     ss_io.seek(0)
-    os.remove(screenshot_path)
-    return send_file(ss_io, mimetype="image/jpeg")
+    return send_file(ss_io, mimetype="image/webp")
 
 
 @app.route("/", methods=["POST", "GET"])
@@ -87,22 +84,25 @@ def home():
     """
 
     # When user submits input
+    st = time.time()
     if request.method == "POST":
-        st = time.time()
         # Initialize input content and if screenshot checkbox was checked
         url = request.form["content"]
-        checked = "get screenshot" in request.form.getlist("screenshot_checkbox")
+        checkbox_list = request.form.getlist("checkbox")
+
+        next_score_checked = "get next score" in checkbox_list
+        screenshot_checked = "get screenshot" in checkbox_list
+
         custom_message_input = request.form["custom_message_content"]
 
         results = ""
 
         # Get score information from user input
-        score = get_score_info(url)
-
+        score = get_score_info(url, next_score_checked)
         # If score is None or -1, do not process
         # score title or score and return with error messages
         if score == None:
-            if checked:
+            if screenshot_checked:
                 results = no_score_found
             return render_template(
                 "home.html",
@@ -110,11 +110,12 @@ def home():
                 image_src=default_score_img,
                 results=results,
                 input=url,
-                checked=checked,
+                screenshot_checked=screenshot_checked,
                 custom_message_input=custom_message_input,
+                next_score_checked=next_score_checked,
             )
         elif score == -1:
-            if checked:
+            if screenshot_checked:
                 results = no_score_found
             return render_template(
                 "home.html",
@@ -122,8 +123,35 @@ def home():
                 image_src=default_score_img,
                 results=results,
                 input=url,
-                checked=checked,
+                screenshot_checked=screenshot_checked,
                 custom_message_input=custom_message_input,
+                next_score_checked=next_score_checked,
+            )
+        elif score == -2:
+            if screenshot_checked:
+                results = no_score_found
+            return render_template(
+                "home.html",
+                score_title=timeout_error,
+                image_src=default_score_img,
+                results=results,
+                input=url,
+                screenshot_checked=screenshot_checked,
+                custom_message_input=custom_message_input,
+                next_score_checked=next_score_checked,
+            )
+        elif score == -3:
+            if screenshot_checked:
+                results = no_score_found
+            return render_template(
+                "home.html",
+                score_title=not_user_error,
+                image_src=default_score_img,
+                results=results,
+                input=url,
+                screenshot_checked=screenshot_checked,
+                custom_message_input=custom_message_input,
+                next_score_checked=next_score_checked,
             )
 
         print("Successfully got ScoreInfo")
@@ -139,15 +167,12 @@ def home():
 
         # If checked, get screenshot and path to the screenshot and send
         # the score object as a json to /screenshot
-        if checked:
+        if screenshot_checked:
             # TODO: make this better
-            screenshot_file_name = generate_screenshot(score)
-            print("Successfully generated screenshot")
             score_json = json.dumps(score.__dict__)
             encoded_json_data = urllib.parse.quote(score_json, safe="")
             score_img = url_for(
                 "screenshot",
-                screenshot_file_name=screenshot_file_name,
                 encoded_json_data=encoded_json_data,
             )
             results = "Screenshot successfully generated"
@@ -155,25 +180,26 @@ def home():
             score_img = default_score_img
             results = "Title successfully generated"
 
-        et = time.time()
-        elapsed_time = et - st
-        print(f"Generated scorepost in: {elapsed_time} seconds")
     else:  # Default page
         score_img = default_score_img
         title = default_title
         results = ""
         url = ""
         custom_message_input = ""
-        checked = True
-
+        screenshot_checked = True
+        next_score_checked = False
+    et = time.time()
+    elapsed_time = et - st
+    print(f"Generated scorepost in: {elapsed_time} seconds")
     return render_template(
         "home.html",
         score_title=title,
         image_src=score_img,
         results=results,
         input=url,
-        checked=checked,
+        screenshot_checked=screenshot_checked,
         custom_message_input=custom_message_input,
+        next_score_checked=next_score_checked,
     )
 
 

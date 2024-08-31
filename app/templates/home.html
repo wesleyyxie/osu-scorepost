@@ -16,7 +16,12 @@
      */
       function loading() {
           loading_element = document.getElementById('loading')
-          loading_element.innerText = "Loading..."
+          if (document.getElementById(next_score_checkbox).checked){
+            loading_element.innerText = "Waiting... Refresh to stop wait"
+          }
+          else {
+            loading_element.innerText = "Loading..."
+          }
           isLoading = true
           document.getElementById('submit_button fa-solid fa-arrow-right').disabled = true;
           document.getElementById('loading_screen').classList.add('loading')
@@ -49,27 +54,22 @@
      */
     async function submit(event) {
       if (event.key === "Enter") {
-        
         event.preventDefault()
-        if (document.getElementById('content') === document.activeElement) {
-          console.log('enter')
-          customMessage = document.getElementById("custom_message_input")
-          customMessage.focus();
-          customMessage.select();
-        }
-        else if (!document.getElementById('submit_button fa-solid fa-arrow-right').disabled) {
+        if (!document.getElementById('submit_button fa-solid fa-arrow-right').disabled) {
           document.getElementById('submit_button fa-solid fa-arrow-right').click()
         }
       }
     }
     
-  
     /**
      * Copy Screemshot
      */
-      function copyScreenshot(callback
-      ) {
+      function copyScreenshot(callback) {
         console.log('hi')
+        if (!document.getElementById('get_screenshot').checked) {
+          if (callback) callback(null);
+          return
+        }
         var img = document.getElementById('score_image');
         var canvas = document.createElement('canvas');
         var ctx = canvas.getContext('2d');
@@ -88,9 +88,6 @@
                     })
                 ]);
                 console.log('Image copied to clipboard!');
-                notif = document.getElementById('copy_notification')
-                notif.classList.add('show');
-                setTimeout(function(){ notif.className = notif.className.replace("show", ""); }, 3000);
                 if (callback) callback(null); 
             } catch (error) {
                 console.error('Failed to copy image to clipboard:', error);
@@ -126,39 +123,13 @@
                   copyScreenshot()
               };
       }
-  
+      
       window.onload = function () {
-        var scrollpos = localStorage.getItem('scrollpos');
-        if (scrollpos) {
-          window.scrollTo(0, scrollpos);
-        }
-  
-        var input = document.getElementById('content');
-  
-        var toggleAutoCheckbox = document.getElementById('toggle_auto_checkbox')
         let auto_toggled = localStorage.getItem('auto_toggled');
-        if (auto_toggled == 'true') {
-          toggleAutoCheckbox.checked = true;
-        }
-        else {
-          toggleAutoCheckbox.checked = false;
-        }
-        
-        isLoading = false
-        input.focus();
-        input.select();
-        document.addEventListener("keyup", submit)
-        document.addEventListener("keydown", copyScreenshotShortcut)
-        document.getElementById('submit_button fa-solid fa-arrow-right').disabled = false;
-  
-        window.onbeforeunload = function(e) {
-              localStorage.setItem('auto_toggled', document.getElementById('toggle_auto_checkbox').checked);
-              localStorage.setItem('scrollpos', window.scrollY);
-          };
-          if (toggleAutoCheckbox.checked) {
-            if ('{{ score_title }} ' != "Player | Artist - Beatmap Title [Version] (Creator, 0.00*) 0.00% SS | 0pp "
-                  &&  '{{ score_title }} ' != "No recent scores "
-                  && '{{ score_title }} ' != "No score found, please enter a valid score link, user link, or username ") {
+        if (auto_toggled == "true") {
+            if ('{{ score_title }}' != "Player | Artist - Beatmap Title [Version] (Creator, 0.00*) 0.00% SS | 0pp"
+                  &&  '{{ score_title }}' != "No recent scores"
+                  && '{{ score_title }}' != "No score found, please enter a valid score link, user link, or username") {
                       
                     (async () => {
                         try {
@@ -171,6 +142,31 @@
                     
                   }
           }
+          var toggleAutoCheckbox = document.getElementById('toggle_auto_checkbox')
+          if (auto_toggled == 'true') {
+            toggleAutoCheckbox.checked = true;
+          }
+          else {
+            toggleAutoCheckbox.checked = false;
+          }
+
+          var scrollpos = localStorage.getItem('scrollpos');
+          if (scrollpos) {
+            window.scrollTo(0, scrollpos);
+          }
+
+          isLoading = false
+          input = document.getElementById('content')
+          input.focus();
+          input.select();
+          document.addEventListener("keyup", submit)
+          document.addEventListener("keydown", copyScreenshotShortcut)
+          document.getElementById('submit_button fa-solid fa-arrow-right').disabled = false;
+    
+          window.onbeforeunload = function(e) {
+                localStorage.setItem('auto_toggled', document.getElementById('toggle_auto_checkbox').checked);
+                localStorage.setItem('scrollpos', window.scrollY);
+          };
       }
   </script>
 <div class="generator_container">
@@ -187,8 +183,12 @@
       <span class="custom_message_label" for="custom_message_content">Leave blank and press enter if none</span>
     </div>
       <!--Screenshot checkbox-->
+      <div class="checkbox_container">
+        <input class="checkbox" name="checkbox" type="checkbox" {% if next_score_checked %} checked {% endif %} id="next_score_checkbox" value="get next score">
+        <label for="next_score_checkbox" class="checkbox_label">Generate next score (users only, 1 minute timeout)</label>
+      </div>
     <div class="checkbox_container">
-      <input class="get_screenshot" name="screenshot_checkbox" type="checkbox" {% if checked %} checked {% endif %} id="get_screenshot" value="get screenshot">
+      <input class="checkbox" name="checkbox" type="checkbox" {% if screenshot_checked %} checked {% endif %} id="get_screenshot" value="get screenshot">
       <label for="get_screenshot" class="checkbox_label">Get score screenshot</label>
     </div>
   </form>

@@ -4,6 +4,7 @@ from circleguard.loader import NoInfoAvailableException
 import rosu_pp_py as rosu
 from requests import get
 from os import getenv
+from waiting import wait, TimeoutExpired
 
 from dotenv import find_dotenv, load_dotenv
 
@@ -320,7 +321,14 @@ def get_ranking_global(score: Score, oss: Ossapi):
         return 0
 
 
-def get_score_info(input: str):
+def is_next_score(user_id, current_score: Score, oss):
+    next_score = get_recent_score(user_id, None, oss)
+    if next_score != None and current_score.created_at != next_score.created_at:
+        return next_score
+    return False
+
+
+def get_score_info(input: str, next_score: bool):
     """Returns score information needed for screenshot and scorepost title
     from a score link, username or user link
 
@@ -336,9 +344,31 @@ def get_score_info(input: str):
     oss = Ossapi(CLIENT_ID, CLIENT_SECRET)
     cg = Circleguard(API_KEY)
 
-    # Does not need to further process if score_ossapi
-    # is -1 or None
-    score_ossapi = get_ossapi_score(input, oss)
+    if next_score:
+        if "scores" in input:
+            return -3
+        current_score = get_ossapi_score(input, oss)
+        if current_score == -1:
+            if "osu.ppy.sh/users/" in input:
+                user_id = extract_id_from_link(input.split("osu.ppy.sh/")[1], oss)
+            else:
+                user_id = extract_id_from_link(f"https://osu.ppy.sh/users/{input}", oss)
+        elif current_score == None:
+            return None
+        else:
+            user_id = current_score.user_id
+
+        try:
+            score_ossapi = wait(
+                lambda: is_next_score(user_id, current_score, oss),
+                timeout_seconds=60,
+                waiting_for="something to be ready",
+            )
+        except TimeoutExpired:
+            return -2
+    else:
+        score_ossapi = get_ossapi_score(input, oss)
+
     if score_ossapi == -1:
         return -1
     elif score_ossapi == None:

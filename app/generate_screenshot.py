@@ -2,9 +2,9 @@ from PIL import Image, ImageDraw, ImageFont, ImageEnhance, UnidentifiedImageErro
 
 import requests
 import random
-import time
 import os
 import uuid
+import io
 
 from util.score import ScoreInfo
 from util.ranking_panel import (
@@ -73,7 +73,7 @@ def set_up_skeleton(im: Image.Image, score: ScoreInfo):
                     os.path.join(
                         skin_dir,
                         "Aristia",
-                        "skeletons",
+                        "skeletons_lite",
                         "osu_replay_skeleton.png",
                     )
                 )
@@ -82,21 +82,27 @@ def set_up_skeleton(im: Image.Image, score: ScoreInfo):
                     os.path.join(
                         skin_dir,
                         "Aristia",
-                        "skeletons",
+                        "skeletons_lite",
                         "osu_noreplay_skeleton.png",
                     )
                 )
         case "taiko":
             skeleton = Image.open(
-                os.path.join(skin_dir, "Aristia", "skeletons", "taiko_skeleton.png")
+                os.path.join(
+                    skin_dir, "Aristia", "skeletons_lite", "taiko_skeleton.png"
+                )
             )
         case "mania":
             skeleton = Image.open(
-                os.path.join(skin_dir, "Aristia", "skeletons", "mania_skeleton.png")
+                os.path.join(
+                    skin_dir, "Aristia", "skeletons_lite", "mania_skeleton.png"
+                )
             )
         case "fruits":
             skeleton = Image.open(
-                os.path.join(skin_dir, "Aristia", "skeletons", "fruits_skeleton.png")
+                os.path.join(
+                    skin_dir, "Aristia", "skeletons_lite", "fruits_skeleton.png"
+                )
             )
     im = im.paste(skeleton, (0, 0), skeleton)
 
@@ -277,34 +283,23 @@ def generate_screenshot(score: ScoreInfo):
 
     # Initialize screenshot file name
     random_id = str(uuid.uuid4())  # Unique name for each screenshot
-    screenshot_file_name = f"score{random_id}.jpg"
 
     # Get beatmapset background data from link
     beatmapset_id = score.beatmapset_id
     beatmap_img_url = f"https://assets.ppy.sh/beatmaps/{beatmapset_id}/covers/raw.png"
-    img_data = requests.get(beatmap_img_url).content
-
-    # Path to screenshots directory
-    path_to_screenshot_dir = os.path.join(scorepost_generator_dir, "screenshots")
-    path_to_background = os.path.join(
-        scorepost_generator_dir, "backgrounds", f"background{random_id}.jpg"
-    )
-    with open(path_to_background, "wb") as handler:
-        handler.write(img_data)
+    background_img_data = requests.get(beatmap_img_url).content
 
     # If the link does not return any data for the background, it could be that it is
     # not a png file, so try again for jpg. If it does not return any data again, then
     # assume that the beatmapset has no background, so the background file is a random choice
     # in default_background directory.
     try:
-        im = Image.open(path_to_background)
+        im = Image.open(io.BytesIO(background_img_data))
     except UnidentifiedImageError:
         beatmap_img_url = f"https://assets.ppy.sh/beatmaps/{beatmapset_id}/covers/raw.jpg"  # Try with jpg
-        img_data = requests.get(beatmap_img_url).content
-        with open(path_to_background, "wb") as handler:
-            handler.write(img_data)
+        background_img_data = requests.get(beatmap_img_url).content
         try:
-            im = Image.open(path_to_background)
+            im = Image.open(io.BytesIO(background_img_data))
         except UnidentifiedImageError:
             # If it doesn't work, pick a random default background
             path_to_default_background_dir = os.path.join(
@@ -335,19 +330,5 @@ def generate_screenshot(score: ScoreInfo):
     generate_mods_items(im, score)
     ranking_panel(im, score)
 
-    # Delete the saved background file
-    os.remove(path_to_background)
-
-    # Delete all previous screenshot files that are older than 1 hour
-    for ss in os.listdir(path_to_screenshot_dir):
-        past_screenshot = os.path.join(path_to_screenshot_dir, ss)
-        file_name = os.path.basename(past_screenshot)
-        if file_name != ".gitkeep" and time.time() - os.path.getmtime(
-            past_screenshot
-        ) > (60 * 15):
-            print("Removing past screenshots")
-            os.remove(past_screenshot)
-
     # Save the screenshot and return the file name
-    im.save(os.path.join(scorepost_generator_dir, "screenshots", screenshot_file_name))
-    return screenshot_file_name
+    return im

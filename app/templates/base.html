@@ -8,27 +8,31 @@
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='style.css') }}">
     <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static',filename='osu!scorepost.ico') }}" />
     <script src="https://kit.fontawesome.com/a5b2cefb49.js" crossorigin="anonymous" async></script>
-    <script>
-        async function openReddit(event) {
-            if ((event.key.toLowerCase() === "d"
-            && event.ctrlKey) || (event.key.toLowerCase() ===  "d"
-            && event.metaKey)){
-                event.preventDefault()
-                if ('{{ score_title }} ' != "Player | Artist - Beatmap Title [Version] (Creator, 0.00*) 0.00% SS | 0pp "
-                &&  '{{ score_title }} ' != "No recent scores "
-                && '{{ score_title }} ' != "No score found, please enter a valid score link, user link, or username ") {
+    <script async>
+        function openReddit(){
+            scoreTitle = "{{ score_title }}"
+            if (scoreTitle != "Player | Artist - Beatmap Title [Version] (Creator, 0.00*) 0.00% SS | 0pp"
+                &&  scoreTitle != "No recent scores"
+                && scoreTitle != "No score found, please enter a valid score link, user link, or username") {
                     window.open("https://www.reddit.com/r/osugame/submit/?type=IMAGE&title={{ score_title | urlencode | replace('/', '%2F') }}");
                 }
                 else {
                     window.open("https://www.reddit.com/r/osugame/submit/?type=IMAGE")
-                }
+            }
+        }
+        async function openRedditShortcut(event) {
+            if ((event.key.toLowerCase() === "d"
+            && event.ctrlKey) || (event.key.toLowerCase() ===  "d"
+            && event.metaKey)){
+                event.preventDefault()
+                openReddit()
                 // Your action to perform when the key is pressed
             }
         }
         if ( window.history.replaceState ) {
             window.history.replaceState( null, null, window.location.href );
         }
-        document.addEventListener('keydown', openReddit)
+        document.addEventListener('keydown', openRedditShortcut)
         </script>
   </head>
   <body>
@@ -52,7 +56,7 @@
                 <i class="fa-solid fa-house"></i>
                 Home
             </a>
-            <a class="reddit_submit" href="https://www.reddit.com/r/osugame/submit/?type=IMAGE&title={{ score_title | urlencode | replace('/', '%2F') }}" target="_blank">
+            <a class="reddit_submit" onclick="openReddit()">
                 <i class="fa-brands fa-reddit"></i>
                 r/osugame
             </a>
