@@ -6,6 +6,9 @@ from requests import get
 from os import getenv
 from waiting import wait, TimeoutExpired
 
+import time
+import datetime
+
 from dotenv import find_dotenv, load_dotenv
 
 # API information from .env
@@ -14,6 +17,7 @@ load_dotenv(dotenv_path)
 CLIENT_ID = getenv("CLIENT_ID")
 CLIENT_SECRET = getenv("CLIENT_SECRET")
 API_KEY = getenv("API_KEY")
+
 
 from .score import ScoreInfo
 
@@ -321,11 +325,45 @@ def get_ranking_global(score: Score, oss: Ossapi):
         return 0
 
 
-def is_next_score(user_id, current_score: Score, oss):
-    next_score = get_recent_score(user_id, None, oss)
-    if next_score != None and current_score.created_at != next_score.created_at:
-        return next_score
-    return False
+def is_next_score_with_recent(user_id, current_created_at, oss: Ossapi):
+    try:
+        # Fetch the most recent score
+        recent_score = oss.user_scores(
+            user_id=user_id,
+            legacy_only=False,
+            type="recent",
+            limit=1,
+            include_fails=True,
+        )[0]
+        if current_created_at == recent_score.created_at:
+            print(datetime.datetime.now())
+            return False
+        else:
+            return recent_score
+    except ValueError as e:
+        # Optionally log the exception or handle specific exceptions
+        print(f"An error occurred: {e}")
+
+
+def is_next_score_no_recent(user_id, oss: Ossapi):
+    try:
+        # Fetch the most recent score
+        user_scores = oss.user_scores(
+            user_id=user_id,
+            legacy_only=False,
+            type="recent",
+            limit=1,
+            include_fails=True,
+        )
+
+        # Ensure that there is at least one score in the response
+        if user_scores:
+            return user_scores[0]
+        else:
+            return False
+    except ValueError as e:
+        # Optionally log the exception or handle specific exceptions
+        print(f"An error occurred: {e}")
 
 
 def get_score_info(input: str, next_score: bool):
@@ -359,11 +397,25 @@ def get_score_info(input: str, next_score: bool):
             user_id = current_score.user_id
 
         try:
-            score_ossapi = wait(
-                lambda: is_next_score(user_id, current_score, oss),
-                timeout_seconds=60,
-                waiting_for="something to be ready",
-            )
+            if current_score == -1:
+                score_ossapi = wait(
+                    lambda: is_next_score_no_recent(
+                        user_id, current_score.created_at, oss
+                    ),
+                    timeout_seconds=60,
+                    waiting_for="something to be ready",
+                    sleep_seconds=2,
+                )
+            else:
+                score_ossapi = wait(
+                    lambda: is_next_score_with_recent(
+                        user_id, current_score.created_at, oss
+                    ),
+                    timeout_seconds=120,
+                    waiting_for="something to be ready",
+                    sleep_seconds=0.5,
+                )
+
         except TimeoutExpired:
             return -2
     else:
@@ -374,6 +426,7 @@ def get_score_info(input: str, next_score: bool):
     elif score_ossapi == None:
         return None
 
+    st = time.time()
     # Difficulty attributes for calculating converted star rating
     difficulty_attributes = oss.beatmap_attributes(
         beatmap_id=score_ossapi.beatmap.id,
@@ -423,4 +476,5 @@ def get_score_info(input: str, next_score: bool):
         beatmap_max_combo=beatmap_max_combo,
         global_ranking=global_ranking,
     )
+    print(f"get_score time: {time.time() - st}")
     return score
