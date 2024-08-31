@@ -10,13 +10,20 @@
     {
       document.getElementById(id).checked = !document.getElementById(id).checked;
     }
-  
+    
+    function copyToClipboard(id){
+      var copyText = document.getElementById(id);
+      navigator.clipboard.writeText(copyText.innerText);
+      notif = document.getElementById('copy_notification')
+      notif.classList.add('show');
+      setTimeout(function(){ notif.className = notif.className.replace("show", ""); }, 3000);
+    }
     /**
      * Loading... message and disable button
      */
       function loading() {
           loading_element = document.getElementById('loading')
-          if (document.getElementById(next_score_checkbox).checked){
+          if (document.getElementById('next_score_checkbox').checked){
             loading_element.innerText = "Waiting... Refresh to stop wait"
           }
           else {
@@ -125,11 +132,14 @@
       }
       
       window.onload = function () {
+        var loadTime = window.performance.timing.domContentLoadedEventEnd-window.performance.timing.navigationStart; 
+        console.log('Page load time is '+ loadTime);
         let auto_toggled = localStorage.getItem('auto_toggled');
         if (auto_toggled == "true") {
             if ('{{ score_title }}' != "Player | Artist - Beatmap Title [Version] (Creator, 0.00*) 0.00% SS | 0pp"
                   &&  '{{ score_title }}' != "No recent scores"
-                  && '{{ score_title }}' != "No score found, please enter a valid score link, user link, or username") {
+                  && '{{ score_title }}' != "No score found, please enter a valid score link, user link, or username"
+                && '{{ score_title }}' != 'Please enter user information when generating next score') {
                       
                     (async () => {
                         try {
