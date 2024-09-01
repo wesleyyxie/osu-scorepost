@@ -23,14 +23,14 @@ from .score import ScoreInfo
 
 
 def extract_id_from_link(input: str, oss: Ossapi):
-    """Gets score id or user id from a link
+    """Gets score id or user id from a link. Raises ValueError if input is invalid
 
     Args:
         input (str): The link without osu.ppy.sh/
         oss (Ossapi): Ossapi API instance
 
     Returns:
-        Union[int, None]: The score ID or user ID as an integer if found, otherwise None.
+        Union[int]: The score ID or user ID as an integer if found.
     """
 
     # Splits the link into parts by /. If the link consists of
@@ -41,45 +41,38 @@ def extract_id_from_link(input: str, oss: Ossapi):
         link_parts.pop()
 
     # Link should consist of 2 or 3 parts in order to be valid.
-    # If unvalid, return None.
+    # If unvalid, raise ValueError.
     if len(link_parts) == 2 or len(link_parts) == 3:
         # If it is a user link, try to convert the second part to
         # integer for the user id, otherwise assume the second
-        # part is the username. If user method does not work,
-        # return None.
+        # part is the username.
         if link_parts[0] == "users":
             try:
                 link_id = int(link_parts[1])
             except ValueError:
-                try:
-                    user = oss.user(link_parts[1])  # user object from Ossapi
-                except ValueError:
-                    return None
+                user = oss.user(link_parts[1])  # user object from Ossapi
                 link_id = user.id
         # If it is a score link, then it consists of 3 parts,
         # the id will be in the third position. If it consists
         # 2 parts, it will be in the second position. Then try
-        # to make it an integer, otherwise return None.
+        # to make it an integer, otherwise raise ValueError.
         elif link_parts[0] == "scores":
             if len(link_parts) == 3:
                 i = 2
             else:
                 i = 1
-            try:
-                link_id = int(link_parts[i])
-            except ValueError:
-                return None
+            link_id = int(link_parts[i])
         else:
-            return None
+            raise ValueError
         return link_id
     else:
-        return None
+        raise ValueError
 
 
 def get_recent_score(user_id: int, mode: str | None, oss: Ossapi):
     """Returns the most recent score from a user ID. If mode is None,
     return recent score from the default gamemode. Returns -1 if no
-    recent scores found from a profile or None if the user_id is not valid.
+    recent scores found from a profile.
 
     Args:
         user_id (int): The user ID
@@ -87,33 +80,28 @@ def get_recent_score(user_id: int, mode: str | None, oss: Ossapi):
         oss (Ossapi): Ossapi API instance
 
     Returns:
-        Union[Score, None, int]: The most recent score object, None if user_id
-        is invalid, or -1 if the profile has no recent scores
+        Union[Score, int]: The most recent score object, or -1 if the profile has no recent scores
     """
 
     # If mode is not None, try getting list of recent scores with mode specified,
-    # else do not specify mode. If user_scores method does not return anything,
-    # it will create a ValueError and function returns None.
-    try:
-        if mode != None:
-            recent_scores = oss.user_scores(
-                user_id=user_id,
-                legacy_only=False,
-                type="recent",
-                mode=mode,
-                limit=1,
-                include_fails=True,
-            )
-        else:
-            recent_scores = oss.user_scores(
-                user_id=user_id,
-                legacy_only=False,
-                type="recent",
-                limit=1,
-                include_fails=True,
-            )
-    except ValueError:
-        return None
+    # else do not specify mode.
+    if mode != None:
+        recent_scores = oss.user_scores(
+            user_id=user_id,
+            legacy_only=False,
+            type="recent",
+            mode=mode,
+            limit=1,
+            include_fails=True,
+        )
+    else:
+        recent_scores = oss.user_scores(
+            user_id=user_id,
+            legacy_only=False,
+            type="recent",
+            limit=1,
+            include_fails=True,
+        )
 
     # If recent_scores is not empty, return the very first score.
     # Otherwise, there are no recent scores on the profile so return -1.
@@ -124,8 +112,7 @@ def get_recent_score(user_id: int, mode: str | None, oss: Ossapi):
 
 
 def get_score_by_id(score_id: int, mode: str | None, oss: Ossapi):
-    """Returns a score object found by the score_id. If score_id is
-    invalid, return None. If mode is None, return recent score from
+    """Returns a score object found by the score_id. If mode is None, return recent score from
     the default gamemode.
 
     Args:
@@ -134,19 +121,15 @@ def get_score_by_id(score_id: int, mode: str | None, oss: Ossapi):
         oss (Ossapi): Ossapi API instance
 
     Returns:
-        Union[Score, None]: Score object or None if score_id is invalid
+        Union[Score]: Score object
     """
 
     # If mode is not None, try getting score with mode specified,
-    # else do not specify mode. If score_mode or score method does not return anything,
-    # it will create a ValueError and function returns None.
-    try:
-        if mode != None:
-            score = oss.score_mode(mode, score_id)
-        else:
-            score = oss.score(score_id)
-    except ValueError:
-        return None
+    # else do not specify mode.
+    if mode != None:
+        score = oss.score_mode(mode, score_id)
+    else:
+        score = oss.score(score_id)
     return score
 
 
@@ -154,16 +137,15 @@ def get_ossapi_score(input: str, oss: Ossapi):
     """Processes an input from the user and returns a score object.
     If the input is a score link, return the corresponding score. If the
     input is a username or user link, return the user's most recent score
-    including fails. Returns None if the the input is invalid, -1 if the
-    user profile has no recent scores.
+    including fails. Returns -1 if the user profile has no recent scores.
+    Raises ValueError if input is invalid
 
     Args:
         input (str): The user's input
         oss (Ossapi): Ossapi API instance
 
     Returns:
-        Union[Score, -1, None]: Returns a score, None if the the input is
-        invalid, or -1 if the user profile has no recent scores.
+        Union[Score, -1]: Returns a score or -1 if the user profile has no recent scores.
     """
 
     # If it is a link, shorten the input and extract the id from it.
@@ -173,19 +155,14 @@ def get_ossapi_score(input: str, oss: Ossapi):
         is_link = True
         input = input.split("osu.ppy.sh/")[1]
         link_id = extract_id_from_link(input, oss)
-        if link_id == None:
-            return link_id
     else:
         is_link = False
-        try:
-            user = oss.user(input)
-        except ValueError:
-            return None
+        user = oss.user(input)
         link_id = user.id
 
     # If it is a user link or username, get the most recent score
     # by the link_id. If the gamemode is specified in the link, then
-    # mode is the corresponding gamemode, else it is None.
+    # mode is the corresponding gamemode.
     if "users/" in input or is_link == False:
         # If the input was just the username, then get recent score from default
         # gamemode
@@ -317,56 +294,11 @@ def get_ranking_global(score: Score, oss: Ossapi):
     score_list = scores.scores
 
     # Calculate ranking by iterating through list of scores
-    try:
-        rank = next(i for i, s in enumerate(score_list, start=1) if s.id == score.id)
-        return rank
-    except StopIteration:
-        # Returns 0 if score is not in leaderboard
-        return 0
+    rank = next((i for i, s in enumerate(score_list, start=1) if s.id == score.id), 0)
+    return rank
 
 
-def is_next_score_with_recent(user_id, current_created_at, oss: Ossapi):
-    try:
-        # Fetch the most recent score
-        recent_score = oss.user_scores(
-            user_id=user_id,
-            legacy_only=False,
-            type="recent",
-            limit=1,
-            include_fails=True,
-        )[0]
-        if current_created_at == recent_score.created_at:
-            print(datetime.datetime.now())
-            return False
-        else:
-            return recent_score
-    except ValueError as e:
-        # Optionally log the exception or handle specific exceptions
-        print(f"An error occurred: {e}")
-
-
-def is_next_score_no_recent(user_id, oss: Ossapi):
-    try:
-        # Fetch the most recent score
-        user_scores = oss.user_scores(
-            user_id=user_id,
-            legacy_only=False,
-            type="recent",
-            limit=1,
-            include_fails=True,
-        )
-
-        # Ensure that there is at least one score in the response
-        if user_scores:
-            return user_scores[0]
-        else:
-            return False
-    except ValueError as e:
-        # Optionally log the exception or handle specific exceptions
-        print(f"An error occurred: {e}")
-
-
-def get_score_info(input: str, next_score: bool):
+def get_score_info(input: str):
     """Returns score information needed for screenshot and scorepost title
     from a score link, username or user link
 
@@ -374,57 +306,19 @@ def get_score_info(input: str, next_score: bool):
         input (str): User input
 
     Returns:
-        Union[Score_Info, int, None]: Returns Score_Info, None if input is invalid, or
+        Union[Score_Info, int]: Returns Score_Info, or
         -1 if input was a user and there are no recent scores
     """
 
     # Initialize Ossapi and Circleguard API
+
     oss = Ossapi(CLIENT_ID, CLIENT_SECRET)
     cg = Circleguard(API_KEY)
 
-    if next_score:
-        if "scores" in input:
-            return -3
-        current_score = get_ossapi_score(input, oss)
-        if current_score == -1:
-            if "osu.ppy.sh/users/" in input:
-                user_id = extract_id_from_link(input.split("osu.ppy.sh/")[1], oss)
-            else:
-                user_id = extract_id_from_link(f"https://osu.ppy.sh/users/{input}", oss)
-        elif current_score == None:
-            return None
-        else:
-            user_id = current_score.user_id
-
-        try:
-            if current_score == -1:
-                score_ossapi = wait(
-                    lambda: is_next_score_no_recent(
-                        user_id, current_score.created_at, oss
-                    ),
-                    timeout_seconds=60,
-                    waiting_for="something to be ready",
-                    sleep_seconds=2,
-                )
-            else:
-                score_ossapi = wait(
-                    lambda: is_next_score_with_recent(
-                        user_id, current_score.created_at, oss
-                    ),
-                    timeout_seconds=120,
-                    waiting_for="something to be ready",
-                    sleep_seconds=0.5,
-                )
-
-        except TimeoutExpired:
-            return -2
-    else:
-        score_ossapi = get_ossapi_score(input, oss)
+    score_ossapi = get_ossapi_score(input, oss)
 
     if score_ossapi == -1:
         return -1
-    elif score_ossapi == None:
-        return None
 
     st = time.time()
     # Difficulty attributes for calculating converted star rating

@@ -30,8 +30,6 @@ not_valid_link_msg = (
 )
 no_score_found = "No score found to generate screenshot"
 no_recent_score = "No recent scores"
-not_user_error = "Please enter user information when generating next score"
-timeout_error = "Timeout!"
 
 
 @app.route("/how_to_use")
@@ -90,7 +88,6 @@ def home():
         url = request.form["content"]
         checkbox_list = request.form.getlist("checkbox")
 
-        next_score_checked = "get next score" in checkbox_list
         screenshot_checked = "get screenshot" in checkbox_list
 
         custom_message_input = request.form["custom_message_content"]
@@ -98,10 +95,10 @@ def home():
         results = ""
 
         # Get score information from user input
-        score = get_score_info(url, next_score_checked)
-        # If score is None or -1, do not process
-        # score title or score and return with error messages
-        if score == None:
+        # ValueError is input is invalid
+        try:
+            score = get_score_info(url)
+        except ValueError:
             if screenshot_checked:
                 results = no_score_found
             return render_template(
@@ -112,9 +109,9 @@ def home():
                 input=url,
                 screenshot_checked=screenshot_checked,
                 custom_message_input=custom_message_input,
-                next_score_checked=next_score_checked,
             )
-        elif score == -1:
+        # If is -1, do not process score title or screenshot, no recent score found
+        if score == -1:
             if screenshot_checked:
                 results = no_score_found
             return render_template(
@@ -125,33 +122,6 @@ def home():
                 input=url,
                 screenshot_checked=screenshot_checked,
                 custom_message_input=custom_message_input,
-                next_score_checked=next_score_checked,
-            )
-        elif score == -2:
-            if screenshot_checked:
-                results = no_score_found
-            return render_template(
-                "home.html",
-                score_title=timeout_error,
-                image_src=default_score_img,
-                results=results,
-                input=url,
-                screenshot_checked=screenshot_checked,
-                custom_message_input=custom_message_input,
-                next_score_checked=next_score_checked,
-            )
-        elif score == -3:
-            if screenshot_checked:
-                results = no_score_found
-            return render_template(
-                "home.html",
-                score_title=not_user_error,
-                image_src=default_score_img,
-                results=results,
-                input=url,
-                screenshot_checked=screenshot_checked,
-                custom_message_input=custom_message_input,
-                next_score_checked=next_score_checked,
             )
 
         print("Successfully got ScoreInfo")
@@ -187,7 +157,6 @@ def home():
         url = ""
         custom_message_input = ""
         screenshot_checked = True
-        next_score_checked = False
     et = time.time()
     elapsed_time = et - st
     print(f"Generated scorepost in: {elapsed_time} seconds")
@@ -199,7 +168,6 @@ def home():
         input=url,
         screenshot_checked=screenshot_checked,
         custom_message_input=custom_message_input,
-        next_score_checked=next_score_checked,
     )
 
 

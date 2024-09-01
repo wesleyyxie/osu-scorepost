@@ -1,4 +1,5 @@
 from util.score import ScoreInfo
+import time
 
 
 def create_title(score: ScoreInfo):
@@ -10,7 +11,7 @@ def create_title(score: ScoreInfo):
     Returns:
         str: Title
     """
-
+    st = time.time()
     # Initialize information
     username = score.username
     artist = score.beatmapset_artist
@@ -18,15 +19,12 @@ def create_title(score: ScoreInfo):
     version = score.beatmap_version
     creator = score.beatmapset_creator
 
-    fc = ""
-    status = ""
-    score_mode = ""
-
     # If score is set with NM, do not
     # display mods in title
-    mods = ""
     if score.mods != "NM":
         mods = f" +{score.mods}"
+    else:
+        mods = ""
 
     # Difficulty attributes of score to get
     # converted star rating
@@ -61,8 +59,11 @@ def create_title(score: ScoreInfo):
         status = {4: "LOVED ", 3: "QUALIFIED ", -1: "WIP ", -2: " ", 0: " "}.get(
             score.beatmapset_status
         )
+    else:
+        status = ""
 
     # If score is not FC (score combo is 20 less than max combo or count miss > 0)
+    fc = ""
     if score.max_combo < score.beatmap_max_combo - 20 or score.count_miss > 0:
         # pp if FC (mania does not care about FC)
         if score.mode != "mania":
@@ -97,4 +98,5 @@ def create_title(score: ScoreInfo):
 
     # Create title
     title = f"{score_mode}{username} | {artist} - {title} [{version}]{mods} ({creator}, {stars_converted:.2f}*) {acc}{fc} {status}| {performance_points}"
+    print(f"create title time: {st - time.time()}")
     return title
