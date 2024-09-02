@@ -14,24 +14,16 @@
             if (scoreTitle != "Player | Artist - Beatmap Title [Version] (Creator, 0.00*) 0.00% SS | 0pp"
                 &&  scoreTitle != "No recent scores"
                 && scoreTitle != "No score found, please enter a valid score link, user link, or username") {
-                    window.open("https://www.reddit.com/r/osugame/submit/?type=IMAGE&title={{ score_title | urlencode | replace('/', '%2F') }}");
-                }
-                else {
-                    window.open("https://www.reddit.com/r/osugame/submit/?type=IMAGE")
-            }
-        }
+                    window.open("https://www.reddit.com/r/osugame/submit/?type=IMAGE&title={{ score_title | urlencode | replace('/', '%2F') }}");}
+                else {window.open("https://www.reddit.com/r/osugame/submit/?type=IMAGE")}}
         async function openRedditShortcut(event) {
-            if ((event.key.toLowerCase() === "d"
+            if (event.key != undefined && ((event.key.toLowerCase() === "d"
             && event.ctrlKey) || (event.key.toLowerCase() ===  "d"
-            && event.metaKey)){
+            && event.metaKey))){
                 event.preventDefault()
-                openReddit()
-                // Your action to perform when the key is pressed
-            }
-        }
+                openReddit()}}
         if ( window.history.replaceState ) {
-            window.history.replaceState( null, null, window.location.href );
-        }
+            window.history.replaceState( null, null, window.location.href );}
         document.addEventListener('keydown', openRedditShortcut)
         </script>
   </head>
@@ -39,9 +31,7 @@
     <!--Navigation bar-->
     <div class="top_navbar">
         <div class="site_title">
-            <a class="site_logo_link" href="/">
-                <img class="site_logo" src="/static/osu!scorepost.png">
-            </a>
+            <a class="site_logo_link" href="/"><img class="site_logo" src="/static/osu!scorepost.png"></a>
             <div class="title_source_code_container">
                 <a class="title" href="/">osu!scorepost</a>
                 <span class="credit">
@@ -50,26 +40,12 @@
                 </span>
             </div>
         </div>
-
         <div class="links_container">
-            <a class="home" href="/">
-                <i class="fa-solid fa-house"></i>
-                Home
-            </a>
-            <a class="reddit_submit" onclick="openReddit()">
-                <i class="fa-brands fa-reddit"></i>
-                r/osugame
-            </a>
-            <a class="how_it_works" href="/how_to_use">
-                <i class="fa-solid fa-circle-question"></i>
-                How to use
-            </a>
-            <a class="contact" href="/contact">
-                <i class="fa-solid fa-envelope"></i>
-                Contact
-            </a>
+            <a class="home" href="/"><i class="fa-solid fa-house"></i>Home</a>
+            <a class="reddit_submit" onclick="openReddit()"><i class="fa-brands fa-reddit"></i>r/osugame</a>
+            <a class="how_it_works" href="/how_to_use"><i class="fa-solid fa-circle-question"></i>How to use</a>
+            <a class="contact" href="/contact"><i class="fa-solid fa-envelope"></i>Contact</a>
         </div>
-
     </div>
     {% block generator %}{% endblock %}
     <!--Copy notification-->

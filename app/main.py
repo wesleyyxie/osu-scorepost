@@ -52,7 +52,7 @@ def contact():
     return render_template("contact.html")
 
 
-@app.route("/screenshot/<encoded_json_data>.webp")
+@app.route("/screenshot/<encoded_json_data>.jpeg")
 def screenshot(encoded_json_data: str):
     """Screenshot path
 
@@ -63,14 +63,17 @@ def screenshot(encoded_json_data: str):
     Returns:
         Response: Screenshot data
     """
-    score_json = urllib.parse.unquote_plus(encoded_json_data)
+    st = time.time()
+    score_json = urllib.parse.unquote(encoded_json_data)
     j = json.loads(score_json)
     score = ScoreInfo(**j, score_ossapi=None)
+
     screenshot = generate_screenshot(score)
     ss_io = BytesIO()
-    screenshot.save(ss_io, format="webp")
+    screenshot.save(ss_io, format="jpeg")
     ss_io.seek(0)
-    return send_file(ss_io, mimetype="image/webp")
+    print(f"screenshot link: {time.time() - st}")
+    return send_file(ss_io, mimetype="image/jpeg")
 
 
 @app.route("/", methods=["POST", "GET"])
@@ -110,8 +113,7 @@ def home():
                 screenshot_checked=screenshot_checked,
                 custom_message_input=custom_message_input,
             )
-        # If is -1, do not process score title or screenshot, no recent score found
-        if score == -1:
+        except IndexError:
             if screenshot_checked:
                 results = no_score_found
             return render_template(

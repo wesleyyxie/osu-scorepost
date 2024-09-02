@@ -5,7 +5,7 @@ import random
 import os
 import uuid
 import io
-
+import time
 from util.score import ScoreInfo
 from util.ranking_panel import (
     ranking_panel_fruits,
@@ -280,9 +280,7 @@ def generate_screenshot(score: ScoreInfo):
     Returns:
         str: The name of the file of the screenshot
     """
-
-    # Initialize screenshot file name
-    random_id = str(uuid.uuid4())  # Unique name for each screenshot
+    st = time.time()
 
     # Get beatmapset background data from link
     beatmapset_id = score.beatmapset_id
@@ -329,6 +327,6 @@ def generate_screenshot(score: ScoreInfo):
     generate_rank(im, score)
     generate_mods_items(im, score)
     ranking_panel(im, score)
-
+    print(f"screenshot time {time.time() - st}")
     # Save the screenshot and return the file name
     return im

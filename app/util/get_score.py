@@ -22,173 +22,75 @@ API_KEY = getenv("API_KEY")
 from .score import ScoreInfo
 
 
-def extract_id_from_link(input: str, oss: Ossapi):
-    """Gets score id or user id from a link. Raises ValueError if input is invalid
-
-    Args:
-        input (str): The link without osu.ppy.sh/
-        oss (Ossapi): Ossapi API instance
-
-    Returns:
-        Union[int]: The score ID or user ID as an integer if found.
-    """
-
-    # Splits the link into parts by /. If the link consists of
-    # just a / at the end, then pop.
-    # (e.g. https://osu.ppy.sh/scores/osu/2177560145/)
-    link_parts = input.split("/")
-    if link_parts[-1] == "":
-        link_parts.pop()
-
-    # Link should consist of 2 or 3 parts in order to be valid.
-    # If unvalid, raise ValueError.
-    if len(link_parts) == 2 or len(link_parts) == 3:
-        # If it is a user link, try to convert the second part to
-        # integer for the user id, otherwise assume the second
-        # part is the username.
-        if link_parts[0] == "users":
-            try:
-                link_id = int(link_parts[1])
-            except ValueError:
-                user = oss.user(link_parts[1])  # user object from Ossapi
-                link_id = user.id
-        # If it is a score link, then it consists of 3 parts,
-        # the id will be in the third position. If it consists
-        # 2 parts, it will be in the second position. Then try
-        # to make it an integer, otherwise raise ValueError.
-        elif link_parts[0] == "scores":
-            if len(link_parts) == 3:
-                i = 2
-            else:
-                i = 1
-            link_id = int(link_parts[i])
-        else:
-            raise ValueError
-        return link_id
+def get_score_link_score(input: str, oss: Ossapi):
+    input_parts = input.split("/")
+    num_of_parts = len(input_parts)
+    if num_of_parts == 2:
+        score_id = int(input_parts[1])
+        return oss.score(score_id)
+    elif num_of_parts == 3:
+        score_id = int(input_parts[2])
+        mode = input_parts[1]
+        return oss.score_mode(mode=mode, score_id=score_id)
     else:
         raise ValueError
 
 
-def get_recent_score(user_id: int, mode: str | None, oss: Ossapi):
-    """Returns the most recent score from a user ID. If mode is None,
-    return recent score from the default gamemode. Returns -1 if no
-    recent scores found from a profile.
+def get_score_username(input: str, oss: Ossapi):
+    scores = oss.user_scores(
+        user_id=oss.user(user=input).id,
+        legacy_only=False,
+        type="recent",
+        include_fails=True,
+    )
+    return scores[0]
 
-    Args:
-        user_id (int): The user ID
-        mode (str | None): The gamemode
-        oss (Ossapi): Ossapi API instance
 
-    Returns:
-        Union[Score, int]: The most recent score object, or -1 if the profile has no recent scores
-    """
-
-    # If mode is not None, try getting list of recent scores with mode specified,
-    # else do not specify mode.
-    if mode != None:
-        recent_scores = oss.user_scores(
-            user_id=user_id,
-            legacy_only=False,
-            type="recent",
-            mode=mode,
-            limit=1,
-            include_fails=True,
-        )
+def get_user_link_score(input: str, oss: Ossapi):
+    input_parts = input.split("/")
+    num_of_parts = len(input_parts)
+    if num_of_parts == 2:
+        if input_parts[1].isdigit():
+            return oss.user_scores(
+                user_id=int(input_parts[1]),
+                legacy_only=False,
+                type="recent",
+                include_fails=True,
+            )[0]
+        else:
+            return get_score_username(input_parts[1], oss)
+    elif num_of_parts == 3:
+        if input_parts[1].isdigit():
+            user_id = int(input_parts[1])
+        else:
+            user_id = oss.user(user=input_parts[1]).id
+        mode = input_parts[2]
+        if mode in ["osu", "taiko", "mania", "fruits"]:
+            return oss.user_scores(
+                user_id=user_id,
+                legacy_only=False,
+                type="recent",
+                include_fails=True,
+                mode=mode,
+            )[0]
+        else:
+            raise ValueError
     else:
-        recent_scores = oss.user_scores(
-            user_id=user_id,
-            legacy_only=False,
-            type="recent",
-            limit=1,
-            include_fails=True,
-        )
-
-    # If recent_scores is not empty, return the very first score.
-    # Otherwise, there are no recent scores on the profile so return -1.
-    if recent_scores != []:
-        return recent_scores[0]
-    else:
-        return -1
-
-
-def get_score_by_id(score_id: int, mode: str | None, oss: Ossapi):
-    """Returns a score object found by the score_id. If mode is None, return recent score from
-    the default gamemode.
-
-    Args:
-        score_id (int): Score ID
-        mode (str | None): Gamemode
-        oss (Ossapi): Ossapi API instance
-
-    Returns:
-        Union[Score]: Score object
-    """
-
-    # If mode is not None, try getting score with mode specified,
-    # else do not specify mode.
-    if mode != None:
-        score = oss.score_mode(mode, score_id)
-    else:
-        score = oss.score(score_id)
-    return score
+        raise ValueError
 
 
 def get_ossapi_score(input: str, oss: Ossapi):
-    """Processes an input from the user and returns a score object.
-    If the input is a score link, return the corresponding score. If the
-    input is a username or user link, return the user's most recent score
-    including fails. Returns -1 if the user profile has no recent scores.
-    Raises ValueError if input is invalid
-
-    Args:
-        input (str): The user's input
-        oss (Ossapi): Ossapi API instance
-
-    Returns:
-        Union[Score, -1]: Returns a score or -1 if the user profile has no recent scores.
-    """
-
-    # If it is a link, shorten the input and extract the id from it.
-    # If it is not a link then assume the input is a username and
-    # try to get a user object by the username to get user id.
     if "osu.ppy.sh/" in input:
-        is_link = True
-        input = input.split("osu.ppy.sh/")[1]
-        link_id = extract_id_from_link(input, oss)
-    else:
-        is_link = False
-        user = oss.user(input)
-        link_id = user.id
-
-    # If it is a user link or username, get the most recent score
-    # by the link_id. If the gamemode is specified in the link, then
-    # mode is the corresponding gamemode.
-    if "users/" in input or is_link == False:
-        # If the input was just the username, then get recent score from default
-        # gamemode
-        if is_link == False:
-            score = get_recent_score(link_id, None, oss)
+        if "/" == input[-1]:
+            input = input[:-1]
+        if "/scores/" in input:
+            return get_score_link_score(input.split("osu.ppy.sh/")[1], oss)
+        elif "/users/" in input:
+            return get_user_link_score(input.split("osu.ppy.sh/")[1], oss)
         else:
-            modes = {
-                "/osu": "osu",
-                "/taiko": "taiko",
-                "/fruits": "fruits",
-                "/mania": "mania",
-            }
-            mode = next((modes[i] for i in modes if i in input), None)
-            score = get_recent_score(link_id, mode, oss)
-    # If it is a score link, check if gamemode is specified. Else, mode is
-    # just None
+            raise ValueError
     else:
-        modes = {
-            "/osu/": "osu",
-            "/taiko/": "taiko",
-            "/fruits/": "fruits",
-            "/mania/": "mania",
-        }
-        mode = next((modes[i] for i in modes if i in input), None)
-        score = get_score_by_id(link_id, mode, oss)
-    return score
+        return get_score_username(input, oss)
 
 
 def count_geki_katu_osu(score: Score, beatmap_id: int, user_id: int, cg: Circleguard):
@@ -239,7 +141,7 @@ def get_beatmap_max_combo(map: rosu.Beatmap):
     return max_combo
 
 
-def calculate_pp(score_ossapi: Score, map: rosu.Beatmap):
+def calculate_pp(score_ossapi: Score, beatmap_max_combo: int, map: rosu.Beatmap):
     """Calculates the pp and pp if FC of a score
 
     Args:
@@ -249,30 +151,55 @@ def calculate_pp(score_ossapi: Score, map: rosu.Beatmap):
     Returns:
         Tuple[int, int]: Tuple with pp of score, pp if FC
     """
+    if not score_ossapi.pp:
+        number_50 = score_ossapi.statistics.count_50 or 0
+        number_100 = score_ossapi.statistics.count_100 or 0
+        number_katu = score_ossapi.statistics.count_katu or 0
+        number_300 = score_ossapi.statistics.count_300 or 0
+        number_geki = score_ossapi.statistics.count_geki or 0
+        number_miss = score_ossapi.statistics.count_miss or 0
+        max_combo = score_ossapi.max_combo
+        # Calculate pp of score if fc
+        perf = rosu.Performance(
+            mods=score_ossapi.mods.value,
+            n100=number_100,
+            n50=number_50,
+            n300=number_300,
+            n_katu=number_katu,
+            n_geki=number_geki,
+            misses=number_miss,
+            combo=max_combo,
+        )
+        pp = round(perf.calculate(map).pp)
+    else:
+        pp = round(score_ossapi.pp)
 
-    # Statistics of score is sometimes None
-    number_50 = score_ossapi.statistics.count_50 or 0
-    number_100 = score_ossapi.statistics.count_100 or 0
-    number_misses = score_ossapi.statistics.count_miss or 0
-    number_katu = score_ossapi.statistics.count_katu or 0
-    number_300 = score_ossapi.statistics.count_300 or 0
-    number_geki = score_ossapi.statistics.count_geki or 0
-
-    # Calculate pp of score
-    perf = rosu.Performance(
-        mods=score_ossapi.mods.value,
-        n100=number_100,
-        n50=number_50,
-        n300=number_300,
-        n_katu=number_katu,
-        n_geki=number_geki,
-    )
-    pp_if_fc = round(perf.calculate(map).pp)
-
-    # Calculate pp of score if FC
-    perf.set_misses(number_misses)
-    perf.set_combo(score_ossapi.max_combo)
-    pp = round(perf.calculate(map).pp)
+    if (
+        score_ossapi.max_combo <= beatmap_max_combo - 20
+        or score_ossapi.statistics.count_miss > 0
+    ):
+        if not score_ossapi.pp:
+            perf.set_misses(0)
+            perf.set_combo(None)
+            pp_if_fc = round(perf.calculate(map).pp)
+        else:
+            number_50 = score_ossapi.statistics.count_50 or 0
+            number_100 = score_ossapi.statistics.count_100 or 0
+            number_katu = score_ossapi.statistics.count_katu or 0
+            number_300 = score_ossapi.statistics.count_300 or 0
+            number_geki = score_ossapi.statistics.count_geki or 0
+            # Calculate pp of score if fc
+            perf = rosu.Performance(
+                mods=score_ossapi.mods.value,
+                n100=number_100,
+                n50=number_50,
+                n300=number_300,
+                n_katu=number_katu,
+                n_geki=number_geki,
+            )
+            pp_if_fc = round(perf.calculate(map).pp)
+    else:
+        return (pp, pp)
     return (pp, pp_if_fc)
 
 
@@ -288,14 +215,20 @@ def get_ranking_global(score: Score, oss: Ossapi):
     """
 
     # Lists of scores on a beatmap with proper leaderboard order
-    scores = oss.beatmap_scores(
-        beatmap_id=score.beatmap.id, legacy_only=True, mode=score.mode.value
-    )
-    score_list = scores.scores
-
     # Calculate ranking by iterating through list of scores
-    rank = next((i for i, s in enumerate(score_list, start=1) if s.id == score.id), 0)
-    return rank
+    return next(
+        (
+            i
+            for i, s in enumerate(
+                oss.beatmap_scores(
+                    beatmap_id=score.beatmap.id, legacy_only=True, mode=score.mode.value
+                ).scores,
+                start=1,
+            )
+            if s.id == score.id
+        ),
+        0,
+    )
 
 
 def get_score_info(input: str):
@@ -311,15 +244,14 @@ def get_score_info(input: str):
     """
 
     # Initialize Ossapi and Circleguard API
-
+    start_time = time.time()
+    st = time.time()
     oss = Ossapi(CLIENT_ID, CLIENT_SECRET)
     cg = Circleguard(API_KEY)
-
+    print(f"api: {time.time() - st}")
+    st = time.time()
     score_ossapi = get_ossapi_score(input, oss)
-
-    if score_ossapi == -1:
-        return -1
-
+    print(f"score_ossapi: {time.time() - st}")
     st = time.time()
     # Difficulty attributes for calculating converted star rating
     difficulty_attributes = oss.beatmap_attributes(
@@ -327,9 +259,10 @@ def get_score_info(input: str):
         mods=score_ossapi.mods,
         ruleset=score_ossapi.mode.value,
     )
-
+    print(f"difficulty_attributes: {time.time() - st}")
     # Geki and katu counts are only available for some scores that are
     # the user's best on the map
+    st = time.time()
     count_geki, count_katu = count_geki_katu_osu(
         score_ossapi, score_ossapi.beatmap.id, score_ossapi.user_id, cg
     )
@@ -346,19 +279,24 @@ def get_score_info(input: str):
     elif score_ossapi.mode.value == "mania":
         map.convert(rosu.GameMode.Mania)
 
-    # Calculate pp
-    pp_score, pp_if_fc = calculate_pp(score_ossapi, map)
-
     # Limited beatmap information for recent scores so use rosu-pp
     # instead of Ossapi to get beatmap max combo
+    st = time.time()
     beatmap_max_combo = get_beatmap_max_combo(map)
+    print(f"max_combo: {time.time() - st}")
+
+    # Calculate pp
+    pp_score, pp_if_fc = calculate_pp(score_ossapi, beatmap_max_combo, map)
+    print(f"pp: {time.time() - st}")
 
     # Needs difficulty attribute for converted star ratings
     stars_converted = difficulty_attributes.attributes.star_rating
-
+    st = time.time()
     # Correct Global rankings needs to be further calculated
     global_ranking = get_ranking_global(score_ossapi, oss)
+    print(f"global_ranking: {time.time() - st}")
 
+    st = time.time()
     # Initialize ScoreInfo
     score = ScoreInfo(
         score_ossapi=score_ossapi,
@@ -370,5 +308,6 @@ def get_score_info(input: str):
         beatmap_max_combo=beatmap_max_combo,
         global_ranking=global_ranking,
     )
-    print(f"get_score time: {time.time() - st}")
+    print(f"scoreInfo time: {time.time() - st}")
+    print(f"total time: {time.time() - start_time}")
     return score
