@@ -2,29 +2,42 @@ from ossapi import Ossapi, Score
 from circleguard import Circleguard, ReplayMap
 from circleguard.loader import NoInfoAvailableException
 import rosu_pp_py as rosu
+
 from requests import get
-from os import getenv
-from waiting import wait, TimeoutExpired
-
 import time
-import datetime
-
+from os import getenv
 from dotenv import find_dotenv, load_dotenv
+
+from .score import ScoreInfo
 
 # API information from .env
 dotenv_path = find_dotenv()
-load_dotenv(dotenv_path, override=True)
+load_dotenv(dotenv_path)
 CLIENT_ID = getenv("CLIENT_ID")
 CLIENT_SECRET = getenv("CLIENT_SECRET")
 API_KEY = getenv("API_KEY")
 
 
-from .score import ScoreInfo
-
-
 def get_score_link_score(input: str, oss: Ossapi):
+    """Returns the score object from a score link
+    Raises ValueError if input is an invalid link
+
+    Args:
+        input (str): The link without https://osu.ppy.sh
+        oss (Ossapi): Ossapi API Instance
+
+    Raises:
+        ValueError: Input in an invalid link
+
+    Returns:
+        Score: score
+    """
+
+    # Splits the link into parts based on /
     input_parts = input.split("/")
     num_of_parts = len(input_parts)
+
+    # Link is only vaid if there are 2 or 3 parts
     if num_of_parts == 2:
         score_id = int(input_parts[1])
         return oss.score(score_id)
@@ -37,6 +50,15 @@ def get_score_link_score(input: str, oss: Ossapi):
 
 
 def get_score_username(input: str, oss: Ossapi):
+    """Returns the the most recent score from a username
+
+    Args:
+        input (str): Username
+        oss (Ossapi): Ossapi API instance
+
+    Returns:
+        Score: The user's most recent score
+    """
     scores = oss.user_scores(
         user_id=oss.user(user=input).id,
         legacy_only=False,
@@ -47,9 +69,29 @@ def get_score_username(input: str, oss: Ossapi):
 
 
 def get_user_link_score(input: str, oss: Ossapi):
+    """Returns the user's most recent score from their user link
+
+    Args:
+        input (str): The link of the user
+        oss (Ossapi): Ossapi API Instance
+
+    Raises:
+        ValueError: mode is invalid
+        ValueError: number of parts is invalid
+
+    Returns:
+        Score: score
+    """
+
+    # Split the link based on /
     input_parts = input.split("/")
     num_of_parts = len(input_parts)
+
+    # Only valid number of parts is 2 and 3
     if num_of_parts == 2:
+
+        # If 2 parts, then check if the link consists of
+        # a username or a userID and act accordingly
         if input_parts[1].isdigit():
             return oss.user_scores(
                 user_id=int(input_parts[1]),
@@ -59,7 +101,11 @@ def get_user_link_score(input: str, oss: Ossapi):
             )[0]
         else:
             return get_score_username(input_parts[1], oss)
+
     elif num_of_parts == 3:
+        # If 3 parts, then the mode is initialized, first initialize
+        # the userID based on the userlink or username if it is in the link,
+        # then get the recent score
         if input_parts[1].isdigit():
             user_id = int(input_parts[1])
         else:
@@ -80,9 +126,27 @@ def get_user_link_score(input: str, oss: Ossapi):
 
 
 def get_ossapi_score(input: str, oss: Ossapi):
+    """Get score based on the user's input. Raises
+    ValueError in input is invalid
+
+    Args:
+        input (str): User's input
+        oss (Ossapi): Ossapi API Instance
+
+    Raises:
+        ValueError: Input is invalid
+
+    Returns:
+        Score: score
+    """
+
+    # Check if the input is a link, otherwise assume it is a username
     if "osu.ppy.sh/" in input:
+        # If / is the last character, get rid of it
         if "/" == input[-1]:
             input = input[:-1]
+
+        # Only valid links are userlinks and score links, else raise ValueError
         if "/scores/" in input:
             return get_score_link_score(input.split("osu.ppy.sh/")[1], oss)
         elif "/users/" in input:
@@ -151,6 +215,9 @@ def calculate_pp(score_ossapi: Score, beatmap_max_combo: int, map: rosu.Beatmap)
     Returns:
         Tuple[int, int]: Tuple with pp of score, pp if FC
     """
+
+    # If it is unranked, initialize pp with rosu, else use the score
+    # object's pp count
     if not score_ossapi.pp:
         number_50 = score_ossapi.statistics.count_50 or 0
         number_100 = score_ossapi.statistics.count_100 or 0
@@ -174,10 +241,12 @@ def calculate_pp(score_ossapi: Score, beatmap_max_combo: int, map: rosu.Beatmap)
     else:
         pp = round(score_ossapi.pp)
 
+    # If it is not FC, find if_fc_pp
     if (
         score_ossapi.max_combo <= beatmap_max_combo - 20
         or score_ossapi.statistics.count_miss > 0
     ):
+        # User previous rosu perf if unranked
         if not score_ossapi.pp:
             perf.set_misses(0)
             perf.set_combo(None)
