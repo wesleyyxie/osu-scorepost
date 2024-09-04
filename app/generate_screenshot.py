@@ -127,13 +127,12 @@ def generate_top_left_text(im: Image.Image, score: ScoreInfo):
     """Generates the score's beatmap title, artist, version, and creator.
     As well as the score's player, and the date and time the play was set
 
-
     Args:
         im (Image.Image): Image
         score (ScoreInfo): Score
     """
 
-    # Initialize the string to be drawn
+    # Initialize the strings to be drawn
     title = (
         score.beatmapset_artist
         + " - "
@@ -279,7 +278,7 @@ def generate_screenshot(score: ScoreInfo):
         score (ScoreInfo): Score
 
     Returns:
-        str: The name of the file of the screenshot
+        Image: The image of the screenshot
     """
     st = time.time()
 

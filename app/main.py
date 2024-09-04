@@ -20,16 +20,18 @@ screenshot_dir = os.path.join(
     app_dir, "static", "scorepost_generator_images", "screenshots"
 )
 
-# Initialize messages and default score path
+# Initialize messages
 default_title = (
     "Player | Artist - Beatmap Title [Version] (Creator, 0.00*) 0.00% SS | 0pp"
 )
-default_score_img = "/static/default_score.jpeg"
 not_valid_link_msg = (
     "No score found, please enter a valid score link, user link, or username"
 )
 no_score_found = "No score found to generate screenshot"
 no_recent_score = "No recent scores"
+
+# Default score path
+default_score_img = "/static/default_score.jpeg"
 
 
 @app.route("/how_to_use")
@@ -57,17 +59,18 @@ def screenshot(encoded_json_data: str):
     """Screenshot path
 
     Args:
-        screenshot_file_name (str): Screenshot file name
         encoded_json_data (str): Score object as json
 
     Returns:
         Response: Screenshot data
     """
     st = time.time()
+    # Convert json back to Score object
     score_json = urllib.parse.unquote(encoded_json_data)
     j = json.loads(score_json)
     score = ScoreInfo(**j, score_ossapi=None)
 
+    # Get screenshot image data and return it
     screenshot = generate_screenshot(score)
     ss_io = BytesIO()
     screenshot.save(ss_io, format="jpeg")
@@ -87,18 +90,18 @@ def home():
     # When user submits input
     st = time.time()
     if request.method == "POST":
-        # Initialize input content and if screenshot checkbox was checked
+        # Initialize input content, if screenshot checkbox was checked, and
+        # content message content
         url = request.form["content"]
         checkbox_list = request.form.getlist("checkbox")
-
         screenshot_checked = "get screenshot" in checkbox_list
-
         custom_message_input = request.form["custom_message_content"]
 
         results = ""
 
         # Get score information from user input
-        # ValueError is input is invalid
+        # ValueError if input is invalid
+        # IndexError if no recent scores are found
         try:
             score = get_score_info(url)
         except ValueError:
@@ -125,20 +128,19 @@ def home():
                 screenshot_checked=screenshot_checked,
                 custom_message_input=custom_message_input,
             )
-
         print("Successfully got ScoreInfo")
 
         # Get title of score
         title = create_title(score)
         print("Successfully generated title")
 
-        # Insert custom message
-        custom_message_input = request.form["custom_message_content"]
+        # Insert custom message, if custom message is just whitespace,
+        # leave blank without |
         if custom_message_input and not custom_message_input.isspace():
             title += f" | {custom_message_input}"
 
-        # If checked, get screenshot and path to the screenshot and send
-        # the score object as a json to /screenshot
+        # If screenshot checked, convert Score to json and send to /screenshot
+        # else, return default screenshot image
         if screenshot_checked:
             # TODO: make this better
             score_json = json.dumps(score.__dict__)
@@ -159,9 +161,9 @@ def home():
         url = ""
         custom_message_input = ""
         screenshot_checked = True
-    et = time.time()
-    elapsed_time = et - st
-    print(f"Generated scorepost in: {elapsed_time} seconds")
+
+    print(f"Generated scorepost in: {time.time() - st} seconds")
+
     return render_template(
         "home.html",
         score_title=title,
