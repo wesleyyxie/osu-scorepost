@@ -13,7 +13,7 @@ from dotenv import find_dotenv, load_dotenv
 
 # API information from .env
 dotenv_path = find_dotenv()
-load_dotenv(dotenv_path)
+load_dotenv(dotenv_path, override=True)
 CLIENT_ID = getenv("CLIENT_ID")
 CLIENT_SECRET = getenv("CLIENT_SECRET")
 API_KEY = getenv("API_KEY")
@@ -246,7 +246,7 @@ def get_score_info(input: str):
     # Initialize Ossapi and Circleguard API
     start_time = time.time()
     st = time.time()
-    oss = Ossapi(CLIENT_ID, CLIENT_SECRET)
+    oss = Ossapi(client_id=CLIENT_ID, client_secret=CLIENT_SECRET)
     cg = Circleguard(API_KEY)
     print(f"api: {time.time() - st}")
     st = time.time()
@@ -266,7 +266,7 @@ def get_score_info(input: str):
     count_geki, count_katu = count_geki_katu_osu(
         score_ossapi, score_ossapi.beatmap.id, score_ossapi.user_id, cg
     )
-
+    print(f"get geki katu: {time.time() - st}")
     # Get beatmap data for rosu-pp and convert to corresponding gamemode
     response = get(f"https://osu.ppy.sh/osu/{score_ossapi.beatmap.id}")
     map = rosu.Beatmap(bytes=response.content)

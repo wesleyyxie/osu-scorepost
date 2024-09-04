@@ -60,7 +60,8 @@ body {
     padding: 5px;}
 .links_container i{
     font-size: 10rem;
-    padding: 2px;}
+    padding: 2px;
+    padding-right: 8px;}
 .links_container a:hover{
     background-color: rgb(46, 124, 162);}
 .reddit_submit:hover{

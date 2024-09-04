@@ -35,13 +35,6 @@ def write_with_img(s: str, x: int, y: int, size: float, im: Image.Image):
         size (float): size multiplier
         im (Image.Image): Image
     """
-
-    # Special size cases for dot and percent
-    dot_width = 15
-    dot_height = 35
-    percent_width = 33
-    percent_height = 35
-
     # Number to corresponding image file
     letters_dict = {
         "0": "berlin-0x",

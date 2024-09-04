@@ -261,14 +261,15 @@ def ranking_panel(im: Image.Image, score: ScoreInfo):
 
     # Different gamemodes has different statistics to display
     score_mode = score.mode
-    if score_mode == "osu":
-        ranking_panel_osu(im, score)
-    elif score_mode == "mania":
-        ranking_panel_mania(im, score)
-    elif score_mode == "taiko":
-        ranking_panel_taiko(im, score)
-    elif score_mode == "fruits":
-        ranking_panel_fruits(im, score)
+    match score_mode:
+        case "osu":
+            ranking_panel_osu(im, score)
+        case "mania":
+            ranking_panel_mania(im, score)
+        case "taiko":
+            ranking_panel_taiko(im, score)
+        case "fruits":
+            ranking_panel_fruits(im, score)
 
 
 def generate_screenshot(score: ScoreInfo):
