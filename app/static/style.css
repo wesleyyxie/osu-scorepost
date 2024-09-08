@@ -261,7 +261,6 @@ body {
     display: none;
     padding: 10px;
     border-radius: 5px;
-
     position: absolute;
     z-index: 1001;}
 .shortcuts_menu > p{
@@ -391,8 +390,7 @@ body {
 .tooltiptext{
     color: white;}
 .social_icon:hover{
-    background-color: rgb(42, 46, 49);
-    box-shadow: 0 0 20px #c2c2c2;
+    background-color:rgb(42, 46, 49);
     cursor: pointer;}
 /* How to use css */
 .content_container{

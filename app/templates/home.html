@@ -2,119 +2,146 @@
 {% block generator %}
 <script async>
   var isLoading = false
-    //toggle checkbox
-     function toggleCheckbox(id)
-    {document.getElementById(id).checked = !document.getElementById(id).checked;}
-    function copyToClipboard(id){
-      var copyText = document.getElementById(id);
-      navigator.clipboard.writeText(copyText.innerText);
-      notif = document.getElementById('copy_notification')
-      notif.classList.add('show');
-      setTimeout(function(){ notif.className = notif.className.replace("show", ""); }, 3000);}
-    // Loading... message and disable button
-      function loading() {
-          loading_element = document.getElementById('loading')
-          loading_element.innerText = "Loading..."
-          isLoading = true
-          document.getElementById('submit_button fa-solid fa-arrow-right').disabled = true;
-          document.getElementById('loading_screen').classList.add('loading')
-          document.getElementById('shortcuts_menu').style.backgroundColor = 'transparent'
-          if (document.getElementById('shortcuts_menu').style.display != 'flex') {
-            document.getElementById('loading_animation').style.display = 'block'}}
-    // Shows shortcuts menu
-    function showShortcutMenu() {
-      document.getElementById('loading_animation').style.display = 'none'
-      document.getElementById('shortcuts_menu').style.display = 'flex'}
-    // Exist shortcuts menu
-    function exitShortcutMenu() {
-      if (isLoading) {
-        document.getElementById('loading_animation').style.display = 'block'}
-      document.getElementById('shortcuts_menu').style.display = 'none'}
-    // Submit form
-    async function submit(event) {
-      if (event.key === "Enter") {
-        event.preventDefault()
-        if (!document.getElementById('submit_button fa-solid fa-arrow-right').disabled) {
-          document.getElementById('submit_button fa-solid fa-arrow-right').click()}}}
-    // Copy Screemshot
-      function copyScreenshot(callback) {
-        if (!document.getElementById('get_screenshot').checked) {
-          if (callback) callback(null);
-          return}
-        var img = document.getElementById('score_image');
-        var canvas = document.createElement('canvas');
-        var ctx = canvas.getContext('2d');
-        canvas.width = img.naturalWidth;
-        canvas.height = img.naturalHeight;
-        ctx.drawImage(img, 0, 0);
-        canvas.toBlob(async function(blob) {
-            try {
-                await navigator.clipboard.write([
-                    new ClipboardItem({[blob.type]: blob})]);
-                if (callback) callback(null); 
-            } catch (error) {
-                console.error('Failed to copy image to clipboard:', error);
-                notif = document.getElementById('fail_notification')
-                notif.classList.add('show');
-                setTimeout(function(){ notif.className = notif.className.replace("show", ""); }, 3000);
-                if (callback) callback(error);}}, 'image/png');}
-      function copyScreenshotPromise() {
-      return new Promise((resolve, reject) => {
-          copyScreenshot((error) => {
-              if (error) {
-                  reject(error);
-              } else {resolve();}});});}
-      // Copy image shortcut
-      async function copyScreenshotShortcut(event) {
-        if (event.key != undefined && ((event.key.toLowerCase() === "s"
-              && event.ctrlKey) || (event.key.toLowerCase() === "s"
-              && event.metaKey))) {
-                // Copy the image data to clipboard
-                  event.preventDefault();
-                  copyScreenshot()
-                  notif = document.getElementById('copy_notification')
-                  notif.classList.add('show');
-                  setTimeout(function(){ notif.className = notif.className.replace("show", ""); }, 3000);};}
-      function loadPreviousData(){
-        var toggleAutoCheckbox = document.getElementById('toggle_auto_checkbox')
-        var scrollpos = localStorage.getItem('scrollpos');
-        let auto_toggled = localStorage.getItem('auto_toggled');
-        if (auto_toggled == 'true') {
-          toggleAutoCheckbox.checked = true;}
-        else {
-          toggleAutoCheckbox.checked = false;}
-        if (scrollpos) {
-          window.scrollTo(0, scrollpos);}}
-      function setUpPage(){
-        isLoading = false
-        input = document.getElementById('content')
-        input.focus();
-        input.select();
-        document.addEventListener("keyup", submit)
-        document.addEventListener("keydown", copyScreenshotShortcut)
-        document.getElementById('submit_button fa-solid fa-arrow-right').disabled = false;}
-      function saveData(){
-        window.onbeforeunload = function(e) {
-                localStorage.setItem('auto_toggled', document.getElementById('toggle_auto_checkbox').checked);
-                localStorage.setItem('scrollpos', window.scrollY);};}
-      window.onload = function () {
-        if (localStorage.getItem('auto_toggled') == "true") {
-            if ('{{ score_title }}' != "Player | Artist - Beatmap Title [Version] (Creator, 0.00*) 0.00% SS | 0pp"
-                  &&  '{{ score_title }}' != "No recent scores"
-                  && '{{ score_title }}' != "No score found, please enter a valid score link, user link, or username") {
-                    (async () => {try {
-                            await copyScreenshotPromise();
-                            window.open("https://www.reddit.com/r/osugame/submit/?type=IMAGE&title={{ score_title | urlencode | replace('/', '%2F') }}");
-                        }catch (error) {
-                            console.error("Failed to copy screenshot:", error);}})();}}
-          var loadTime = window.performance.timing.domContentLoadedEventEnd-window.performance.timing.navigationStart; 
-          console.log('Page load time is '+ loadTime);
-          loadPreviousData()
-          setUpPage()
-          saveData()}
+  // Toggle checkbox
+  function toggleCheckbox(id){
+    document.getElementById(id).checked = !document.getElementById(id).checked;
+  }
+  // Resets from checkmark back to clipboard
+  function resetClipboardButton(){
+    var icon = document.getElementById('copy_button_icon')
+    if (icon.classList.contains('fa-check')){
+      icon.classList.remove('fa-check');
+    }
+  }
+  // Copies the title to clipboard
+  function copyTitleToClipboard(){
+    navigator.clipboard.writeText(document.getElementById("generated_title").innerText);
+    document.getElementById("copy_button_icon").classList.add("fa-check");
+  }
+  // Page loading activities
+  function loading() {
+    loading_element = document.getElementById('loading')
+    loading_element.innerText = "Loading..."
+    isLoading = true
+    document.getElementById('submit_button fa-solid fa-arrow-right').disabled = true;
+    document.getElementById('loading_screen').classList.add('loading')
+    document.getElementById('shortcuts_menu').style.backgroundColor = 'transparent'
+    if (document.getElementById('shortcuts_menu').style.display != 'flex') {
+      document.getElementById('loading_animation').style.display = 'block'
+    }
+  }
+  // Shows shortcuts menu
+  function showShortcutMenu() {
+    document.getElementById('loading_animation').style.display = 'none'
+    document.getElementById('shortcuts_menu').style.display = 'flex'
+  }
+  // Exit shortcuts menu
+  function exitShortcutMenu() {
+    if (isLoading) {
+      document.getElementById('loading_animation').style.display = 'block'
+    }
+    document.getElementById('shortcuts_menu').style.display = 'none'
+  }
+  // Submit form on enter
+  async function submit(event) {
+    if (event.key === "Enter") {
+      event.preventDefault()
+      if (!document.getElementById('submit_button fa-solid fa-arrow-right').disabled) {
+        document.getElementById('submit_button fa-solid fa-arrow-right').click()
+      }
+    }
+  }
+  // Copy Screemshot
+  function copyScreenshot(callback) {
+    if (!document.getElementById('get_screenshot').checked) {
+      if (callback) callback(null);
+      return
+    }
+    var img = document.getElementById('score_image');
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext('2d');
+    canvas.width = img.naturalWidth;
+    canvas.height = img.naturalHeight;
+    ctx.drawImage(img, 0, 0);
+    canvas.toBlob(async function(blob) {
+        try {
+            await navigator.clipboard.write([
+                new ClipboardItem({[blob.type]: blob})
+              ]);
+            if (callback) callback(null); 
+        } catch (error) {
+            console.error('Failed to copy image to clipboard:', error);
+            notif = document.getElementById('fail_notification');
+            notif.classList.add('show');
+            setTimeout(function(){ notif.className = notif.className.replace("show", ""); }, 3000);
+            if (callback) callback(error);
+          }
+        }, 'image/png');
+      }
+  function copyScreenshotPromise() {
+    return new Promise((resolve, reject) => {
+        copyScreenshot((error) => {
+            if (error) {
+                reject(error);
+            } else {resolve();}
+          });
+    });
+  }
+  // Copy image shortcut
+  async function copyScreenshotShortcut(event) {
+    if (event.key != undefined && ((event.key.toLowerCase() === "s"
+          && event.ctrlKey) || (event.key.toLowerCase() === "s"
+          && event.metaKey))) {
+            // Copy the image data to clipboard
+            event.preventDefault();
+            copyScreenshot()
+            notif = document.getElementById('copy_notification')
+            notif.classList.add('show');
+            setTimeout(function(){ notif.className = notif.className.replace("show", ""); }, 3000);
+    };
+  }
+  function loadPreviousData(){
+    var toggleAutoCheckbox = document.getElementById('toggle_auto_checkbox')
+    var scrollpos = localStorage.getItem('scrollpos');
+    if (scrollpos) {
+      window.scrollTo(0, scrollpos);
+    }
+  }
+  function setUpPage(){
+    isLoading = false
+    input = document.getElementById('content')
+    input.focus();
+    input.select();
+    document.addEventListener("keyup", submit)
+    document.addEventListener("keydown", copyScreenshotShortcut)
+    document.getElementById('submit_button fa-solid fa-arrow-right').disabled = false;
+  }
+  function saveData(){
+    window.onbeforeunload = function(e) {
+            localStorage.setItem('scrollpos', window.scrollY);
+    };
+  }
+  window.onload = function () {
+    if (document.getElementById('toggle_auto_checkbox').checked) {
+        if ('{{ score_title }}' != "Player | Artist - Beatmap Title [Version] (Creator, 0.00*) 0.00% SS | 0pp"
+              &&  '{{ score_title }}' != "No recent scores"
+              && '{{ score_title }}' != "No score found, please enter a valid score link, user link, or username") {
+                (async () => {try {
+                        await copyScreenshotPromise();
+                        window.open("https://www.reddit.com/r/osugame/submit/?type=IMAGE&title={{ score_title | urlencode | replace('/', '%2F') }}");
+                    }catch (error) {
+                        console.error("Failed to copy screenshot:", error);}}) ();
+      }
+    }
+    var loadTime = window.performance.timing.domContentLoadedEventEnd-window.performance.timing.navigationStart; 
+    console.log('Page load time is '+ loadTime);
+    loadPreviousData()
+    setUpPage()
+    saveData()
+  }
   </script>
-<div class="generator_container">
-  <form class="score_input" action="/" onsubmit="loading()" method="POST">
+<form div class="generator_container"  action="/" onsubmit="loading()" method="POST">
+  <div class="score_input">
     <!--Generator input-->
     <div class="input_container">
       <input class="url_input" type="text" onkeydown="return (event.key != 'Enter')" name="content" id="content" value="{{ input }}" placeholder="Enter Score URL, User URL, or Username">
@@ -128,22 +155,22 @@
     </div>
       <!--Screenshot checkbox-->
     <div class="checkbox_container">
-      <input class="checkbox" name="checkbox" type="checkbox" {% if screenshot_checked %} checked {% endif %} id="get_screenshot" value="get screenshot">
+      <input class="checkbox" name="checkbox" type="checkbox" {% if screenshot_checked %} checked {% endif %} id="get_screenshot" value="get_screenshot">
       <label for="get_screenshot" class="checkbox_label">Get score screenshot</label>
     </div>
-  </form>
+  </div>
   <!--Scorepost title-->
   <p class="generated_title" id="generated_title">{{ score_title }}
-    <button class="copy_button" onclick="copyToClipboard('generated_title')">
+    <button class="copy_button" onmouseenter="resetClipboardButton()" onclick="copyTitleToClipboard()">
       <span style="color: white;" class="copy_button_style">
-        <i class="fa-solid fa-clipboard"></i>
+        <i id="copy_button_icon"class="fa-solid fa-clipboard"></i>
       </span>
     </button>
   </p>
   <!--Screenshot-->
   <div onmouseleave="exitShortcutMenu()" onmouseover="showShortcutMenu()" class="image_wrapper" >
     <div class="toggle_auto_container">
-      <input class="toggle_auto_checkbox" id="toggle_auto_checkbox" type="checkbox">
+      <input class="toggle_auto_checkbox" id="toggle_auto_checkbox" {% if auto_checked %} checked {% endif %}  type="checkbox" name="checkbox" value="auto_toggled">
       <label for="toggle_auto_checkbox" class="toggle_switch">
         <i class="fa-solid fa-bolt fast"></i>
         <div class="toggle_switch_bubble"></div>
@@ -153,7 +180,6 @@
     <div class="shortcuts_menu" id="shortcuts_menu">
       <p>CTRL + S - copy screenshot</p>
       <p>CTRL + D - open Reddit submission page</p>
-      <p>On Reddit submission page, CTRL + V to paste screenshot</p>
     </div>
     <div class="loading_screen" id="loading_screen">
       <div class="loading_animation" id="loading_animation"></div>
@@ -163,5 +189,5 @@
     </div>
   </div>
   <p class = "results" id="loading">{{ results }}</p>
-</div>
+</form>
 {% endblock %}

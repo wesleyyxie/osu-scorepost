@@ -90,13 +90,14 @@ def home():
     # When user submits input
     st = time.time()
     if request.method == "POST":
-        # Initialize input content, if screenshot checkbox was checked, and
-        # content message content
+        # Initialize input content, if screenshot checkbox was checked, if auto was toggled
+        # and content message content
         url = request.form["content"]
         checkbox_list = request.form.getlist("checkbox")
-        screenshot_checked = "get screenshot" in checkbox_list
+        screenshot_checked = "get_screenshot" in checkbox_list
+        auto_checked = "auto_toggled" in checkbox_list
         custom_message_input = request.form["custom_message_content"]
-
+        print(checkbox_list)
         results = ""
 
         # Get score information from user input
@@ -115,6 +116,7 @@ def home():
                 input=url,
                 screenshot_checked=screenshot_checked,
                 custom_message_input=custom_message_input,
+                auto_checked=auto_checked,
             )
         except IndexError:
             if screenshot_checked:
@@ -127,6 +129,7 @@ def home():
                 input=url,
                 screenshot_checked=screenshot_checked,
                 custom_message_input=custom_message_input,
+                auto_checked=auto_checked,
             )
         print("Successfully got ScoreInfo")
 
@@ -161,7 +164,7 @@ def home():
         url = ""
         custom_message_input = ""
         screenshot_checked = True
-
+        auto_checked = False
     print(f"Generated scorepost in: {time.time() - st} seconds")
 
     return render_template(
@@ -172,6 +175,7 @@ def home():
         input=url,
         screenshot_checked=screenshot_checked,
         custom_message_input=custom_message_input,
+        auto_checked=auto_checked,
     )
 
 
