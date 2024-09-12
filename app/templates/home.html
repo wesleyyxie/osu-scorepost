@@ -94,9 +94,15 @@
           && event.metaKey))) {
             // Copy the image data to clipboard
             event.preventDefault();
-            copyScreenshot()
             notif = document.getElementById('copy_notification')
-            notif.classList.add('show');
+            try {
+              copyScreenshot()
+              notif.classList.add('show');
+              notif.innerText = "Copied Screenshot"
+            } catch {
+              notif.classList.add('show');
+              notif.innerText = "Copy failed, please wait for image to load"
+            }
             setTimeout(function(){ notif.className = notif.className.replace("show", ""); }, 3000);
     };
   }

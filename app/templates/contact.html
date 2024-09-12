@@ -1,10 +1,19 @@
 {% extends "base.html" %}
 {% block generator %}
+<script>
+    function copyDiscord(){
+        notif = document.getElementById("copy_notification")
+        navigator.clipboard.writeText("smaako");
+        notif.classList.add('show');
+        notif.innerText = "Copied Discord"
+        setTimeout(function(){ notif.className = notif.className.replace("show", ""); }, 3000);
+    }
+</script>
 <div class="contacts_container">
     <h1 class="contact_title">Contact</h1>
     <p class="contact_prompt">If you encounter any issues, bugs, or have questions, please don't hesitate to reach out using your preferred method of contact.</p>
     <div class="socials_container">
-        <a class="discord social_icon" onclick="copyToClipboard('discordName')">
+        <a class="discord social_icon" onclick="copyDiscord()">
             <i class="fa-brands fa-discord" style="color: rgb(114,137,218)"></i>
             <p>Discord</p>
             <span class="tooltiptext" id="discordName">smaako</span>

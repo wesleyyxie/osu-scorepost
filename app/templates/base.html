@@ -28,7 +28,7 @@
                 openReddit()
             }
         }
-        
+
         if (window.history.replaceState) {
             window.history.replaceState( null, null, window.location.href );
         }
@@ -57,7 +57,6 @@
     </div>
     {% block generator %}{% endblock %}
     <!--Copy notification-->
-    <div id="copy_notification" class="">Copied to clipboard</div>
-    <div id="fail_notification" class="">You are copying too fast. Please wait for image to fully load.</div>
+    <div id="copy_notification" class=""></div>
   </body>
 </html>
