@@ -11,6 +11,8 @@ This scorepost was generated with just a score link, [https://osu.ppy.sh/scores/
 ## Features
 * A scorepost can be generated for all 4 gamemodes
 * Supports Ranked, Qualified, Loved, Graveyarded, and WIP maps
+* Option to enter a custom message to scorepost title
+* Toggle auto mode to automate copying screenshot, opening Reddit with scorepost title already typed in as soon as the scorepost is generated
 * Click the r/osugame button (or use shortcut CTRL + D) to open the [submissions page](https://www.reddit.com/r/osugame/submit/?type=IMAGE) of r/osugame, the scorepost title is already written for you
 * Clipboard button to easily copy the generated scorepost title
 * Shortcut (CTRL + S) to copy the scorepost screenshot
@@ -27,18 +29,16 @@ Entering the link to a user's profile will generate a scorepost of that user's m
 3. **Using a Username (e.g., lifeline):** \
 Entering just a username will also generate a scorepost of the user's most recent score! This method will only work for the user's default game mode.
 
-### After your scorepost is created
-* If your screenshot was created, you can copy the screenshot (CTRL + S).
-* You do not need to copy the scorepost title! You can click the r/osugame button in the navigation bar (CTRL + D) and the title is automatically generated in the title section.
-* Paste the screenshot (CTRL + V).
-* Change the flair to "Gameplay" and click Post!
+### Auto Mode:
+On the top left of the screenshot image, there is an option to toggle "Auto Mode". When Auto Mode is on, the app will copy your screenshot to your clipboard, and open Reddit in a new tab with your generated scorepost title already written in! All you would have to do is set the flair to "Gameplay," paste (CTRL + V)
+                the screenshot, and click post!
 
 ![Example post](/app/static/after.gif)
 
 ## Setup
 
 ### Prerequisites 
-- Python (version 3.12.4 or 3.12.5) 
+- Python3 (version 3.12.4 or 3.12.5)
 - pip (Python package installer)
 
 ### Steps
@@ -51,7 +51,7 @@ cd osu-scorepost
 ```
 pip install -r requirements.txt
 ```
-3. Copy your API key, and create a Client to get Client Secret and Client ID from your [osu! profile settings](https://osu.ppy.sh/home/account/edit#oauth).<details><summary>Instructions</summary><ul>
+3. Copy your API key, and create a Client to get Client Secret and Client ID from your [osu! profile settings](https://osu.ppy.sh/home/account/edit#oauth).<details><summary>Further Instructions</summary><ul>
     <li>
         Scroll to new the bottom and click "New OAuth Application" in the OAuth section and give it any name you want. Copy the client ID and client secret for later.
     </li>
@@ -62,7 +62,7 @@ pip install -r requirements.txt
 </ul>
 </details>
 
-4. Paste your API Key, Client Secret, and Client ID into the `.env` file located in the root folder of the repository accordingly.
+4. Create a file called `.env` in the repository folder and paste your API Key, Client Secret, and Client ID accordingly.
 ```
 CLIENT_ID = # Paste Client ID
 CLIENT_SECRET = # Paste Client Secret

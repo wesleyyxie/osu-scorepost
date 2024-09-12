@@ -71,8 +71,9 @@
             if (callback) callback(null); 
         } catch (error) {
             console.error('Failed to copy image to clipboard:', error);
-            notif = document.getElementById('fail_notification');
+            notif = document.getElementById('copy_notification');
             notif.classList.add('show');
+            notif.innerText = "Copy failed, please wait for screenshot to load fully before copying"
             setTimeout(function(){ notif.className = notif.className.replace("show", ""); }, 3000);
             if (callback) callback(error);
           }
