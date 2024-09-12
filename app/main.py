@@ -97,7 +97,6 @@ def home():
         screenshot_checked = "get_screenshot" in checkbox_list
         auto_checked = "auto_toggled" in checkbox_list
         custom_message_input = request.form["custom_message_content"]
-        print(checkbox_list)
         results = ""
 
         # Get score information from user input
