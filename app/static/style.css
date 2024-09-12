@@ -581,11 +581,11 @@ body {
     .top_navbar{
         display: flex;}
 .site_logo{
-        height: 40px;}
+        height: 45px;}
 .title{
-        font-size: 20rem;}
+        font-size: 23rem;}
 .credit{
-        font-size: 8.5rem;
+        font-size: 11rem;
         padding-bottom: 8px;
         padding-left: 0px;}
 .links_container a{
@@ -619,7 +619,7 @@ body {
 }
 @media (min-width: 1440px) {
 
-    .score_input{
+.score_input{
         row-gap: 25px;}
 .submit_button{
         font-size: 19em;}
