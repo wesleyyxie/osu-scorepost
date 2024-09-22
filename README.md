@@ -13,9 +13,9 @@ This scorepost was generated with just a score link, [https://osu.ppy.sh/scores/
 * Supports Ranked, Qualified, Loved, Graveyarded, and WIP maps
 * Option to enter a custom message to scorepost title
 * Toggle auto mode to automate copying screenshot, opening Reddit with scorepost title already typed in as soon as the scorepost is generated
-* Click the r/osugame button (or use shortcut CTRL + D) to open the [submissions page](https://www.reddit.com/r/osugame/submit/?type=IMAGE) of r/osugame, the scorepost title is already written for you
+* Click the r/osugame button (or use shortcut CTRL/CMD + D) to open the [submissions page](https://www.reddit.com/r/osugame/submit/?type=IMAGE) of r/osugame, the scorepost title is already written for you
 * Clipboard button to easily copy the generated scorepost title
-* Shortcut (CTRL + S) to copy the scorepost screenshot
+* Shortcut (CTRL/CMD + S) to copy the scorepost screenshot
 * All scoreposts titles matches the [criteria]("https://www.reddit.com/r/osugame/wiki/scoreposting/") set on r/osugame
 
 
@@ -30,10 +30,9 @@ Entering the link to a user's profile will generate a scorepost of that user's m
 Entering just a username will also generate a scorepost of the user's most recent score! This method will only work for the user's default game mode.
 
 ### Auto Mode:
-On the top left of the screenshot image, there is an option to toggle "Auto Mode". When Auto Mode is on, the app will copy your screenshot to your clipboard, and open Reddit in a new tab with your generated scorepost title already written in! All you would have to do is set the flair to "Gameplay," paste (CTRL + V)
-                the screenshot, and click post!
+On the top left of the screenshot image, there is an option to toggle "Auto Mode". When Auto Mode is on, the app will copy your screenshot to your clipboard, and open Reddit in a new tab with your generated scorepost title already written in! All you would have to do is set the flair to "Gameplay," paste (CTRL/CMD + V) the screenshot, and click post!
 
-![Example post](/app/static/after.gif)
+![Example post](/app/static/auto_mode.gif)
 
 ## Setup
 
