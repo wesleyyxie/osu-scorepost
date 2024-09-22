@@ -6,17 +6,13 @@
   function toggleCheckbox(id){
     document.getElementById(id).checked = !document.getElementById(id).checked;
   }
-  // Resets from checkmark back to clipboard
-  function resetClipboardButton(){
-    var icon = document.getElementById('copy_button_icon')
-    if (icon.classList.contains('fa-check')){
-      icon.classList.remove('fa-check');
-    }
-  }
   // Copies the title to clipboard
   function copyTitleToClipboard(){
     navigator.clipboard.writeText(document.getElementById("generated_title").innerText);
     document.getElementById("copy_button_icon").classList.add("fa-check");
+    setTimeout(() => {
+      document.getElementById("copy_button_icon").classList.remove("fa-check")
+    }, 2000);
   }
   // Page loading activities
   function loading() {
@@ -168,7 +164,7 @@
   </div>
   <!--Scorepost title-->
   <p class="generated_title" id="generated_title">{{ score_title }}
-    <button class="copy_button" onmouseenter="resetClipboardButton()" onclick="copyTitleToClipboard()">
+    <button type="button" class="copy_button" onclick="copyTitleToClipboard()">
       <span style="color: white;" class="copy_button_style">
         <i id="copy_button_icon"class="fa-solid fa-clipboard"></i>
       </span>
@@ -185,8 +181,8 @@
       </label>
     </div>
     <div class="shortcuts_menu" id="shortcuts_menu">
-      <p>CTRL + S - copy screenshot</p>
-      <p>CTRL + D - open Reddit submission page</p>
+      <p>CTRL/CMD + S - copy screenshot</p>
+      <p>CTRL/CMD + D - open Reddit submission page</p>
     </div>
     <div class="loading_screen" id="loading_screen">
       <div class="loading_animation" id="loading_animation"></div>
