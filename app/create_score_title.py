@@ -11,7 +11,6 @@ def create_title(score: ScoreInfo):
     Returns:
         str: Title
     """
-    st = time.time()
     # Initialize information
     username = score.username
     artist = score.beatmapset_artist
@@ -98,5 +97,4 @@ def create_title(score: ScoreInfo):
 
     # Create title
     title = f"{score_mode}{username} | {artist} - {title} [{version}]{mods} ({creator}, {stars_converted:.2f}*) {acc}{fc} {status}| {performance_points}"
-    print(f"create title time: {st - time.time()}")
     return title

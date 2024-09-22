@@ -327,6 +327,5 @@ def generate_screenshot(score: ScoreInfo):
     generate_rank(im, score)
     generate_mods_items(im, score)
     ranking_panel(im, score)
-    print(f"screenshot time {time.time() - st}")
     # Save the screenshot and return the file name
     return im

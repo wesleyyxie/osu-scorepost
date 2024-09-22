@@ -64,7 +64,6 @@ def screenshot(encoded_json_data: str):
     Returns:
         Response: Screenshot data
     """
-    st = time.time()
     # Convert json back to Score object
     score_json = urllib.parse.unquote(encoded_json_data)
     j = json.loads(score_json)
@@ -75,7 +74,6 @@ def screenshot(encoded_json_data: str):
     ss_io = BytesIO()
     screenshot.save(ss_io, format="jpeg")
     ss_io.seek(0)
-    print(f"screenshot link: {time.time() - st}")
     return send_file(ss_io, mimetype="image/jpeg")
 
 
@@ -88,7 +86,6 @@ def home():
     """
 
     # When user submits input
-    st = time.time()
     if request.method == "POST":
         # Initialize input content, if screenshot checkbox was checked, if auto was toggled
         # and content message content
@@ -130,11 +127,9 @@ def home():
                 custom_message_input=custom_message_input,
                 auto_checked=auto_checked,
             )
-        print("Successfully got ScoreInfo")
 
         # Get title of score
         title = create_title(score)
-        print("Successfully generated title")
 
         # Insert custom message, if custom message is just whitespace,
         # leave blank without |
@@ -164,7 +159,6 @@ def home():
         custom_message_input = ""
         screenshot_checked = True
         auto_checked = False
-    print(f"Generated scorepost in: {time.time() - st} seconds")
 
     return render_template(
         "home.html",

@@ -313,29 +313,23 @@ def get_score_info(input: str):
     """
 
     # Initialize Ossapi and Circleguard API
-    start_time = time.time()
-    st = time.time()
+
     oss = Ossapi(client_id=CLIENT_ID, client_secret=CLIENT_SECRET)
     cg = Circleguard(API_KEY)
-    print(f"api: {time.time() - st}")
-    st = time.time()
     score_ossapi = get_ossapi_score(input, oss)
-    print(f"score_ossapi: {time.time() - st}")
-    st = time.time()
+
     # Difficulty attributes for calculating converted star rating
     difficulty_attributes = oss.beatmap_attributes(
         beatmap_id=score_ossapi.beatmap.id,
         mods=score_ossapi.mods,
         ruleset=score_ossapi.mode.value,
     )
-    print(f"difficulty_attributes: {time.time() - st}")
+
     # Geki and katu counts are only available for some scores that are
     # the user's best on the map
-    st = time.time()
     count_geki, count_katu = count_geki_katu_osu(
         score_ossapi, score_ossapi.beatmap.id, score_ossapi.user_id, cg
     )
-    print(f"get geki katu: {time.time() - st}")
     # Get beatmap data for rosu-pp and convert to corresponding gamemode
     response = get(f"https://osu.ppy.sh/osu/{score_ossapi.beatmap.id}")
     map = rosu.Beatmap(bytes=response.content)
@@ -350,22 +344,17 @@ def get_score_info(input: str):
 
     # Limited beatmap information for recent scores so use rosu-pp
     # instead of Ossapi to get beatmap max combo
-    st = time.time()
     beatmap_max_combo = get_beatmap_max_combo(map)
-    print(f"max_combo: {time.time() - st}")
 
     # Calculate pp
     pp_score, pp_if_fc = calculate_pp(score_ossapi, beatmap_max_combo, map)
-    print(f"pp: {time.time() - st}")
 
     # Needs difficulty attribute for converted star ratings
     stars_converted = difficulty_attributes.attributes.star_rating
-    st = time.time()
     # Correct Global rankings needs to be further calculated
     global_ranking = get_ranking_global(score_ossapi, oss)
-    print(f"global_ranking: {time.time() - st}")
+    # print(f"global_ranking: {time.time() - st}")
 
-    st = time.time()
     # Initialize ScoreInfo
     score = ScoreInfo(
         score_ossapi=score_ossapi,
@@ -377,6 +366,4 @@ def get_score_info(input: str):
         beatmap_max_combo=beatmap_max_combo,
         global_ranking=global_ranking,
     )
-    print(f"scoreInfo time: {time.time() - st}")
-    print(f"total time: {time.time() - start_time}")
     return score
