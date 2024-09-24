@@ -237,9 +237,9 @@ def calculate_pp(score_ossapi: Score, beatmap_max_combo: int, map: rosu.Beatmap)
             misses=number_miss,
             combo=max_combo,
         )
-        pp = round(perf.calculate(map).pp)
+        pp = int(perf.calculate(map).pp + 0.5)
     else:
-        pp = round(score_ossapi.pp)
+        pp = int(score_ossapi.pp + 0.5)
 
     # If it is not FC, find if_fc_pp
     if (
@@ -250,7 +250,8 @@ def calculate_pp(score_ossapi: Score, beatmap_max_combo: int, map: rosu.Beatmap)
         if not score_ossapi.pp:
             perf.set_misses(0)
             perf.set_combo(None)
-            pp_if_fc = round(perf.calculate(map).pp)
+
+            pp_if_fc = int(perf.calculate(map).pp + 0.5)
         else:
             number_50 = score_ossapi.statistics.count_50 or 0
             number_100 = score_ossapi.statistics.count_100 or 0
@@ -266,9 +267,10 @@ def calculate_pp(score_ossapi: Score, beatmap_max_combo: int, map: rosu.Beatmap)
                 n_katu=number_katu,
                 n_geki=number_geki,
             )
-            pp_if_fc = round(perf.calculate(map).pp)
+            pp_if_fc = int(perf.calculate(map).pp + 0.5)
     else:
         return (pp, pp)
+
     return (pp, pp_if_fc)
 
 
