@@ -210,7 +210,7 @@ def generate_mods_items(im: Image.Image, score: ScoreInfo):
     # into an array with every 2 characters to get each mod name.
     # Then create an array for the corresponding image file names
     mods_array = [mods[i : i + 2] for i in range(0, len(mods), 2)]
-    mods_img_arr = [mods_img_dict[m] for m in mods_array]
+    mods_img_arr = [mods_img_dict[m] for m in mods_array if m != "TD"]
 
     RIGHT = 50  # Amount of spacing between each mod image
 
