@@ -8,6 +8,8 @@ A generated scorepost includes a post title and an image that replicates a scree
 
 This scorepost was generated with just a score link, [https://osu.ppy.sh/scores/1777987420](https://osu.ppy.sh/scores/1777987420), and a single click!
 
+The project can be accessed at [https://osuscorepost.wesleyxie.com/](https://osuscorepost.wesleyxie.com/).
+
 ## Features
 * A scorepost can be generated for all 4 gamemodes
 * Supports Ranked, Qualified, Loved, Graveyarded, and WIP maps
