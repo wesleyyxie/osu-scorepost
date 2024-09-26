@@ -68,7 +68,7 @@ def set_up_skeleton(im: Image.Image, score: ScoreInfo):
     match score.mode:
         # Osu gamemode has different skeleton whether it has a replay or not
         case "osu":
-            if score.id == score.best_id:
+            if score.count_geki != None:
                 skeleton = Image.open(
                     os.path.join(
                         skin_dir,
