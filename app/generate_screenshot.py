@@ -198,7 +198,7 @@ def generate_mods_items(im: Image.Image, score: ScoreInfo):
         "NF": "selection-mod-nofail@2x.png",
         "PF": "selection-mod-perfect@2x.png",
         "RD": "selection-mod-random@2x.png",
-        "RL": "selection-mod-relax@2x.png",
+        "RX": "selection-mod-relax@2x.png",
         "AP": "selection-mod-relax2@2x.png",
         "SO": "selection-mod-spunout@2x.png",
         "SD": "selection-mod-suddendeath@2x.png",
