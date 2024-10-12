@@ -142,6 +142,7 @@ body {
 .custom_message_label{
     color: rgb(130, 148, 157);
     font-size: 8rem;
+    text-align: center;
     padding-top: 7px;}
 .custom_message_input::placeholder,
 .unstable_rate_input::placeholder{
