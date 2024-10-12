@@ -129,7 +129,8 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;}
-.custom_message_input{
+.custom_message_input,
+.unstable_rate_input{
     font-family: exo2;
     padding: 6px 5px 4px 10px;
     border-radius: 10000000px;
@@ -142,11 +143,15 @@ body {
     color: rgb(130, 148, 157);
     font-size: 8rem;
     padding-top: 7px;}
-.custom_message_input::placeholder{
+.custom_message_input::placeholder,
+.unstable_rate_input::placeholder{
     color: rgb(130, 148, 157)}
-.custom_message_input:focus{
+.custom_message_input:focus,
+.unstable_rate_input:focus{
     outline: none;
     box-shadow: 0 0 8px rgb(130, 148, 157);}
+.unstable_rate_input{
+    padding-right: 10px;}
 .input_container{
     position: relative;
     display: flex;
@@ -453,7 +458,8 @@ body {
 .url_input{
         width: 35vw;
         font-size: 10em;}
-.custom_message_input{
+.custom_message_input,
+.unstable_rate_input{
         width: 22vw;
         font-size: 10em;}
 .checkbox_label{
@@ -514,7 +520,8 @@ body {
         font-size: 13em;
         width: 40vw;
         max-width: 360px;}
-.custom_message_input{
+.custom_message_input,
+.unstable_rate_input{
         font-size: 13em;
         width: 25vw;
         max-width: 230px;}
@@ -626,7 +633,8 @@ body {
 .url_input{
         width: 42.5vw;
         font-size: 15em;}
-.custom_message_input{
+.custom_message_input,
+.unstable_rate_input{
         font-size: 15em;}
 .checkbox_label{
         font-size: 17rem;}
