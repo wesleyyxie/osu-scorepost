@@ -32,7 +32,7 @@ Entering the link to a user's profile will generate a scorepost of that user's m
 Entering just a username will also generate a scorepost of the user's most recent score! This method will only work for the user's default game mode.
 
 ### Auto Mode:
-On the top right of the screenshot image, there is an option to toggle "Auto Mode". When Auto Mode is on, the app will copy your screenshot to your clipboard, and open Reddit in a new tab with your generated scorepost title already written in! All you would have to do is set the flair to "Gameplay," paste (CTRL/CMD + V) the screenshot, and click post!
+On the top right of the screenshot image, there is an option to toggle "Auto Mode". When Auto Mode is on, the app will copy your screenshot to your clipboard, and open Reddit in a new tab with your generated scorepost title already written in! All you would have to do is set the flair to "Gameplay," paste (CTRL/CMD + V) the screenshot, and click post! 
 
 ![Example post](/app/static/auto_mode.gif)
 
