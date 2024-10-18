@@ -37,6 +37,7 @@ class ScoreInfo:
         count_miss=None,
         rank=None,
         created_at=None,
+        is_lazer=None,
     ):
         """
         Initializes ScoreInfo with score details.
@@ -109,3 +110,5 @@ class ScoreInfo:
 
         self.beatmap_max_combo = beatmap_max_combo
         self.stars_converted = stars_converted
+
+        self.is_lazer = is_lazer

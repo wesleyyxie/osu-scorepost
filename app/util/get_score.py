@@ -2,8 +2,9 @@ from ossapi import Ossapi, Score
 from circleguard import Circleguard, ReplayMap
 from circleguard.loader import NoInfoAvailableException
 import rosu_pp_py as rosu
-
+from bs4 import BeautifulSoup
 from requests import get
+import json
 import time
 from os import getenv
 from dotenv import find_dotenv, load_dotenv
@@ -40,7 +41,8 @@ def get_score_link_score(input: str, oss: Ossapi):
     # Link is only vaid if there are 2 or 3 parts
     if num_of_parts == 2:
         score_id = int(input_parts[1])
-        return oss.score(score_id)
+        score = oss.score(score_id)
+        return score
     elif num_of_parts == 3:
         score_id = int(input_parts[2])
         mode = input_parts[1]
@@ -302,6 +304,24 @@ def get_ranking_global(score: Score, oss: Ossapi):
     )
 
 
+def get_lazer_score_and_accuracy(score_id: int):
+    """Gets the correct accuracy and score amount
+
+    Args:
+        score_id (int): The ID of the score
+
+    Returns:
+        Tuple[int, float]: The accuracy and score amount
+    """
+    res = get(f"https://osu.ppy.sh/scores/{score_id}")
+    html_content = res.text
+    soup_page = BeautifulSoup(html_content, "html.parser")
+    score_obj = json.loads(soup_page.find("script", {"id": "json-show"}).get_text())
+    score = int(score_obj.get("classic_total_score"))
+    accuracy = float(score_obj.get("accuracy"))
+    return score, accuracy
+
+
 def get_score_info(input: str):
     """Returns score information needed for screenshot and scorepost title
     from a score link, username or user link
@@ -319,6 +339,15 @@ def get_score_info(input: str):
     oss = Ossapi(client_id=CLIENT_ID, client_secret=CLIENT_SECRET)
     cg = Circleguard(API_KEY)
     score_ossapi = get_ossapi_score(input, oss)
+
+    # Get correct lazer score information
+    if score_ossapi.score == 0:
+        score_ossapi.score, score_ossapi.accuracy = get_lazer_score_and_accuracy(
+            score_ossapi.id
+        )
+        is_lazer = True
+    else:
+        is_lazer = False
 
     # Difficulty attributes for calculating converted star rating
     difficulty_attributes = oss.beatmap_attributes(
@@ -358,7 +387,7 @@ def get_score_info(input: str):
     # print(f"global_ranking: {time.time() - st}")
 
     # Initialize ScoreInfo
-    score = ScoreInfo(
+    score_info = ScoreInfo(
         score_ossapi=score_ossapi,
         count_geki=count_geki,
         stars_converted=stars_converted,
@@ -367,5 +396,6 @@ def get_score_info(input: str):
         pp_if_fc=pp_if_fc,
         beatmap_max_combo=beatmap_max_combo,
         global_ranking=global_ranking,
+        is_lazer=is_lazer,
     )
-    return score
+    return score_info

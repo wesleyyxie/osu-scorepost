@@ -97,4 +97,6 @@ def create_title(score: ScoreInfo):
 
     # Create title
     title = f"{score_mode}{username} | {artist} - {title} [{version}]{mods} ({creator}, {stars_converted:.2f}*) {acc}{fc} {status}| {performance_points}"
+    if score.is_lazer:
+        title += " | (done on lazer)"
     return title
