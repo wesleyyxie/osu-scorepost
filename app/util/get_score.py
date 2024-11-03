@@ -178,17 +178,12 @@ def count_geki_katu_osu(score: Score, beatmap_id: int, user_id: int, cg: Circleg
     # A tuple of None. It may raise a NoInfoAvailableException error so
     # return a tuple of None.
     if score.mode.value == "osu":
-        if score.id == score.best_id:
-            try:
-                replay = ReplayMap(beatmap_id, user_id, mods=score.mods)
-                cg.load(replay)
-                return (replay.count_geki, replay.count_katu)
-            except (
-                NoInfoAvailableException
-            ):  # Some replays are unavailable for some reason
-                return (None, None)
-        else:
-            return (None, None)
+        try:
+            replay = ReplayMap(beatmap_id, user_id, mods=score.mods)
+            cg.load(replay)
+            return (replay.count_geki, replay.count_katu)
+        except NoInfoAvailableException:  # Some replays are unavailable for some reason
+            return (0, 0)
     else:
         return (score.statistics.count_geki, score.statistics.count_katu)
 
@@ -317,6 +312,7 @@ def get_lazer_score_and_accuracy(score_id: int):
     html_content = res.text
     soup_page = BeautifulSoup(html_content, "html.parser")
     score_obj = json.loads(soup_page.find("script", {"id": "json-show"}).get_text())
+    print(score_obj)
     score = int(score_obj.get("classic_total_score"))
     accuracy = float(score_obj.get("accuracy"))
     return score, accuracy

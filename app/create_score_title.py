@@ -50,8 +50,7 @@ def create_title(score: ScoreInfo):
     }.get(score.mode, "")
 
     performance_points = f"{score.pp}pp"
-    if score.beatmapset_status == 1 and score.id != score.best_id and score.rank != "F":
-        performance_points += " if submitted"
+
     # Beatmap status
     if score.beatmapset_status != 1 and score.beatmapset_status != 2:
         performance_points += " if ranked"
