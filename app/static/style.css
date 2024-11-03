@@ -66,6 +66,13 @@ body {
     background-color: rgb(46, 124, 162);}
 .reddit_submit:hover{
     background-color: white;}
+#warning{
+    font-size: 10em;
+    color: red;
+}
+#warning:hover{
+    background-color: rgb(56, 134, 172);
+}
 /* Copy notification */
 
 #copy_notification{
@@ -431,6 +438,9 @@ body {
         padding: 12px;}
 .links_container i{
         font-size: 15rem;}
+#warning{
+    font-size: 15em;
+}
 /* Contacts */
     .contacts_container{
         font-size: 1.5em;}
@@ -593,6 +603,10 @@ body {
         padding: 12px;}
 .links_container i{
         font-size: 20rem;}
+#warning{
+    max-width: 473px;
+    padding-right: 50px;
+}
 /* Toggle button */
     .toggle_auto_container{
         top: 15px;
