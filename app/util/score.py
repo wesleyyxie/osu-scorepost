@@ -67,7 +67,7 @@ class ScoreInfo:
             for m in score_ossapi.mods:
                 if m.acronym != "CL":
                     mods_str += m.acronym
-            self.mods = f"{Mod(mods_str or "NM")}"
+            self.mods = f'{Mod(mods_str or "NM")}'
             self.accuracy = score_ossapi.accuracy
             self.mode = score_ossapi.beatmap.mode.value
             self.max_combo = score_ossapi.max_combo
