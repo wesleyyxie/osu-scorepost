@@ -20,7 +20,7 @@ def create_title(score: ScoreInfo):
 
     # If score is set with NM, do not
     # display mods in title
-    if score.mods != "NM":
+    if f"{score.mods}" != "NM":
         mods = f" +{score.mods}"
     else:
         mods = ""

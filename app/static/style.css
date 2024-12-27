@@ -68,7 +68,7 @@ body {
     background-color: white;}
 #warning{
     font-size: 10em;
-    color: red;
+    color: greenyellow;
 }
 #warning:hover{
     background-color: rgb(56, 134, 172);

@@ -1,11 +1,8 @@
-from ossapi import Ossapi, Score
+from ossapi import Ossapi, Score, Mod
 from circleguard import Circleguard, ReplayMap
 from circleguard.loader import NoInfoAvailableException
 import rosu_pp_py as rosu
-from bs4 import BeautifulSoup
 from requests import get
-import json
-import time
 from os import getenv
 from dotenv import find_dotenv, load_dotenv
 
@@ -177,15 +174,29 @@ def count_geki_katu_osu(score: Score, beatmap_id: int, user_id: int, cg: Circleg
     # If score is the user's best play on the map, try to get replay, else return
     # A tuple of None. It may raise a NoInfoAvailableException error so
     # return a tuple of None.
-    if score.mode.value == "osu":
+    if (
+        score.beatmap.mode.value == "osu"
+        and score.replay
+        and score.legacy_total_score != 0
+    ):
         try:
-            replay = ReplayMap(beatmap_id, user_id, mods=score.mods)
+            mods_str = ""
+            for m in score.mods:
+                if m.acronym != "CL":
+                    mods_str += m.acronym
+            mods = Mod(mods_str or "NM")
+
+            replay = ReplayMap(beatmap_id, user_id, mods=mods)
             cg.load(replay)
+            n300 = score.statistics.great or 0
+            n100 = score.statistics.ok or 0
+            if replay.count_geki > n300 or replay.count_katu > n100:
+                raise NoInfoAvailableException
             return (replay.count_geki, replay.count_katu)
         except NoInfoAvailableException:  # Some replays are unavailable for some reason
             return (0, 0)
     else:
-        return (score.statistics.count_geki, score.statistics.count_katu)
+        return (score.statistics.perfect or 0, score.statistics.good or 0)
 
 
 def get_beatmap_max_combo(map: rosu.Beatmap):
@@ -216,16 +227,24 @@ def calculate_pp(score_ossapi: Score, beatmap_max_combo: int, map: rosu.Beatmap)
     # If it is unranked, initialize pp with rosu, else use the score
     # object's pp count
     if not score_ossapi.pp:
-        number_50 = score_ossapi.statistics.count_50 or 0
-        number_100 = score_ossapi.statistics.count_100 or 0
-        number_katu = score_ossapi.statistics.count_katu or 0
-        number_300 = score_ossapi.statistics.count_300 or 0
-        number_geki = score_ossapi.statistics.count_geki or 0
-        number_miss = score_ossapi.statistics.count_miss or 0
+        number_50 = score_ossapi.statistics.meh or 0
+        number_100 = score_ossapi.statistics.ok or 0
+        number_katu = score_ossapi.statistics.good or 0
+        number_300 = score_ossapi.statistics.great or 0
+        number_geki = score_ossapi.statistics.perfect or 0
+        number_miss = score_ossapi.statistics.miss or 0
+
+        slider_ticks = score_ossapi.statistics.large_tick_hit or 0
+        slider_ends = score_ossapi.statistics.slider_tail_hit or 0
+
+        is_lazer = score_ossapi.legacy_total_score == 0
         max_combo = score_ossapi.max_combo
+        mods_list = []
+        for m in score_ossapi.mods:
+            mods_list.append({"acronym": m.acronym, "settings": m.settings})
         # Calculate pp of score if fc
         perf = rosu.Performance(
-            mods=score_ossapi.mods.value,
+            mods=mods_list,
             n100=number_100,
             n50=number_50,
             n300=number_300,
@@ -233,6 +252,9 @@ def calculate_pp(score_ossapi: Score, beatmap_max_combo: int, map: rosu.Beatmap)
             n_geki=number_geki,
             misses=number_miss,
             combo=max_combo,
+            lazer=is_lazer,
+            large_tick_hits=slider_ticks,
+            slider_end_hits=slider_ends,
         )
         pp = int(perf.calculate(map).pp + 0.5)
     else:
@@ -241,7 +263,7 @@ def calculate_pp(score_ossapi: Score, beatmap_max_combo: int, map: rosu.Beatmap)
     # If it is not FC, find if_fc_pp
     if (
         score_ossapi.max_combo <= beatmap_max_combo - 20
-        or score_ossapi.statistics.count_miss > 0
+        or score_ossapi.statistics.miss != None
     ):
         # User previous rosu perf if unranked
         if not score_ossapi.pp:
@@ -250,19 +272,31 @@ def calculate_pp(score_ossapi: Score, beatmap_max_combo: int, map: rosu.Beatmap)
 
             pp_if_fc = int(perf.calculate(map).pp + 0.5)
         else:
-            number_50 = score_ossapi.statistics.count_50 or 0
-            number_100 = score_ossapi.statistics.count_100 or 0
-            number_katu = score_ossapi.statistics.count_katu or 0
-            number_300 = score_ossapi.statistics.count_300 or 0
-            number_geki = score_ossapi.statistics.count_geki or 0
+            number_50 = score_ossapi.statistics.meh or 0
+            number_100 = score_ossapi.statistics.ok or 0
+            number_katu = score_ossapi.statistics.good or 0
+            number_300 = score_ossapi.statistics.great or 0
+            number_geki = score_ossapi.statistics.perfect or 0
+
+            slider_ticks = score_ossapi.statistics.large_tick_hit or 0
+            slider_ends = score_ossapi.statistics.slider_tail_hit or 0
+
+            is_lazer = score_ossapi.legacy_total_score == 0
+
+            mods_list = []
+            for m in score_ossapi.mods:
+                mods_list.append({"acronym": m.acronym, "settings": m.settings})
             # Calculate pp of score if fc
             perf = rosu.Performance(
-                mods=score_ossapi.mods.value,
+                mods=mods_list,
                 n100=number_100,
                 n50=number_50,
                 n300=number_300,
                 n_katu=number_katu,
                 n_geki=number_geki,
+                lazer=is_lazer,
+                large_tick_hits=slider_ticks,
+                slider_end_hits=slider_ends,
             )
             pp_if_fc = int(perf.calculate(map).pp + 0.5)
     else:
@@ -284,12 +318,15 @@ def get_ranking_global(score: Score, oss: Ossapi):
 
     # Lists of scores on a beatmap with proper leaderboard order
     # Calculate ranking by iterating through list of scores
+
     return next(
         (
             i
             for i, s in enumerate(
                 oss.beatmap_scores(
-                    beatmap_id=score.beatmap.id, legacy_only=True, mode=score.mode.value
+                    beatmap_id=score.beatmap.id,
+                    legacy_only=True,
+                    mode=score.beatmap.mode,
                 ).scores,
                 start=1,
             )
@@ -297,25 +334,6 @@ def get_ranking_global(score: Score, oss: Ossapi):
         ),
         0,
     )
-
-
-def get_lazer_score_and_accuracy(score_id: int):
-    """Gets the correct accuracy and score amount
-
-    Args:
-        score_id (int): The ID of the score
-
-    Returns:
-        Tuple[int, float]: The accuracy and score amount
-    """
-    res = get(f"https://osu.ppy.sh/scores/{score_id}")
-    html_content = res.text
-    soup_page = BeautifulSoup(html_content, "html.parser")
-    score_obj = json.loads(soup_page.find("script", {"id": "json-show"}).get_text())
-    print(score_obj)
-    score = int(score_obj.get("classic_total_score"))
-    accuracy = float(score_obj.get("accuracy"))
-    return score, accuracy
 
 
 def get_score_info(input: str):
@@ -337,20 +355,10 @@ def get_score_info(input: str):
     score_ossapi = get_ossapi_score(input, oss)
 
     # Get correct lazer score information
-    if score_ossapi.score == 0:
-        score_ossapi.score, score_ossapi.accuracy = get_lazer_score_and_accuracy(
-            score_ossapi.id
-        )
+    if score_ossapi.legacy_total_score == 0:
         is_lazer = True
     else:
         is_lazer = False
-
-    # Difficulty attributes for calculating converted star rating
-    difficulty_attributes = oss.beatmap_attributes(
-        beatmap_id=score_ossapi.beatmap.id,
-        mods=score_ossapi.mods,
-        ruleset=score_ossapi.mode.value,
-    )
 
     # Geki and katu counts are only available for some scores that are
     # the user's best on the map
@@ -360,13 +368,13 @@ def get_score_info(input: str):
     # Get beatmap data for rosu-pp and convert to corresponding gamemode
     response = get(f"https://osu.ppy.sh/osu/{score_ossapi.beatmap.id}")
     map = rosu.Beatmap(bytes=response.content)
-    if score_ossapi.mode.value == "osu":
+    if score_ossapi.beatmap.mode.value == "osu":
         map.convert(rosu.GameMode.Osu)
-    elif score_ossapi.mode.value == "fruits":
+    elif score_ossapi.beatmap.mode.value == "fruits":
         map.convert(rosu.GameMode.Catch)
-    elif score_ossapi.mode.value == "taiko":
+    elif score_ossapi.beatmap.mode.value == "taiko":
         map.convert(rosu.GameMode.Taiko)
-    elif score_ossapi.mode.value == "mania":
+    elif score_ossapi.beatmap.mode.value == "mania":
         map.convert(rosu.GameMode.Mania)
 
     # Limited beatmap information for recent scores so use rosu-pp
@@ -376,8 +384,16 @@ def get_score_info(input: str):
     # Calculate pp
     pp_score, pp_if_fc = calculate_pp(score_ossapi, beatmap_max_combo, map)
 
+    # Difficulty attributes for calculating converted star rating
+    mods_list = []
+    for m in score_ossapi.mods:
+        mods_list.append({"acronym": m.acronym, "settings": m.settings})
+
+    diff = rosu.Difficulty(mods=mods_list, lazer=score_ossapi.legacy_total_score == 0)
+    diff_attr = diff.calculate(map)
+
     # Needs difficulty attribute for converted star ratings
-    stars_converted = difficulty_attributes.attributes.star_rating
+    stars_converted = diff_attr.stars
     # Correct Global rankings needs to be further calculated
     global_ranking = get_ranking_global(score_ossapi, oss)
     # print(f"global_ranking: {time.time() - st}")

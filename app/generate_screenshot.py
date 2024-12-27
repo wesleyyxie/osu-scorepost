@@ -73,7 +73,7 @@ def set_up_skeleton(im: Image.Image, score: ScoreInfo):
                     skin_dir,
                     "Aristia",
                     "skeletons_lite",
-                    "osu_noreplay_skeleton.png",
+                    "osu_replay_skeleton.png",
                 )
             )
         case "taiko":
