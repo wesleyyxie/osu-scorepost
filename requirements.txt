@@ -1,8 +1,8 @@
+circleguard @ git+https://github.com/wesleyyxie/circlecore  
 ossapi==5.0.4
 rosu-pp-py==2.0.1
 pillow==10.4.0
 Flask==3.0.3
 python-dotenv==1.0.1
-circleguard==5.4.3
 gunicorn==22.0.0
 waiting==1.5.0
