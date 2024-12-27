@@ -14,6 +14,7 @@ The project can be accessed at [https://osuscorepost.wesleyxie.com/](https://osu
 * A scorepost can be generated for all 4 gamemodes
 * Supports Ranked, Qualified, Loved, Graveyarded, and WIP maps
 * Option to enter a custom message to scorepost title
+* Option to enter [unstable rate](https://osu.ppy.sh/wiki/en/Gameplay/Unstable_rate), it will be converted based on mods used in the play and attached to scorepost title
 * Toggle auto mode to automate copying screenshot, opening Reddit with scorepost title already typed in as soon as the scorepost is generated
 * Click the r/osugame button (or use shortcut CTRL/CMD + D) to open the [submissions page](https://www.reddit.com/r/osugame/submit/?type=IMAGE) of r/osugame, the scorepost title is already written for you
 * Clipboard button to easily copy the generated scorepost title
