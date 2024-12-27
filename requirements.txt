@@ -1,5 +1,5 @@
-circleguard==5.4.3  --no-deps
-ossapi==5.0.4  --no-deps
+circleguard @ git+https://github.com/wesleyyxie/circlecore  
+ossapi==5.0.4
 rosu-pp-py==1.1.0
 pillow==10.4.0
 Flask==3.0.3
