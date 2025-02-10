@@ -10,7 +10,7 @@ ENV API_KEY=${API_KEY}
 
 WORKDIR /app
 
-COPY . .
+COPY app/ /app/
 
 RUN pip install -r requirements.txt
 
