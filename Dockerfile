@@ -8,9 +8,7 @@ ENV CLIENT_ID=${CLIENT_ID}
 ENV CLIENT_SECRET=${CLIENT_SECRET}
 ENV API_KEY=${API_KEY}
 
-WORKDIR /app
-
-COPY app/ /app/
+COPY . .
 
 RUN pip install -r requirements.txt
 
