@@ -1,0 +1,12 @@
+services:
+  app:
+    env_file:
+      - .env
+    image: wesleyxie05/osu-scorepost-generator:latest
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - CLIENT_ID=$CLIENT_ID
+      - CLINET_SECRET=&CLINET_SECRET
+      - API_KEY=$API_KEY
