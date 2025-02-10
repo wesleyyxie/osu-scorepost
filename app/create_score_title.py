@@ -1,5 +1,7 @@
 import time
 
+# from util.score import ScoreInfo
+
 
 def create_title(score):
     """Returns the title of the scorepost
