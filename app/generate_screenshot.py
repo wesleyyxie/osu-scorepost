@@ -3,7 +3,6 @@ from PIL import Image, ImageDraw, ImageFont, ImageEnhance, UnidentifiedImageErro
 import requests
 import random
 import os
-import uuid
 import io
 import time
 from util.score import ScoreInfo

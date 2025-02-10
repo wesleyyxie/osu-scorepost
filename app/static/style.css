@@ -65,6 +65,7 @@ body {
 .links_container a:hover{
     background-color: rgb(46, 124, 162);}
 .reddit_submit:hover{
+    cursor: pointer;
     background-color: white;}
 #warning{
     font-size: 10em;
