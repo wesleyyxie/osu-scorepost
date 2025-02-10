@@ -3,6 +3,7 @@ import app.util.get_score as get_score
 import pytest
 
 
+# Test for ranked osu! standard scores
 @pytest.mark.osu_ranked
 @pytest.mark.parametrize(
     "score_link, expected_score_title",
@@ -38,8 +39,14 @@ import pytest
     ],
 )
 def test_osu_ranked(score_link: str, expected_score_title: str):
+    # This function is repeated throughout the test file so I will type this out once
     score_info = get_score.get_score_info(score_link)
     score_title = create_score_title.create_title(score_info)
+
+    # If there is a global ranking for the ScoreInfo object, check if it is
+    # in the expected title. If it is not, change the expected title to contain
+    # the actual global ranking. This is because the global ranking can
+    # always change and I do not want to have to change it everytime I test.
     if (
         score_info.global_ranking != 0
         and f"#{score_info.global_ranking}" not in expected_score_title
@@ -51,6 +58,7 @@ def test_osu_ranked(score_link: str, expected_score_title: str):
     assert score_title == expected_score_title
 
 
+# Test for unranked osu! standard scores
 @pytest.mark.osu_unranked
 @pytest.mark.parametrize(
     "score_link, expected_score_title",
@@ -91,6 +99,7 @@ def test_osu_unranked(score_link, expected_score_title):
     assert score_title == expected_score_title
 
 
+# Test for ranked osu! taiko scores
 @pytest.mark.taiko_ranked
 @pytest.mark.parametrize(
     "score_link, expected_score_title",
@@ -123,6 +132,7 @@ def test_taiko_ranked(score_link, expected_score_title):
     assert score_title == expected_score_title
 
 
+# Test for unranked osu! taiko scores
 @pytest.mark.taiko_unranked
 @pytest.mark.parametrize(
     "score_link, expected_score_title",
@@ -152,6 +162,7 @@ def test_taiko_unranked(score_link, expected_score_title):
 
 
 # Mania scores get Lazer accuracy for some reason
+# Test for ranked osu! mania scores
 @pytest.mark.mania_ranked
 @pytest.mark.parametrize(
     "score_link, expected_score_title",
@@ -192,6 +203,7 @@ def test_mania_ranked(score_link, expected_score_title):
     assert score_title == expected_score_title
 
 
+# Test for unranked osu! mania scores
 @pytest.mark.mania_unranked
 @pytest.mark.parametrize(
     "score_link, expected_score_title",
@@ -220,6 +232,7 @@ def test_mania_unranked(score_link, expected_score_title):
     assert score_title == expected_score_title
 
 
+# Test for ranked osu! catch scores
 @pytest.mark.catch_ranked
 @pytest.mark.parametrize(
     "score_link, expected_score_title",
@@ -256,6 +269,7 @@ def test_catch_ranked(score_link, expected_score_title):
     assert score_title == expected_score_title
 
 
+# Test for unranked osu! catch scores
 @pytest.mark.catch_unranked
 @pytest.mark.parametrize(
     "score_link, expected_score_title",
