@@ -14,4 +14,4 @@ RUN pip install -r requirements.txt
 
 EXPOSE 8000
 
-CMD ["gunicorn", "-w", "4", "main:app", "--chdir", "./app"]
+CMD ["gunicorn", "-w", "4", "main:app", "-b", "0.0.0.0:8000", "--chdir", "./app"]
