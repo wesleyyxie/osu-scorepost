@@ -39,7 +39,7 @@ On the top right of the screenshot image, there is an option to toggle "Auto Mod
 ## Setup
 
 ### Prerequisites 
-- Python3 (version 3.12.4 or 3.12.5)
+- Python3 (version 3.12)
 - pip (Python package installer)
 
 ### Steps
