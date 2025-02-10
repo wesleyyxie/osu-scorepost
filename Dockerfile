@@ -10,10 +10,10 @@ ENV API_KEY=${API_KEY}
 
 WORKDIR /app
 
-COPY . /app
+COPY . .
 
 RUN pip install -r requirements.txt
 
 EXPOSE 8000
 
-CMD ["gunicorn", "-w", "4", "app.main:app"]
+CMD ["gunicorn", "-w", "4", "main:app", "--chdir", "./app"]
